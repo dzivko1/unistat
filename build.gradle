@@ -1,9 +1,19 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
 }
 
 group 'hr.ferit.dominikzivko'
 version '1.0-SNAPSHOT'
+
+javafx {
+    version = "15.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+mainClassName = 'hr.ferit.dominikzivko.unistat.App'
 
 repositories {
     mavenCentral()
