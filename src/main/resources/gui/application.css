@@ -1,0 +1,61 @@
+/*
+ * Reference: (modena.css)
+ * https://gist.github.com/maxd/63691840fc372f22f470
+ */
+
+.root {
+    -fx-base: #f99;
+    -fx-background: derive(-fx-base, 98.0%);
+   /* -fx-control-inner-background: derive(-fx-base,92.0%);
+    -fx-control-inner-background-alt: derive(-fx-control-inner-background,-3%);
+    -fx-accent: #ffaf4b;
+    */
+    -fx-default-button: #ffa062;
+
+    -fx-color: -fx-base;
+
+    -fx-text-base-color: ladder(
+        -fx-color,
+        -fx-light-text-color 95.0%,
+        -fx-mid-text-color   97.0%,
+        -fx-dark-text-color  99.0%
+    );
+}
+
+.login-frame {
+    -fx-border-color: -fx-base;
+    -fx-border-width: 3px;
+}
+
+.error-message {
+    -fx-font-weight: bold;
+    -fx-text-fill: red;
+}
+
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, -fx-color 80%, derive(-fx-color, 10%) 100%)
+}
+
+.nav-button {
+    -fx-font-size: 16.0;
+    -fx-font-weight: bold;
+    -fx-background-radius: 0.0;
+    -fx-background-color: -fx-color;
+    -fx-max-width: Infinity;
+}
+
+.nav-button:selected {
+	-fx-background-color: -fx-pressed-base;
+}
+
+.header {
+    -fx-border-color: -fx-color;
+    -fx-border-width: 0 0 2 0;
+}
+
+#login-app-title {
+    -fx-background-color: -fx-color;
+    -fx-font-size: 4em;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
