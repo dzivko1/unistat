@@ -1,7 +1,6 @@
 package hr.ferit.dominikzivko.unistat.ui.component
 
 import domyutil.jfx.*
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -13,18 +12,20 @@ import javafx.scene.control.ProgressBar
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 
-class ProgressMonitor(initialMessage: String = "", initialProgress: Double = -1.0, onCancel: (() -> Unit)? = null) : VBox() {
+class ProgressMonitor(
+    initialMessage: String = "",
+    initialProgress: Double = -1.0,
+    initialOnCancel: (() -> Unit)? = null
+) : VBox() {
 
     val progressProperty = SimpleDoubleProperty(this, "progress", initialProgress)
-    var progress by progressProperty
+    var progress: Number by progressProperty
 
     val messageProperty = SimpleStringProperty(this, "message", initialMessage)
-    var message by messageProperty
+    var message: String by messageProperty
 
-    val onCancelProperty = SimpleObjectProperty<() -> Unit>(this, "onCancel", onCancel)
+    val onCancelProperty = SimpleObjectProperty<(() -> Unit)?>(this, "onCancel", initialOnCancel)
     var onCancel by onCancelProperty
-
-    val cancellable: Boolean get() = onCancel != null
 
     val stage: Stage get() = scene.window as Stage
 
@@ -56,4 +57,24 @@ class ProgressMonitor(initialMessage: String = "", initialProgress: Double = -1.
 
         children.addAll(messageLabel, progressBar, cancelButton)
     }
+
+    fun applyFx(wait: Boolean = false, block: ProgressMonitor.() -> Unit) {
+        if (wait) runFxAndWait { block() }
+        else runFx { block() }
+    }
+
+    fun exportState() = State(message, progress as Double, onCancel)
+
+    fun importState(state: State, wait: Boolean = false) = applyFx(wait) {
+        message = state.message
+        progress = state.progress
+        onCancel = state.onCancel
+    }
+
+
+    data class State(
+        val message: String,
+        val progress: Double,
+        val onCancel: (() -> Unit)?
+    )
 }

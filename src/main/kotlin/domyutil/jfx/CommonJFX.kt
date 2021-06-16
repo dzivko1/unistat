@@ -10,28 +10,43 @@ import javafx.scene.control.ToggleGroup
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import javafx.stage.Stage
-import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Future
 import java.util.concurrent.FutureTask
 import kotlin.reflect.KProperty
 
-val strings by lazy { ResourceBundle.getBundle("Strings") }
+val strings: ResourceBundle by lazy { ResourceBundle.getBundle("Strings") }
 operator fun ResourceBundle.get(key: String): String = getString(key)
 
 operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
 operator fun <T> Property<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
 
 /**
- * Run the specified block on the JavaFX Application Thread at some unspecified time in the future, or
- * immediately if called from that thread. If called from a thread that is not the JavaFX Application Thread, this
- * method will post the specified block to the event queue and then return immediately to the caller.
+ * Run the specified block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
+ * called from that thread. If called from a thread other than the JavaFX Application Thread, this method will post
+ * the specified block to the event queue and then return immediately to the caller.
  * @param block code that needs to be executed on the JavaFX Application Thread
  * @see Platform.runLater
  */
-fun runFx(block: () -> Unit) =
+fun runFx(block: () -> Unit): Unit =
     if (Platform.isFxApplicationThread()) block()
     else Platform.runLater(block)
+
+/**
+ * Run the specified block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
+ * called from that thread. The block is wrapped in a [FutureTask] before being executed. If called from a thread other
+ * than the JavaFX Application Thread, this method will post the task to the event queue and then return immediately to
+ * the caller.
+ * @param block code that needs to be executed on the JavaFX Application Thread
+ * @return a [FutureTask] representing the future result of the block
+ */
+fun <T> runFx(block: () -> T): Future<T> {
+    val task = FutureTask(block)
+    if (Platform.isFxApplicationThread()) task.run()
+    else Platform.runLater(task)
+    return task
+}
 
 /**
  * Run the specified block on the JavaFX Application Thread at some unspecified time in the future and wait until
@@ -58,12 +73,15 @@ fun runFxAndWait(block: () -> Unit) {
     doneLatch.await()
 }
 
-fun <T> runFxAndWait(block: () -> T) : T {
-    val task = FutureTask(block)
-    if (Platform.isFxApplicationThread()) task.run()
-    else Platform.runLater(task)
-    return task.get()
-}
+/**
+ * Run the specified block on the JavaFX Application Thread at some unspecified time in the future and wait until
+ * it is executed. The block is wrapped in a [FutureTask] before being executed. If this is called from the JavaFX
+ * Application Thread, the runnable is run immediately instead of being posted to the event queue.
+ * @param block code that needs to be executed on the JavaFX Application Thread
+ * @return a [FutureTask] representing the future result of the block
+ * @throws InterruptedException if interrupted while waiting for the block to complete execution
+ */
+fun <T> runFxAndWait(block: () -> T): T = runFx(block).get()
 
 class DeselectionFilter(val toggleGroup: ToggleGroup) : EventHandler<Event> {
     override fun handle(event: Event) {

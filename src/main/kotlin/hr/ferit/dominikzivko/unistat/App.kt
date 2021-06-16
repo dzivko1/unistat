@@ -3,13 +3,15 @@ package hr.ferit.dominikzivko.unistat
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.data.*
 import hr.ferit.dominikzivko.unistat.ui.UIManager
-import hr.ferit.dominikzivko.unistat.web.AuthWebConnection
-import hr.ferit.dominikzivko.unistat.web.WebConnection
+import hr.ferit.dominikzivko.unistat.web.AuthWebGateway
+import hr.ferit.dominikzivko.unistat.web.WebGateway
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
-import org.koin.core.context.*
+import org.koin.core.context.GlobalContext
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.io.IOException
 import java.io.RandomAccessFile
@@ -17,36 +19,41 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import javax.swing.JOptionPane
-import kotlin.concurrent.thread
-import kotlin.properties.Delegates
 import kotlin.system.exitProcess
 
 class App : Application() {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
-    private val appRuntime: AppRuntime by lazy { GlobalContext.get().get() }
+    private val appBase: AppBase by lazy { GlobalContext.get().get() }
 
     override fun start(primaryStage: Stage) {
         log.info("Application started.")
-        thread(name = "Starter Thread") {
-            try {
-                Platform.setImplicitExit(false)
-                startKoin { modules(baseModule) }
-                AppDatabase.initialize()
-                appRuntime.start(primaryStage)
-            } catch (t: Throwable) {
-                log.fatal("Fatal error", t)
-                Alerts.catching(strings["msg_error_occurred"], t)
-                exit()
-            }
+        try {
+            Platform.setImplicitExit(false)
+            val isSampleMode =
+                Pref.autoLogin && Pref.savedUsername == SAMPLE_USER.username
+            startKoin { modules(getModules(isSampleMode)) }
+            AppDatabase.initialize()
+            appBase.start(primaryStage, isSampleMode)
+        } catch (t: Throwable) {
+            log.fatal("Fatal error", t)
+            Alerts.catching(strings["msg_error_occurred"], t)
+            exit()
         }
     }
 
     override fun stop() {
         log.info("Application stopping.")
+        appBase.stop()
         stopKoin()
         super.stop()
     }
+
+    private fun getModules(sampleMode: Boolean) = listOf(
+        baseModule,
+        if (sampleMode) sampleDatasourceModule
+        else remoteDatasourceModule
+    )
 
 
     companion object {
@@ -124,18 +131,18 @@ class App : Application() {
 }
 
 val baseModule = module {
-    single { AppRuntime(get()) }
+    single { AppBase(get(), get()) }
     single { UIManager() }
     single { Repository(get()) }
 }
 
 val remoteDatasourceModule = module {
-    single { WebConnection() }
-    single { AuthWebConnection(get()) }
+    single { WebGateway() }
+    single { AuthWebGateway(get()) }
     single<DataSource> { WebDataSource(get()) }
 }
 
-val localDatasourceModule = module {
+val sampleDatasourceModule = module {
 
 }
 

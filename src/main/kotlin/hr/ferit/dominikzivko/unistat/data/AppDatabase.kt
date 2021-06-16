@@ -19,7 +19,7 @@ object AppDatabase {
 
         transaction {
             addLogger(StdOutSqlLogger)
-            SchemaUtils.create(Users, Bills, BillEntries, Articles)
+            SchemaUtils.create(Users, Bills, BillEntries, Articles, Cookies)
         }
     }
 }

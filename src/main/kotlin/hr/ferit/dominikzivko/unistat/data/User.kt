@@ -1,5 +1,6 @@
 package hr.ferit.dominikzivko.unistat.data
 
+import domyutil.*
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -7,7 +8,15 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
+val SAMPLE_USER = UserLogon("<SAMPLE_USER>")
+
 data class UserLogon(
+    val username: String
+) {
+    val id by lazy { nameUUIDFromString(username) }
+}
+
+data class LoginDetails(
     val username: String,
     val password: String
 )
@@ -18,7 +27,7 @@ data class User(
     val institution: String,
     val level: String,
     val balance: Float,
-    val id: UUID? = null
+    val id: UUID
 ) {
     constructor(dao: UserDAO) : this(
         dao.username,
@@ -29,7 +38,12 @@ data class User(
         dao.id.value
     )
 
-    val dao: UserDAO? get() = transaction { this@User.id?.let { UserDAO.findById(it) } }
+    val dao: UserDAO? by lazy { transaction { UserDAO.findById(this@User.id) } }
+
+    fun loadBills(): List<Bill> = transaction {
+        if (dao != null) BillDAO.find { Bills.user eq dao!!.id }.map { Bill(it) }
+        else emptyList()
+    }
 }
 
 object Users : UUIDTable() {

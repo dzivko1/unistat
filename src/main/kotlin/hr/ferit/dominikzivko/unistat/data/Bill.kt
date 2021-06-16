@@ -5,8 +5,6 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.`java-time`.datetime
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
 import java.util.*
 
@@ -25,9 +23,8 @@ data class Bill(
             ArticleDAO.findById(it[BillEntries.article])!!
         ) },*/
         dao.entries.map { BillEntry(it) },
-        dao.id.value)
-
-    val dao: BillDAO? get() = transaction { this@Bill.id?.let { BillDAO.findById(it) } }
+        dao.id.value
+    )
 }
 
 object Bills : LongIdTable() {

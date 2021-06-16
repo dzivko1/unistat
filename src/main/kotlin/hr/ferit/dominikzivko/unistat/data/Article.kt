@@ -4,7 +4,6 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.transactions.transaction
 
 data class Article(
     val name: String,
@@ -12,8 +11,6 @@ data class Article(
     val id: Int? = null
 ) {
     constructor(dao: ArticleDAO) : this(dao.name, dao.price, dao.id.value)
-
-    val dao: ArticleDAO? get() = transaction { this@Article.id?.let { ArticleDAO.findById(it) } }
 
     fun areDetailsEqual(other: Article): Boolean {
         return name == other.name && price == other.price
