@@ -4,10 +4,6 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
 
 data class BillEntry(
     val article: Article,
@@ -15,13 +11,6 @@ data class BillEntry(
     val subsidy: Float,
     val id: Long? = null
 ) {
-    /*constructor(billDAO: BillDAO, articleDAO: ArticleDAO) : this(BillEntries.select { (BillEntries.bill eq billDAO.id) and (BillEntries.article eq articleDAO.id) }.first(), articleDAO)
-
-    private constructor(entry: ResultRow, articleDAO: ArticleDAO) : this(
-        Article(articleDAO),
-        entry[BillEntries.amount],
-        entry[BillEntries.subsidy]
-    )*/
 
     constructor(dao: BillEntryDAO) : this(
         Article(dao.article),

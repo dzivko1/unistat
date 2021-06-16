@@ -9,10 +9,10 @@ inline fun <reified T : Any> preference(preferences: Preferences, key: String, d
     PreferenceDelegate(preferences, key, defaultValue, T::class)
 
 class PreferenceDelegate<T : Any>(
-    val preferences: Preferences,
-    val key: String,
-    val defaultValue: T,
-    val type: KClass<T>
+    private val preferences: Preferences,
+    private val key: String,
+    private val defaultValue: T,
+    private val type: KClass<T>
 ) : ReadWriteProperty<Any, T> {
 
     @Suppress("UNCHECKED_CAST")

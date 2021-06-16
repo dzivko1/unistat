@@ -4,9 +4,7 @@ import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.App
 import hr.ferit.dominikzivko.unistat.ui.component.Prompt
 import hr.ferit.dominikzivko.unistat.ui.component.PromptCompanion
-import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.Node
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Label
 import javafx.scene.control.PasswordField

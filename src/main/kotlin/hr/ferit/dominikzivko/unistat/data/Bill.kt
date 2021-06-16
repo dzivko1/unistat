@@ -19,9 +19,6 @@ data class Bill(
         dao.dateTime,
         dao.source,
         dao.user.id.value,
-        /*BillEntries.select { BillEntries.bill eq dao.id }.map { BillEntry(BillDAO.findById(it[BillEntries.bill])!!,
-            ArticleDAO.findById(it[BillEntries.article])!!
-        ) },*/
         dao.entries.map { BillEntry(it) },
         dao.id.value
     )

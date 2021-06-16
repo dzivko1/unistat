@@ -2,23 +2,17 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-
-<BorderPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiBase">
-   <left>
-      <VBox prefWidth="180.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-         <children>
-            <VBox fx:id="navButtonBox" />
-            <Region VBox.vgrow="ALWAYS" />
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiBase">
+    <left>
+        <VBox prefWidth="180.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+            <VBox fx:id="navButtonBox"/>
+            <Region VBox.vgrow="ALWAYS"/>
             <ToolBar prefHeight="40.0">
-              <items>
-                <Button mnemonicParsing="false" text="Button" />
-              </items>
+                <Button mnemonicParsing="false" text="Button"/>
             </ToolBar>
-            <AnchorPane prefHeight="100.0" />
-         </children></VBox>
-   </left>
+            <AnchorPane prefHeight="100.0"/>
+        </VBox>
+    </left>
 </BorderPane>

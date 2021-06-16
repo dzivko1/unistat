@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox
 class GuiBase {
     @FXML
     private lateinit var root: BorderPane
+
     @FXML
     private lateinit var navButtonBox: VBox
 

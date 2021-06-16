@@ -1,9 +1,6 @@
 package hr.ferit.dominikzivko.unistat.ui.component
 
-import domyutil.jfx.*
 import javafx.stage.Stage
-import kotlinx.coroutines.runBlocking
-import kotlin.concurrent.thread
 
 interface Prompt {
 

@@ -6,7 +6,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-fun obfuscate(input: String) : String {
+fun obfuscate(input: String): String {
     val key = KeyGenerator.getInstance("AES").generateKey()
     val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
     cipher.init(Cipher.ENCRYPT_MODE, key)
@@ -16,7 +16,7 @@ fun obfuscate(input: String) : String {
     return base64Encode(stitched.toByteArray())
 }
 
-fun deobfuscate(input: String) : String {
+fun deobfuscate(input: String): String {
     val parts = base64Decode(input).decodeToString().split(':')
     val keyBytes = base64Decode(parts[0])
     val iv = base64Decode(parts[1])
@@ -28,5 +28,5 @@ fun deobfuscate(input: String) : String {
     return cipher.doFinal(cryptoText).decodeToString()
 }
 
-private fun base64Encode(input: ByteArray) : String = Base64.getUrlEncoder().withoutPadding().encodeToString(input)
-private fun base64Decode(input: String) : ByteArray = Base64.getUrlDecoder().decode(input)
+private fun base64Encode(input: ByteArray): String = Base64.getUrlEncoder().withoutPadding().encodeToString(input)
+private fun base64Decode(input: String): ByteArray = Base64.getUrlDecoder().decode(input)
