@@ -18,34 +18,30 @@ class GuiBase {
     private lateinit var navButtonBox: VBox
 
     private val navToggleGroup = ToggleGroup()
+    private lateinit var cardsToButtons: Map<Card, ToggleButton>
 
     @FXML
     fun initialize() {
         setupNavButtons()
-
-        navToggleGroup.selectedToggleProperty().addListener { _, _, newValue ->
-            showCard(newValue.userData as Card)
-        }
-
         showCard(Card.Overview)
     }
 
     private fun setupNavButtons() {
-        for (card in Card.values()) {
-            with(ToggleButton(card.title)) {
+        val deselectionFilter = DeselectionFilter(navToggleGroup)
+        cardsToButtons = Card.values().associateWith { card ->
+            ToggleButton(card.title).apply {
                 styleClass += "nav-button"
                 toggleGroup = navToggleGroup
-                userData = card
-                addEventFilter(Event.ANY, DeselectionFilter(navToggleGroup))
-                navButtonBox.children += this
-
-                if (card == Card.Overview) isSelected = true
+                addEventFilter(Event.ANY, deselectionFilter)
+                setOnAction { showCard(card) }
             }
         }
+        navButtonBox.children += cardsToButtons.values
     }
 
     private fun showCard(card: Card) {
         val cardView = FXMLLoader(javaClass.getResource(card.fxmlPath)).load<Pane>()
         root.center = cardView
+        navToggleGroup.selectToggle(cardsToButtons[card])
     }
 }
