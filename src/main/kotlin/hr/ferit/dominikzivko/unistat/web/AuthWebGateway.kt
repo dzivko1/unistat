@@ -71,7 +71,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
 
         val progressState = progressMonitor?.exportState()
         progressMonitor?.applyFx {
-            message = strings["logging_in"]
+            message = strings["loggingIn"]
             progress = -1
             onCancel = null
         }
@@ -79,7 +79,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         try {
             login(loginDetails, loginPage)
         } catch (e: LoginFailedException) {
-            val errorMessage = e.userFriendlyMessage ?: strings["msg_error_occurred"]
+            val errorMessage = e.userFriendlyMessage ?: strings["msg_errorOccurred"]
             val freshLoginPage = web.get(Pref.url_student).takeIf { it.isLoginPage }
                 ?: throw UnexpectedResponseException("Did not receive the login page during a login attempt.")
             progressMonitor?.importState(progressState!!, wait = true)
@@ -126,7 +126,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
 
             throw LoginFailedException(
                 "The webserver returned an error message: $errorMessage",
-                errorMessage ?: strings["msg_error_occurred"]
+                errorMessage ?: strings["msg_errorOccurred"]
             )
         }
 

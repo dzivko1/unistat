@@ -64,7 +64,7 @@ class AppBase(
     }
 
     fun logout() = runBackground {
-        uiManager.monitorProgress(strings["logging_out"]) {
+        uiManager.monitorProgress(strings["loggingOut"]) {
             repository.forget()
         }
         setupOnlineMode()

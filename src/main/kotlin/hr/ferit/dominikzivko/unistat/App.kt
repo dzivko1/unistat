@@ -37,7 +37,7 @@ class App : Application() {
             appBase.start(primaryStage, isSampleMode)
         } catch (t: Throwable) {
             log.fatal("Fatal error", t)
-            Alerts.catching(strings["msg_error_occurred"], t)
+            Alerts.catching(strings["msg_errorOccurred"], t)
             exit()
         }
     }
@@ -78,7 +78,7 @@ class App : Application() {
                 launch(App::class.java, *args)
             } catch (t: Throwable) {
                 log.fatal("Top level error", t)
-                Alerts.catching(strings["msg_error_occurred"], t)
+                Alerts.catching(strings["msg_errorOccurred"], t)
                 exitProcess(ExitCodes.FAIL)
             }
         }

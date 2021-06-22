@@ -20,7 +20,7 @@ private object BackgroundThreadFactory : ThreadFactory {
     const val THREAD_NAME_PREFIX = "worker-thread-"
     private val threadCount = AtomicInteger()
     private val handler = Thread.UncaughtExceptionHandler { t, e ->
-        Alerts.catching(strings["msg_error_occurred"], e, LogManager.getLogger(t.javaClass))
+        Alerts.catching(strings["msg_errorOccurred"], e, LogManager.getLogger(t.javaClass))
         if (e is BackgroundTaskException && e.shouldExit) App.exit()
     }
 
