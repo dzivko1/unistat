@@ -14,15 +14,16 @@ import kotlin.properties.Delegates
 
 class AppBase(
     val uiManager: UIManager,
-    val repository: Repository
+    val repository: Repository,
+    val exporter: Exporter
 ) {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
-    var sampleMode by Delegates.notNull<Boolean>()
+    var offlineMode by Delegates.notNull<Boolean>()
         private set
 
-    fun start(primaryStage: Stage, sampleMode: Boolean) {
-        this.sampleMode = sampleMode
+    fun start(primaryStage: Stage, offlineMode: Boolean) {
+        this.offlineMode = offlineMode
         uiManager.start()
         uiManager.primaryStage = primaryStage
         repository.start()
@@ -46,7 +47,7 @@ class AppBase(
             }.onFailure {
                 when (it) {
                     is SwitchToSampleException -> {
-                        setupSampleMode()
+                        setupOfflineMode()
                         return@runBackground
                     }
                     is InputCancelledException -> {
@@ -63,6 +64,12 @@ class AppBase(
         uiManager.showBaseGui()
     }
 
+    fun exportBills(bills: List<Bill>) {
+        val location = uiManager.showSaveDialog(extensionFilters = App.billFileExtensionFilters)
+            ?: return
+        exporter.exportBills(bills, location)
+    }
+
     fun logout() = runBackground {
         uiManager.monitorProgress(strings["loggingOut"]) {
             repository.forget()
@@ -71,23 +78,23 @@ class AppBase(
     }
 
     private fun setupOnlineMode() {
-        if (sampleMode) {
+        if (offlineMode) {
             log.info("Setting up online mode.")
-            unloadKoinModules(sampleDatasourceModule)
+            unloadKoinModules(localDatasourceModule)
             loadKoinModules(remoteDatasourceModule)
             repository::dataSource.inject()
-            sampleMode = false
+            offlineMode = false
         }
         refreshUserData()
     }
 
-    private fun setupSampleMode() {
-        if (!sampleMode) {
-            log.info("Setting up sample mode.")
+    private fun setupOfflineMode() {
+        if (!offlineMode) {
+            log.info("Setting up offline mode.")
             unloadKoinModules(remoteDatasourceModule)
-            loadKoinModules(sampleDatasourceModule)
+            loadKoinModules(localDatasourceModule)
             repository::dataSource.inject()
-            sampleMode = true
+            offlineMode = true
         }
         refreshUserData()
     }

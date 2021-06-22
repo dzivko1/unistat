@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
-val SAMPLE_USER = UserLogon("<SAMPLE_USER>")
+val LOCAL_USER = UserLogon("<LOCAL_USER>")
 
 data class UserLogon(
     val username: String

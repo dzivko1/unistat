@@ -7,6 +7,7 @@ import hr.ferit.dominikzivko.unistat.web.AuthWebGateway
 import hr.ferit.dominikzivko.unistat.web.WebGateway
 import javafx.application.Application
 import javafx.application.Platform
+import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.koin.core.context.GlobalContext
@@ -30,11 +31,10 @@ class App : Application() {
         log.info("Application started.")
         try {
             Platform.setImplicitExit(false)
-            val isSampleMode =
-                Pref.autoLogin && Pref.savedUsername == SAMPLE_USER.username
-            startKoin { modules(getModules(isSampleMode)) }
+            val isOfflineMode = true //TODO temp
+            startKoin { modules(getModules(isOfflineMode)) }
             AppDatabase.initialize()
-            appBase.start(primaryStage, isSampleMode)
+            appBase.start(primaryStage, isOfflineMode)
         } catch (t: Throwable) {
             log.fatal("Fatal error", t)
             Alerts.catching(strings["msg_errorOccurred"], t)
@@ -49,9 +49,9 @@ class App : Application() {
         super.stop()
     }
 
-    private fun getModules(sampleMode: Boolean) = listOf(
+    private fun getModules(offlineMode: Boolean) = listOf(
         baseModule,
-        if (sampleMode) sampleDatasourceModule
+        if (offlineMode) localDatasourceModule
         else remoteDatasourceModule
     )
 
@@ -65,6 +65,10 @@ class App : Application() {
         val mainStylesheet: String by lazy {
             App::class.java.getResource("/gui/application.css").toExternalForm()
         }
+
+        val billFileExtensionFilters = listOf(
+            FileChooser.ExtensionFilter("JSON Files", "*.json")
+        )
 
         fun exit() {
             Platform.exit()
@@ -131,9 +135,10 @@ class App : Application() {
 }
 
 val baseModule = module {
-    single { AppBase(get(), get()) }
+    single { AppBase(get(), get(), get()) }
     single { UIManager() }
     single { Repository(get()) }
+    single { Exporter() }
 }
 
 val remoteDatasourceModule = module {
@@ -142,8 +147,8 @@ val remoteDatasourceModule = module {
     single<DataSource> { WebDataSource(get()) }
 }
 
-val sampleDatasourceModule = module {
-
+val localDatasourceModule = module {
+    single<DataSource> { LocalDataSource() }
 }
 
 object ExitCodes {

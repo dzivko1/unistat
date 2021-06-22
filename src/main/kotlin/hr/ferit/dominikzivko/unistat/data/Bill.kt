@@ -1,5 +1,6 @@
 package hr.ferit.dominikzivko.unistat.data
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -8,9 +9,12 @@ import org.jetbrains.exposed.sql.`java-time`.datetime
 import java.time.LocalDateTime
 import java.util.*
 
+@Serializable
 data class Bill(
+    @Serializable(with = LocalDateTimeSerializer::class)
     val dateTime: LocalDateTime,
     val source: String,
+    @Serializable(with = UuidSerializer::class)
     val user: UUID,
     val entries: List<BillEntry>,
     val id: Long? = null

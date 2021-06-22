@@ -8,9 +8,11 @@ import hr.ferit.dominikzivko.unistat.ui.component.Prompt
 import hr.ferit.dominikzivko.unistat.ui.component.PromptCompanion
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
+import javafx.stage.FileChooser
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import org.apache.logging.log4j.LogManager
+import java.io.File
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.time.format.DateTimeFormatter
@@ -30,6 +32,7 @@ class UIManager : AppComponent {
     lateinit var primaryStage: Stage
 
     private lateinit var baseScene: Scene
+    private val fileChooser by lazy { FileChooser() }
 
     val isBaseGuiShowing get() = primaryStage.isShowing
 
@@ -80,6 +83,42 @@ class UIManager : AppComponent {
         return@runFxAndWait loader.getController()
     }
 
+    fun showOpenDialog(
+        title: String? = null,
+        initialDirectory: File? = null,
+        initialFileName: String? = null,
+        extensionFilters: List<FileChooser.ExtensionFilter>? = null,
+        selectedExtensionFilter: FileChooser.ExtensionFilter? = null
+    ): File? = runFxAndWait<File?> {
+        fileChooser.configure(title, initialDirectory, initialFileName, extensionFilters, selectedExtensionFilter)
+        return@runFxAndWait fileChooser.showOpenDialog(primaryStage)
+    }
+
+    fun showSaveDialog(
+        title: String? = null,
+        initialDirectory: File? = null,
+        initialFileName: String? = null,
+        extensionFilters: List<FileChooser.ExtensionFilter>? = null,
+        selectedExtensionFilter: FileChooser.ExtensionFilter? = null
+    ): File? = runFxAndWait<File?> {
+        fileChooser.configure(title, initialDirectory, initialFileName, extensionFilters, selectedExtensionFilter)
+        return@runFxAndWait fileChooser.showSaveDialog(primaryStage)
+    }
+
+    private fun FileChooser.configure(
+        title: String?,
+        initialDirectory: File?,
+        initialFileName: String?,
+        extensionFilters: List<FileChooser.ExtensionFilter>?,
+        selectedExtensionFilter: FileChooser.ExtensionFilter?
+    ) {
+        this.title = title
+        this.initialDirectory = initialDirectory
+        this.initialFileName = initialFileName
+        this.extensionFilters.setAll(extensionFilters ?: emptyList())
+        this.selectedExtensionFilter = selectedExtensionFilter
+    }
+
     inline fun <T> monitorProgress(
         initialMessage: String = "",
         initialProgress: Double = -1.0,
@@ -92,7 +131,7 @@ class UIManager : AppComponent {
     ): T {
         showProgressMonitor(progressMonitor)
         return block(progressMonitor).also {
-            runFx { progressMonitor.stage.close() }
+            runFx { progressMonitor.hide() }
         }
     }
 

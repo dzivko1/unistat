@@ -2,6 +2,7 @@ package hr.ferit.dominikzivko.unistat.data
 
 import domyutil.*
 import domyutil.jfx.*
+import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.AppComponent
 import hr.ferit.dominikzivko.unistat.checkCancelled
 import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
@@ -12,10 +13,12 @@ import javafx.collections.ObservableList
 import org.apache.logging.log4j.LogManager
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.core.context.GlobalContext
 
 class Repository(var dataSource: DataSource) : AppComponent {
 
     private val log by lazy { LogManager.getLogger(javaClass) }
+    private val app: AppBase get() = GlobalContext.get().get()
 
     private val _userProperty = ReadOnlyObjectWrapper<User?>(this, "user")
     val userProperty: ReadOnlyObjectProperty<User?> get() = _userProperty.readOnlyProperty
@@ -54,7 +57,8 @@ class Repository(var dataSource: DataSource) : AppComponent {
         val newBills = dataSource.fetchBills(existingBills, progressMonitor)
         checkCancelled()
 
-        persist(newUser, newBills)
+        if (!app.offlineMode)
+            persist(newUser, newBills)
         log.info("Data refresh finished.")
     }
 
@@ -64,14 +68,12 @@ class Repository(var dataSource: DataSource) : AppComponent {
             val userDAO = (newUser.dao ?: UserDAO.new(nameUUIDFromString(newUser.username)) {})
                 .apply { update(newUser) }
 
-            val newBillDAOs = mutableListOf<BillDAO>()
-
             newBills.forEach { newBill ->
                 val billDAO = BillDAO.new {
                     dateTime = newBill.dateTime
                     source = newBill.source
                     user = userDAO
-                }.also { newBillDAOs += it }
+                }
 
                 val articles = newBill.entries.map { it.article }
                 val existingArticles = ArticleDAO.all().map { Article(it.name, it.price) }

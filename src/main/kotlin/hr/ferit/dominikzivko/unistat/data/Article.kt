@@ -1,10 +1,12 @@
 package hr.ferit.dominikzivko.unistat.data
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
+@Serializable
 data class Article(
     val name: String,
     val price: Float,

@@ -14,7 +14,7 @@ import javafx.stage.Stage
 
 data class LoginPromptResult(
     override val cancelled: Boolean,
-    val useSampleData: Boolean,
+    val goOffline: Boolean,
     val username: String,
     val password: String,
     val remember: Boolean
@@ -37,7 +37,7 @@ class GuiLogin : Prompt {
     private lateinit var errorMessageLabel: Label
 
     private var cancelled = false
-    private var useSampleData = false
+    private var goOffline = false
 
     override val stage get() = usernameField.scene.window as Stage
 
@@ -69,15 +69,15 @@ class GuiLogin : Prompt {
     }
 
     @FXML
-    fun useSampleData() {
-        useSampleData = true
+    fun goOffline() {
+        goOffline = true
         stage.close()
     }
 
     override fun reset() {
         clearInputs()
         cancelled = false
-        useSampleData = false
+        goOffline = false
         remember.isSelected = false
         errorMessage = null
     }
@@ -89,7 +89,7 @@ class GuiLogin : Prompt {
 
     override fun makeResult() = LoginPromptResult(
         cancelled,
-        useSampleData,
+        goOffline,
         usernameField.text,
         passwordField.text,
         remember.isSelected

@@ -63,6 +63,10 @@ class ProgressMonitor(
         else runFx { block() }
     }
 
+    fun show() = runFx { stage.show() }
+
+    fun hide() = runFx { stage.hide() }
+
     fun exportState() = State(message, progress as Double, onCancel)
 
     fun importState(state: State, wait: Boolean = false) = applyFx(wait) {

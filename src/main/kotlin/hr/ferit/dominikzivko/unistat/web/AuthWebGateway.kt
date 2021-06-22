@@ -63,8 +63,8 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         val loginDetails = when {
             Pref.autoLogin -> LoginDetails(Pref.savedUsername, Pref.savedPassword)
             canPromptLogin -> {
-                progressMonitor?.applyFx { stage.hide() }
-                askForLogin(loginErrorMessage).also { progressMonitor?.applyFx { stage.show() } }
+                progressMonitor?.hide()
+                askForLogin(loginErrorMessage).also { progressMonitor?.show() }
             }
             else -> throw NotLoggedInException()
         }
@@ -99,7 +99,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
     private fun askForLogin(errorMessage: String? = null): LoginDetails {
         uiManager.promptLogin(errorMessage).run {
             if (cancelled) throw InputCancelledException()
-            if (useSampleData) throw SwitchToSampleException()
+            if (goOffline) throw SwitchToSampleException()
 
             return LoginDetails(username, password)
                 .also { if (remember) enableAutoLogin(it) }
