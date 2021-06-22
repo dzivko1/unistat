@@ -1,6 +1,7 @@
 package hr.ferit.dominikzivko.unistat.ui
 
 import domyutil.jfx.*
+import hr.ferit.dominikzivko.unistat.AppBase
 import javafx.event.Event
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -9,8 +10,11 @@ import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
+import org.koin.core.context.GlobalContext
 
 class GuiBase {
+    private val app: AppBase get() = GlobalContext.get().get()
+
     @FXML
     private lateinit var root: BorderPane
 
@@ -37,6 +41,11 @@ class GuiBase {
             }
         }
         navButtonBox.children += cardsToButtons.values
+    }
+
+    @FXML
+    private fun logout() {
+        app.logout()
     }
 
     private fun showCard(card: Card) {
