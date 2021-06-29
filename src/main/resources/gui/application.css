@@ -53,6 +53,17 @@
     -fx-border-width: 0 0 2 0;
 }
 
+.title{
+	-fx-font-size: 16.0;
+	-fx-font-weight: bold;
+}
+
+#user-name {
+    -fx-font-size: 14.0;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
 #login-app-title {
     -fx-background-color: -fx-color;
     -fx-font-size: 4em;

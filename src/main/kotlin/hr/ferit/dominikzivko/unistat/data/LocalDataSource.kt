@@ -20,7 +20,7 @@ class LocalDataSource : DataSource {
     override fun stop() {}
 
     override fun fetchGeneralData(progressMonitor: ProgressMonitor): User {
-        return User(LOCAL_USER.username, "(${strings["demo"]})", "-", "-", -1f, LOCAL_USER.id)
+        return User(LOCAL_USER.username, "(${strings["demo"]})", "---", "---", -1f, LOCAL_USER.id)
     }
 
     override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor): List<Bill> {

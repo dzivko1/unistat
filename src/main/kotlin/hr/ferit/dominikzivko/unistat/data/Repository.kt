@@ -18,7 +18,7 @@ import org.koin.core.context.GlobalContext
 class Repository(var dataSource: DataSource) : AppComponent {
 
     private val log by lazy { LogManager.getLogger(javaClass) }
-    private val app: AppBase get() = GlobalContext.get().get()
+    private val app: AppBase by lazy { GlobalContext.get().get() }
 
     private val _userProperty = ReadOnlyObjectWrapper<User?>(this, "user")
     val userProperty: ReadOnlyObjectProperty<User?> get() = _userProperty.readOnlyProperty
@@ -57,8 +57,14 @@ class Repository(var dataSource: DataSource) : AppComponent {
         val newBills = dataSource.fetchBills(existingBills, progressMonitor)
         checkCancelled()
 
-        if (!app.offlineMode)
+        if (app.offlineMode) {
+            user = newUser
+            _bills.setAll(newBills)
+        } else {
             persist(newUser, newBills)
+            reload()
+        }
+
         log.info("Data refresh finished.")
     }
 
@@ -100,7 +106,6 @@ class Repository(var dataSource: DataSource) : AppComponent {
             }
         }
 
-        reload()
         log.debug("Saving finished.")
     }
 
