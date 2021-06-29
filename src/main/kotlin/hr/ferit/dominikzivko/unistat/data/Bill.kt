@@ -26,6 +26,10 @@ data class Bill(
         dao.entries.map { BillEntry(it) },
         dao.id.value
     )
+
+    val articleCount get() = entries.sumOf { it.amount }
+    val totalValue get() = entries.sumOf { (it.amount * it.article.price).toDouble() }
+    val totalSubsidy get() = entries.sumOf { it.subsidy.toDouble() }
 }
 
 object Bills : LongIdTable() {

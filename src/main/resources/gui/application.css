@@ -58,6 +58,11 @@
 	-fx-font-weight: bold;
 }
 
+.strong {
+    -fx-font-size: 14.0;
+    -fx-font-weight: bold;
+}
+
 #user-name {
     -fx-font-size: 14.0;
     -fx-font-weight: bold;

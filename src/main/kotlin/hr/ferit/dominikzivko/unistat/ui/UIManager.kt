@@ -26,6 +26,8 @@ val FLOAT_FORMAT = DecimalFormat("0.00").apply {
     decimalFormatSymbols = DecimalFormatSymbols().apply { decimalSeparator = ',' }
 }
 
+val shortCurrencyStr = "kn"
+
 class UIManager : AppComponent {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
