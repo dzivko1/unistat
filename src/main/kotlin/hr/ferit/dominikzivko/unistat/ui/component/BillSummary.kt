@@ -4,6 +4,7 @@ import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.data.Bill
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -15,10 +16,13 @@ import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 
-class BillSummary(title: String, observableBills: ObservableList<Bill>) : GridPane() {
+class BillSummary(initialTitle: String, observableBills: ObservableList<Bill> = FXCollections.emptyObservableList()) : GridPane() {
 
-    val billsProperty = SimpleListProperty(this, "bills", FXCollections.observableArrayList(observableBills))
-    var bills by billsProperty
+    val titleProperty = SimpleStringProperty(this, "title", initialTitle)
+    var title: String by titleProperty
+
+    val billsProperty = SimpleListProperty(this, "bills", observableBills)
+    var bills: ObservableList<Bill> by billsProperty
 
     init {
         prefWidth = 180.0
@@ -44,7 +48,7 @@ class BillSummary(title: String, observableBills: ObservableList<Bill>) : GridPa
             Bindings.createStringBinding({ "%.2f".format(bills.sumOf { it.totalValue }) }, bills)
         )
         val lblCost = Label().bindText(
-            Bindings.createStringBinding({ "%.2f".format(bills.sumOf { it.totalValue - it.totalSubsidy }) }, bills)
+            Bindings.createStringBinding({ "%.2f".format(bills.sumOf { it.totalCost }) }, bills)
         )
 
         add(lblTitle, 0, 0, 2, 1)

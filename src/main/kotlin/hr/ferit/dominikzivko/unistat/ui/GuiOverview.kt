@@ -40,13 +40,13 @@ class GuiOverview {
         )
 
         billSummaryBox.children += listOf(
-            BillSummary(strings["summary_today"], app.repository.bills.filtered { it.dateTime.isToday() }),
+            BillSummary(strings["summary_today"], app.repository.bills.filtered { it.date.isToday() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_yesterday"], app.repository.bills.filtered { it.dateTime.isYesterday() }),
+            BillSummary(strings["summary_yesterday"], app.repository.bills.filtered { it.date.isYesterday() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_thisWeek"], app.repository.bills.filtered { it.dateTime.isPastWeek() }),
+            BillSummary(strings["summary_thisWeek"], app.repository.bills.filtered { it.date.isPastWeek() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_thisMonth"], app.repository.bills.filtered { it.dateTime.isPastMonth() }),
+            BillSummary(strings["summary_thisMonth"], app.repository.bills.filtered { it.date.isPastMonth() }),
             Separator(Orientation.VERTICAL),
             BillSummary(strings["summary_total"], app.repository.bills),
             Separator(Orientation.VERTICAL)

@@ -68,7 +68,8 @@ class GuiBase {
     }
 
     private fun showCard(card: Card) {
-        val cardView = FXMLLoader(javaClass.getResource(card.fxmlPath), ResourceBundle.getBundle("Strings")).load<Pane>()
+        val cardView =
+            FXMLLoader(javaClass.getResource(card.fxmlPath), ResourceBundle.getBundle("Strings")).load<Pane>()
         root.center = cardView
         navToggleGroup.selectToggle(cardsToButtons[card])
     }

@@ -27,9 +27,11 @@ data class Bill(
         dao.id.value
     )
 
+    val date get() = dateTime.toLocalDate()!!
     val articleCount get() = entries.sumOf { it.amount }
     val totalValue get() = entries.sumOf { (it.amount * it.article.price).toDouble() }
     val totalSubsidy get() = entries.sumOf { it.subsidy.toDouble() }
+    val totalCost get() = entries.sumOf { (it.amount * it.article.price - it.subsidy).toDouble() }
 }
 
 object Bills : LongIdTable() {
