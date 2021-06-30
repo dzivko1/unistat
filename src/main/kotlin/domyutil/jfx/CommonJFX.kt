@@ -1,8 +1,7 @@
 package domyutil.jfx
 
 import javafx.application.Platform
-import javafx.beans.property.Property
-import javafx.beans.value.ObservableValue
+import javafx.beans.value.WritableValue
 import javafx.event.Event
 import javafx.event.EventHandler
 import javafx.scene.Node
@@ -19,8 +18,8 @@ import kotlin.reflect.KProperty
 val strings: ResourceBundle by lazy { ResourceBundle.getBundle("Strings") }
 operator fun ResourceBundle.get(key: String): String = getString(key)
 
-operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
-operator fun <T> Property<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
+operator fun <T> WritableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
+operator fun <T> WritableValue<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
 
 /**
  * Run the specified block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
