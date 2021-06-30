@@ -11,7 +11,8 @@
     -fx-accent: #ffaf4b;
     */
     -fx-default-button: #ffa062;
-
+    -fx-focus-color: #ff7043;
+    -fx-faint-focus-color: #ff704322;
     -fx-color: -fx-base;
 
     -fx-text-base-color: ladder(
