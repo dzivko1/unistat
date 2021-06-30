@@ -21,6 +21,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObjectInstance
 
 val SERVER_DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. H:mm")
+val CHART_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yy.")
 
 val FLOAT_FORMAT = DecimalFormat("0.00").apply {
     decimalFormatSymbols = DecimalFormatSymbols().apply { decimalSeparator = ',' }
