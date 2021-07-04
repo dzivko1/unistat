@@ -5,10 +5,13 @@ import javafx.beans.value.WritableValue
 import javafx.event.Event
 import javafx.event.EventHandler
 import javafx.scene.Node
+import javafx.scene.control.TableCell
+import javafx.scene.control.TableColumn
 import javafx.scene.control.ToggleGroup
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import javafx.stage.Stage
+import javafx.util.Callback
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Future
@@ -119,5 +122,26 @@ class ManualStageDrag : EventHandler<MouseEvent> {
                 dragging = false
             }
         }
+    }
+}
+
+
+abstract class StringCellFactory<S, T> : Callback<TableColumn<S, T>, TableCell<S, T>> {
+
+    override fun call(param: TableColumn<S, T>?): TableCell<S, T> {
+        return object : TableCell<S, T>() {
+            override fun updateItem(item: T, empty: Boolean) {
+                super.updateItem(item, empty)
+                text = if (item == null || empty) null else format(item)
+            }
+        }
+    }
+
+    abstract fun format(item: T): String
+}
+
+fun <S, T> TableColumn<S, T>.setStringCellFactory(format: (item: T) -> String) {
+    cellFactory = object : StringCellFactory<S, T>() {
+        override fun format(item: T) = format(item)
     }
 }

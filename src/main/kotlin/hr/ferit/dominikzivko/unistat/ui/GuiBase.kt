@@ -6,11 +6,11 @@ import javafx.beans.binding.Bindings
 import javafx.event.Event
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.control.ToggleButton
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.BorderPane
-import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import org.koin.core.context.GlobalContext
 import java.util.*
@@ -69,7 +69,7 @@ class GuiBase {
 
     private fun showCard(card: Card) {
         val cardView =
-            FXMLLoader(javaClass.getResource(card.fxmlPath), ResourceBundle.getBundle("Strings")).load<Pane>()
+            FXMLLoader(javaClass.getResource(card.fxmlPath), ResourceBundle.getBundle("Strings")).load<Parent>()
         root.center = cardView
         navToggleGroup.selectToggle(cardsToButtons[card])
     }

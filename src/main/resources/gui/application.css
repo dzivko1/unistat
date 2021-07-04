@@ -6,10 +6,10 @@
 .root {
     -fx-base: #f99;
     -fx-background: derive(-fx-base, 98.0%);
-   /* -fx-control-inner-background: derive(-fx-base,92.0%);
+    -fx-control-inner-background: derive(-fx-base,92.0%);
     -fx-control-inner-background-alt: derive(-fx-control-inner-background,-3%);
     -fx-accent: #ffaf4b;
-    */
+
     -fx-default-button: #ffa062;
     -fx-focus-color: #ff7043;
     -fx-faint-focus-color: #ff704322;
@@ -54,6 +54,14 @@
     -fx-border-width: 0 0 2 0;
 }
 
+.table-view .column-header .label {
+    -fx-text-fill: -fx-light-text-color;
+}
+
+.context-menu .label {
+    -fx-text-fill: -fx-dark-text-color
+}
+
 .title{
 	-fx-font-size: 16.0;
 	-fx-font-weight: bold;
@@ -76,3 +84,25 @@
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
+
+.chart-title {
+    -fx-font-size: 1.2em;
+}
+
+.chart-pie-label {
+    -fx-fill: -fx-text-background-color;
+    -fx-font-size: 12.0;
+    -fx-max-width: 50;
+    -fx-min-width: 50;
+    -fx-pref-width: 50;
+    -fx-width: 50;
+}
+
+.data0.chart-pie { -fx-pie-color: CHART_COLOR_1; }
+.data1.chart-pie { -fx-pie-color: CHART_COLOR_2; }
+.data2.chart-pie { -fx-pie-color: CHART_COLOR_3; }
+.data3.chart-pie { -fx-pie-color: CHART_COLOR_4; }
+.data4.chart-pie { -fx-pie-color: CHART_COLOR_5; }
+.data5.chart-pie { -fx-pie-color: CHART_COLOR_6; }
+.data6.chart-pie { -fx-pie-color: CHART_COLOR_7; }
+.data7.chart-pie { -fx-pie-color: CHART_COLOR_8; }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<fx:root minWidth="420.0" type="VBox" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+    </padding>
+    <Label fx:id="lblDateTime" text="&lt;time-of-issue&gt;"/>
+    <Label fx:id="lblSource" text="&lt;place-of-issue&gt;"/>
+    <Label fx:id="lblValue" text="&lt;total-value&gt;"/>
+    <Label fx:id="lblSubsidy" text="&lt;total-subsidy&gt;"/>
+    <Label fx:id="lblCost" text="&lt;personal-cost&gt;"/>
+    <Label fx:id="lblArticleCount" text="&lt;number-of-articles&gt;"/>
+    <TableView fx:id="billEntriesTable" maxHeight="-Infinity" minHeight="-Infinity" minWidth="200.0" prefHeight="194.0">
+        <columns>
+            <TableColumn fx:id="colAmount" editable="false" maxWidth="60.0" minWidth="60.0" prefWidth="60.0"
+                         resizable="false" style="-fx-alignment: center;" text="%billView_amount"/>
+            <TableColumn fx:id="colArticle" editable="false" minWidth="130.0" prefWidth="-1.0"
+                         text="%billView_article"/>
+            <TableColumn fx:id="colPrice" editable="false" maxWidth="70.0" minWidth="70.0" prefWidth="70.0"
+                         resizable="false" style="-fx-alignment: center-right;" text="%billView_price"/>
+            <TableColumn fx:id="colSubsidy" editable="false" maxWidth="70.0" minWidth="70.0" prefWidth="70.0"
+                         resizable="false" style="-fx-alignment: center-right;" text="%billView_subsidy"/>
+            <TableColumn fx:id="colCost" editable="false" maxWidth="70.0" minWidth="70.0" prefWidth="70.0"
+                         resizable="false" style="-fx-alignment: center-right;" text="%billView_cost"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <VBox.margin>
+            <Insets top="5.0"/>
+        </VBox.margin>
+    </TableView>
+    <PieChart fx:id="valueByArticleChart" labelLineLength="10.0" scaleShape="false" title="%chart_title_valueByArticle"
+              VBox.vgrow="ALWAYS"/>
+</fx:root>

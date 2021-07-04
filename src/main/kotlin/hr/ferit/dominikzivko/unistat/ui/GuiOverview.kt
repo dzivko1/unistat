@@ -96,7 +96,7 @@ class GuiOverview {
             val dayBills = billsByDay[day] ?: emptyList()
             val value = dayBills.sumOf { it.totalValue }
             val cost = dayBills.sumOf { it.totalCost }
-            val dateString = day.format(CHART_DATE_FORMATTER)
+            val dateString = day.format(SHORT_DATE_FORMATTER)
             values += XYChart.Data(dateString, value)
             costs += XYChart.Data(dateString, cost)
         }
@@ -119,7 +119,7 @@ class GuiOverview {
         var prevDateString = ""
         var repeatCounter = 0
         bills.forEach { bill ->
-            var dateString = bill.date.format(CHART_DATE_FORMATTER)
+            var dateString = bill.date.format(SHORT_DATE_FORMATTER)
             if (dateString == prevDateString) {
                 dateString += "(${++repeatCounter})"
             } else {
