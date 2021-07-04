@@ -21,6 +21,9 @@ data class BillEntry(
         dao.id.value
     )
 
+    val totalValue get() = amount * article.price
+    val totalCost get() = amount * article.price - subsidy
+
     fun areDetailsEqual(other: BillEntry): Boolean {
         return article.areDetailsEqual(other.article) &&
                 amount == other.amount &&

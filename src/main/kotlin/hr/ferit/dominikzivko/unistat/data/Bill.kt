@@ -29,9 +29,9 @@ data class Bill(
 
     val date get() = dateTime.toLocalDate()!!
     val articleCount get() = entries.sumOf { it.amount }
-    val totalValue get() = entries.sumOf { (it.amount * it.article.price).toDouble() }
+    val totalValue get() = entries.sumOf { it.totalValue.toDouble() }
     val totalSubsidy get() = entries.sumOf { it.subsidy.toDouble() }
-    val totalCost get() = entries.sumOf { (it.amount * it.article.price - it.subsidy).toDouble() }
+    val totalCost get() = entries.sumOf { it.totalCost.toDouble() }
 }
 
 object Bills : LongIdTable() {
