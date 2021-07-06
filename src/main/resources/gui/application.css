@@ -37,6 +37,17 @@
     -fx-background-color: linear-gradient(to bottom, -fx-color 80%, derive(-fx-color, 10%) 100%)
 }
 
+.nav-section {
+    -fx-max-width: Infinity;
+    -fx-text-fill: -fx-light-text-color;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+    -fx-font-size: 16.0;
+    -fx-padding: 8;
+    -fx-border-insets: 20 0 0 0;
+    -fx-border-color: -fx-inner-border transparent -fx-outer-border transparent;
+}
+
 .nav-button {
     -fx-font-size: 16.0;
     -fx-font-weight: bold;

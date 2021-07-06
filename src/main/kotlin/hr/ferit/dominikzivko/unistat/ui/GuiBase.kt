@@ -50,7 +50,17 @@ class GuiBase {
                 setOnAction { showCard(card) }
             }
         }
-        navButtonBox.children += cardsToButtons.values
+
+        var lastSection = Card.Section.General
+        cardsToButtons.forEach { (card, button) ->
+            if (card.section != lastSection) {
+                navButtonBox.children += Label(card.section.title).apply {
+                    styleClass += "nav-section"
+                }
+                lastSection = card.section
+            }
+            navButtonBox.children += button
+        }
     }
 
     private fun setupUserInfoPanel() {
