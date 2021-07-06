@@ -133,5 +133,6 @@ class GuiOverview {
         spendingByBillChart.data = FXCollections.observableArrayList()
         spendingByBillChart.data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
         spendingByBillChart.data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
+        spendingByBillChart.installBarTooltips()
     }
 }
