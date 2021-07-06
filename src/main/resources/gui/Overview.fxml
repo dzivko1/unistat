@@ -25,7 +25,7 @@
     </ScrollPane>
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
         <VBox>
-            <LineChart fx:id="dailySpendingChart" title="%chart_title_dailySpending">
+            <LineChart fx:id="dailySpendingChart" createSymbols="false" title="%chart_title_dailySpending">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>
