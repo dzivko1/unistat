@@ -2,7 +2,7 @@ package hr.ferit.dominikzivko.unistat
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hr.ferit.dominikzivko.unistat.ui.floatToString
-import javafx.scene.chart.StackedBarChart
+import javafx.scene.chart.XYChart
 import javafx.scene.control.Tooltip
 import javafx.util.Duration
 import java.time.LocalDate
@@ -14,7 +14,7 @@ fun LocalDate.isPastMonth() = this > LocalDate.now().minusMonths(1) && this <= L
 
 val HtmlPage.urlString: String get() = url.toExternalForm()
 
-fun <X, Y : Number> StackedBarChart<X, Y>.installBarTooltips() {
+fun <X, Y : Number> XYChart<X, Y>.installBarTooltips(showDelay: Duration = Duration.seconds(0.5)) {
     data.forEach { series ->
         series.data.forEach { item ->
             val yString = when (item.yValue) {
@@ -22,7 +22,7 @@ fun <X, Y : Number> StackedBarChart<X, Y>.installBarTooltips() {
                 else -> item.yValue.toString()
             }
             val tooltip = Tooltip(item.xValue.toString() + "\n" + yString).apply {
-                showDelay = Duration.seconds(0.5)
+                this.showDelay = showDelay
             }
             Tooltip.install(item.node, tooltip)
         }
