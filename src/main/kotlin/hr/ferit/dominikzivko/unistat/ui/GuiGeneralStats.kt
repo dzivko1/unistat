@@ -54,10 +54,12 @@ class GuiGeneralStats {
             subsidies += XYChart.Data(monthString, subsidy)
         }
 
-        monthlySpendingChart.data = FXCollections.observableArrayList()
-        monthlySpendingChart.data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-        monthlySpendingChart.data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
-        monthlySpendingChart.installBarTooltips()
+        monthlySpendingChart.apply {
+            data = FXCollections.observableArrayList()
+            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
+            data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
+            installBarTooltips()
+        }
     }
 
     private fun populateBillsBySourceChart() {
@@ -81,9 +83,11 @@ class GuiGeneralStats {
                 subsidies += XYChart.Data(source, sum.second)
             }
 
-        spendingBySourceChart.data = FXCollections.observableArrayList()
-        spendingBySourceChart.data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-        spendingBySourceChart.data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
-        spendingBySourceChart.installBarTooltips()
+        spendingBySourceChart.apply {
+            data = FXCollections.observableArrayList()
+            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
+            data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
+            installBarTooltips()
+        }
     }
 }

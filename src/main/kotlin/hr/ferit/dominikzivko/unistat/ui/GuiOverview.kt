@@ -100,9 +100,12 @@ class GuiOverview {
             values += XYChart.Data(dateString, value)
             costs += XYChart.Data(dateString, cost)
         }
-        dailySpendingChart.data = FXCollections.observableArrayList()
-        dailySpendingChart.data.add(XYChart.Series(strings["chart_series_totalValue"], values))
-        dailySpendingChart.data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
+
+        dailySpendingChart.apply {
+            data = FXCollections.observableArrayList()
+            data.add(XYChart.Series(strings["chart_series_totalValue"], values))
+            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
+        }
     }
 
     private fun populateSpendingByBillChart() {
@@ -130,9 +133,12 @@ class GuiOverview {
             costs += XYChart.Data(dateString, bill.totalCost)
             subsidies += XYChart.Data(dateString, bill.totalSubsidy)
         }
-        spendingByBillChart.data = FXCollections.observableArrayList()
-        spendingByBillChart.data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-        spendingByBillChart.data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
-        spendingByBillChart.installBarTooltips()
+
+        spendingByBillChart.apply {
+            data = FXCollections.observableArrayList()
+            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
+            data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
+            installBarTooltips()
+        }
     }
 }
