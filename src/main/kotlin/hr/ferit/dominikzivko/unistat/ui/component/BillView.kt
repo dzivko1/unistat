@@ -5,6 +5,7 @@ import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.BillEntry
 import hr.ferit.dominikzivko.unistat.ui.APP_DATE_TIME_FORMATTER
+import hr.ferit.dominikzivko.unistat.ui.floatToString
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
@@ -77,7 +78,7 @@ class BillView : VBox() {
         colCost.setCellValueFactory { Bindings.createFloatBinding({ it.value.totalCost }) }
 
         val floatFormatCellFactory = object : StringCellFactory<BillEntry, Number>() {
-            override fun format(item: Number) = item.toString("%.2f")
+            override fun format(item: Number) = floatToString(item)
         }
         colPrice.cellFactory = floatFormatCellFactory
         colSubsidy.cellFactory = floatFormatCellFactory
@@ -89,9 +90,9 @@ class BillView : VBox() {
     private fun populate(bill: Bill) {
         lblDateTime.text = strings["billView_timeOfIssue"] + ": " + bill.dateTime.format(APP_DATE_TIME_FORMATTER)
         lblSource.text = strings["billView_placeOfIssue"] + ": " + bill.source
-        lblValue.text = strings["billView_totalValue"] + ": " + bill.totalValue.toString("%.2f")
-        lblSubsidy.text = strings["billView_totalSubsidy"] + ": " + bill.totalSubsidy.toString("%.2f")
-        lblCost.text = strings["billView_personalCost"] + ": " + bill.totalCost.toString("%.2f")
+        lblValue.text = strings["billView_totalValue"] + ": " + floatToString(bill.totalValue)
+        lblSubsidy.text = strings["billView_totalSubsidy"] + ": " + floatToString(bill.totalSubsidy)
+        lblCost.text = strings["billView_personalCost"] + ": " + floatToString(bill.totalCost)
         lblArticleCount.text = strings["billView_numberOfArticles"] + ": " + bill.articleCount
 
         billEntriesTable.items = FXCollections.observableArrayList(bill.entries)

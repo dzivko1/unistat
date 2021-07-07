@@ -1,6 +1,5 @@
 package hr.ferit.dominikzivko.unistat.ui
 
-import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.data.Bill
@@ -65,7 +64,7 @@ class GuiBills {
         colDateTime.setCellValueFactory { Bindings.createObjectBinding({ it.value.dateTime }) }
 
         val floatFormatCellFactory = object : StringCellFactory<Bill, Number>() {
-            override fun format(item: Number) = item.toString("%.2f")
+            override fun format(item: Number) = floatToString(item)
         }
         colValue.cellFactory = floatFormatCellFactory
         colSubsidy.cellFactory = floatFormatCellFactory

@@ -1,5 +1,6 @@
 package hr.ferit.dominikzivko.unistat.ui
 
+import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.App
 import hr.ferit.dominikzivko.unistat.AppComponent
@@ -28,6 +29,8 @@ val MONTH_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MM.yyyy.")
 val FLOAT_FORMAT = DecimalFormat("0.00").apply {
     decimalFormatSymbols = DecimalFormatSymbols().apply { decimalSeparator = ',' }
 }
+
+val floatToString = { float: Number -> float.toString("%.2f") }
 
 val shortCurrencyStr = "kn"
 
