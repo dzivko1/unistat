@@ -1,7 +1,10 @@
 package hr.ferit.dominikzivko.unistat.ui.component
 
 import domyutil.jfx.*
+import hr.ferit.dominikzivko.unistat.articleCount
 import hr.ferit.dominikzivko.unistat.data.Bill
+import hr.ferit.dominikzivko.unistat.totalCost
+import hr.ferit.dominikzivko.unistat.totalValue
 import hr.ferit.dominikzivko.unistat.ui.floatToString
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
@@ -17,7 +20,10 @@ import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 
-class BillSummary(initialTitle: String, observableBills: ObservableList<Bill> = FXCollections.emptyObservableList()) : GridPane() {
+class BillSummary(
+    initialTitle: String,
+    observableBills: ObservableList<Bill> = FXCollections.emptyObservableList()
+) : GridPane() {
 
     val titleProperty = SimpleStringProperty(this, "title", initialTitle)
     var title: String by titleProperty
@@ -35,21 +41,22 @@ class BillSummary(initialTitle: String, observableBills: ObservableList<Bill> = 
             ColumnConstraints().apply { halignment = HPos.RIGHT }
         )
 
-        val lblTitle = Label(title).apply {
+        val lblTitle = Label().apply {
             styleClass += "title"
             maxWidth = Double.POSITIVE_INFINITY
             alignment = Pos.CENTER
+            textProperty().bind(titleProperty)
         }
 
-        val lblBills = Label().bindText(Bindings.size(bills).asString())
+        val lblBills = Label().bindText(Bindings.size(billsProperty).asString())
         val lblArticles = Label().bindText(
-            Bindings.createStringBinding({ bills.sumOf { it.articleCount }.toString() }, bills)
+            Bindings.createStringBinding({ bills.articleCount.toString() }, billsProperty)
         )
         val lblValue = Label().bindText(
-            Bindings.createStringBinding({ floatToString(bills.sumOf { it.totalValue }) }, bills)
+            Bindings.createStringBinding({ floatToString(bills.totalValue) }, billsProperty)
         )
         val lblCost = Label().bindText(
-            Bindings.createStringBinding({ floatToString(bills.sumOf { it.totalCost }) }, bills)
+            Bindings.createStringBinding({ floatToString(bills.totalCost) }, billsProperty)
         )
 
         add(lblTitle, 0, 0, 2, 1)

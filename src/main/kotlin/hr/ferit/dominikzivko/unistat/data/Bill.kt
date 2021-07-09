@@ -28,6 +28,7 @@ data class Bill(
     )
 
     val date get() = dateTime.toLocalDate()!!
+    val articles get() = entries.map { it.article }
     val articleCount get() = entries.sumOf { it.amount }
     val totalValue get() = entries.sumOf { it.totalValue.toDouble() }
     val totalSubsidy get() = entries.sumOf { it.subsidy.toDouble() }

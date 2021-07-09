@@ -94,11 +94,9 @@ class GuiOverview {
 
         for (day in startDay..lastBillDay) {
             val dayBills = billsByDay[day] ?: emptyList()
-            val value = dayBills.sumOf { it.totalValue }
-            val cost = dayBills.sumOf { it.totalCost }
             val dateString = day.format(SHORT_DATE_FORMATTER)
-            values += XYChart.Data(dateString, value)
-            costs += XYChart.Data(dateString, cost)
+            values += XYChart.Data(dateString, dayBills.totalValue)
+            costs += XYChart.Data(dateString, dayBills.totalCost)
         }
 
         dailySpendingChart.apply {

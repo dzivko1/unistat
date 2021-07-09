@@ -83,6 +83,10 @@
     -fx-font-weight: bold;
 }
 
+.pick-instruction {
+    -fx-font-size: 14.0;
+}
+
 #user-name {
     -fx-font-size: 14.0;
     -fx-font-weight: bold;

@@ -4,6 +4,8 @@ import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.installBarTooltips
+import hr.ferit.dominikzivko.unistat.totalCost
+import hr.ferit.dominikzivko.unistat.totalSubsidy
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.fxml.FXML
@@ -47,11 +49,9 @@ class GuiGeneralStats {
         val lastBillMonth = app.repository.bills.last().date.yearMonth
         for (month in firstBillMonth..lastBillMonth) {
             val monthBills = billsByMonth[month] ?: emptyList()
-            val subsidy = monthBills.sumOf { it.totalSubsidy }
-            val cost = monthBills.sumOf { it.totalCost }
             val monthString = month.format(MONTH_FORMATTER)
-            costs += XYChart.Data(monthString, cost)
-            subsidies += XYChart.Data(monthString, subsidy)
+            costs += XYChart.Data(monthString, monthBills.totalCost)
+            subsidies += XYChart.Data(monthString, monthBills.totalSubsidy)
         }
 
         monthlySpendingChart.apply {

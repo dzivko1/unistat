@@ -24,7 +24,7 @@
          </columnResizePolicy>
      </TableView>
      <StackPane fx:id="detailsPanel" prefHeight="150.0" prefWidth="200.0">
-         <Label fx:id="lblNoBill" contentDisplay="TOP" graphicTextGap="15.0" text="%pickBill">
+         <Label fx:id="lblNoBill" contentDisplay="TOP" graphicTextGap="15.0" styleClass="pick-instruction" text="%pickBill">
              <graphic>
                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <effect>

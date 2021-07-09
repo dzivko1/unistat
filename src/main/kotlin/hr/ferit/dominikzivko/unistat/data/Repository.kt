@@ -81,7 +81,7 @@ class Repository(var dataSource: DataSource) : AppComponent {
                     user = userDAO
                 }
 
-                val articles = newBill.entries.map { it.article }
+                val articles = newBill.articles
                 val existingArticles = ArticleDAO.all().map { Article(it.name, it.price) }
                 val newArticles = articles.minus(articles.intersect(existingArticles))
 
@@ -115,5 +115,4 @@ class Repository(var dataSource: DataSource) : AppComponent {
             _bills.setAll(BillDAO.find { Bills.user eq user!!.id }.map { Bill(it) })
         else _bills.clear()
     }
-
 }
