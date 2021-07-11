@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<SplitPane dividerPositions="0.7" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiArticleStats">
+    <SplitPane dividerPositions="0.5" maxWidth="1.7976931348623157E308" orientation="VERTICAL"
+               SplitPane.resizableWithParent="false">
+        <ScrollPane fx:id="articleChartHolder" fitToHeight="true" minHeight="400.0" pannable="true"
+                    vbarPolicy="NEVER">
+            <VBox>
+                <StackedBarChart fx:id="spendingByArticleChart" categoryGap="2.0" minHeight="200.0"
+                                 style="CHART_COLOR_1: CHART_COLOR_3; CHART_COLOR_2: CHART_COLOR_4;">
+                    <xAxis>
+                        <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis side="LEFT"/>
+                    </yAxis>
+                </StackedBarChart>
+                <BarChart fx:id="amountByArticleChart" barGap="0.0" categoryGap="2.0" minHeight="200.0"
+                          style="CHART_COLOR_1: CHART_COLOR_2;">
+                    <xAxis>
+                        <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis side="LEFT"/>
+                    </yAxis>
+                </BarChart>
+            </VBox>
+        </ScrollPane>
+        <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="100.0" pannable="true">
+            <StackPane fx:id="detailsPanel">
+                <Label fx:id="lblNoArticle" contentDisplay="TOP" graphicTextGap="15.0"
+                       styleClass="pick-instruction" text="%pickArticle">
+                    <graphic>
+                        <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <effect>
+                                <ColorAdjust brightness="0.5" contrast="-1.0" saturation="1.0"/>
+                            </effect>
+                            <Image url="@../images/article.png"/>
+                        </ImageView>
+                    </graphic>
+                </Label>
+            </StackPane>
+        </ScrollPane>
+    </SplitPane>
+    <TableView fx:id="articlesTable" minWidth="-Infinity" prefWidth="300.0" SplitPane.resizableWithParent="false">
+        <columns>
+            <TableColumn fx:id="colName" editable="false" minWidth="100.0" prefWidth="100.0"
+                         text="%articleStats_article"/>
+            <TableColumn fx:id="colPrice" editable="false" maxWidth="70.0" minWidth="70.0" prefWidth="70.0"
+                         resizable="false" style="-fx-alignment: center-right;" text="%articleStats_price"/>
+            <TableColumn fx:id="colAmount" editable="false" maxWidth="70.0" minWidth="70.0" prefWidth="70.0"
+                         resizable="false" sortType="DESCENDING" style="-fx-alignment: center;"
+                         text="%articleStats_amount"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+</SplitPane>

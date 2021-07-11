@@ -21,6 +21,8 @@
         -fx-mid-text-color   97.0%,
         -fx-dark-text-color  99.0%
     );
+
+    -fx-bar-selected-color: #e15353;
 }
 
 .login-frame {

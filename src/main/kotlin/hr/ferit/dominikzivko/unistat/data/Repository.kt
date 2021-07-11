@@ -6,8 +6,10 @@ import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.AppComponent
 import hr.ferit.dominikzivko.unistat.checkCancelled
 import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
+import javafx.beans.binding.Bindings
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.ReadOnlyObjectWrapper
+import javafx.beans.property.SimpleListProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import org.apache.logging.log4j.LogManager
@@ -30,6 +32,12 @@ class Repository(var dataSource: DataSource) : AppComponent {
 
     private val _bills: ObservableList<Bill> = FXCollections.observableArrayList()
     val bills: ObservableList<Bill> = FXCollections.unmodifiableObservableList(_bills)
+    private val _articles = SimpleListProperty<Article>().apply {
+        bind(Bindings.createObjectBinding({
+            FXCollections.observableList(_bills.flatMap { it.articles }.distinct())
+        }, _bills))
+    }
+    val articles: ObservableList<Article> = FXCollections.unmodifiableObservableList(_articles)
 
     override fun start() {
         dataSource.start()
