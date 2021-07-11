@@ -113,6 +113,18 @@
     -fx-width: 50;
 }
 
+.chart-pie:hover {
+    -fx-background-color: derive(-fx-pie-color, -20%);
+}
+
+.chart-bar:hover {
+    -fx-background-color: derive(-fx-bar-fill, -20%);
+}
+
+.chart-bar-selected {
+    -fx-bar-fill: -fx-bar-selected-color;
+}
+
 .data0.chart-pie { -fx-pie-color: CHART_COLOR_1; }
 .data1.chart-pie { -fx-pie-color: CHART_COLOR_2; }
 .data2.chart-pie { -fx-pie-color: CHART_COLOR_3; }
