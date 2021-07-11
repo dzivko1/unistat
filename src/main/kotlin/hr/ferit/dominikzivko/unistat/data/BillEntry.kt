@@ -6,6 +6,11 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
+val List<BillEntry>.totalAmount get() = sumOf { it.amount }
+val List<BillEntry>.totalValue get() = sumOf { it.totalValue.toDouble() }
+val List<BillEntry>.totalSubsidy get() = sumOf { it.subsidy.toDouble() }
+val List<BillEntry>.totalCost get() = sumOf { it.totalCost.toDouble() }
+
 @Serializable
 data class BillEntry(
     val article: Article,
@@ -13,7 +18,6 @@ data class BillEntry(
     val subsidy: Float,
     val id: Long? = null
 ) {
-
     constructor(dao: BillEntryDAO) : this(
         Article(dao.article),
         dao.amount,

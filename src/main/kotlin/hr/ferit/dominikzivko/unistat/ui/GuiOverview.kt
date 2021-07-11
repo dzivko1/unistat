@@ -3,11 +3,11 @@ package hr.ferit.dominikzivko.unistat.ui
 import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.*
+import hr.ferit.dominikzivko.unistat.data.totalCost
+import hr.ferit.dominikzivko.unistat.data.totalValue
 import hr.ferit.dominikzivko.unistat.ui.component.BillSummary
 import hr.ferit.dominikzivko.unistat.ui.component.ChartControlPanel
-import javafx.beans.binding.Bindings
 import javafx.collections.FXCollections
-import javafx.collections.ListChangeListener
 import javafx.fxml.FXML
 import javafx.geometry.Orientation
 import javafx.scene.chart.LineChart
@@ -42,16 +42,14 @@ class GuiOverview {
     @FXML
     fun initialize() {
         setupBillSummary()
-        setupCharts()
+        setupDailySpendingChart()
+        setupSpendingByBillChart()
     }
 
     private fun setupBillSummary() {
-        lblAvailableSubsidy.textProperty().bind(
-            Bindings.createStringBinding(
-                { "${app.repository.user?.balance.toString()} $shortCurrencyStr" },
-                app.repository.userProperty
-            )
-        )
+        lblAvailableSubsidy.bindText(app.repository.userProperty) {
+            "${app.repository.user?.balance.toString()} $shortCurrencyStr"
+        }
 
         billSummaryBox.children += listOf(
             BillSummary(strings["summary_today"], app.repository.bills.filtered { it.date.isToday() }),
@@ -67,76 +65,66 @@ class GuiOverview {
         )
     }
 
-    private fun setupCharts() {
-        dailySpendingChartControlPanel.entryCountProperty.addListener { _, _, _ -> populateCharts() }
-        spendingByBillChartControlPanel.entryCountProperty.addListener { _, _, _ -> populateCharts() }
-        app.repository.bills.addListener(ListChangeListener {
-            populateCharts()
-        })
-        populateCharts()
-    }
+    private fun setupDailySpendingChart() {
+        dailySpendingChart.bindData(
+            app.repository.bills,
+            dailySpendingChartControlPanel.entryCountProperty
+        ) { series ->
+            val valueData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+            val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-    private fun populateCharts() {
-        populateDailySpendingChart()
-        populateSpendingByBillChart()
-    }
+            val pointCount = dailySpendingChartControlPanel.entryCount
+            val lastBillDay = app.repository.bills.last().date
+            val startDay =
+                if (pointCount == 0) app.repository.bills.first().date
+                else lastBillDay.minusDays(pointCount.toLong() - 1L)
+            val billsByDay = app.repository.bills.groupBy { it.date }
 
-    private fun populateDailySpendingChart() {
-        val values = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-        val costs = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-
-        val pointCount = dailySpendingChartControlPanel.entryCount
-        val lastBillDay = app.repository.bills.last().date
-        val startDay =
-            if (pointCount == 0) app.repository.bills.first().date
-            else lastBillDay.minusDays(pointCount.toLong() - 1L)
-        val billsByDay = app.repository.bills.groupBy { it.date }
-
-        for (day in startDay..lastBillDay) {
-            val dayBills = billsByDay[day] ?: emptyList()
-            val dateString = day.format(SHORT_DATE_FORMATTER)
-            values += XYChart.Data(dateString, dayBills.totalValue)
-            costs += XYChart.Data(dateString, dayBills.totalCost)
-        }
-
-        dailySpendingChart.apply {
-            data = FXCollections.observableArrayList()
-            data.add(XYChart.Series(strings["chart_series_totalValue"], values))
-            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-        }
-    }
-
-    private fun populateSpendingByBillChart() {
-        val costs = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-        val subsidies = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-
-        val billCount = app.repository.bills.size
-        val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
-        val bills = when {
-            pointCount == 0 || pointCount >= billCount -> app.repository.bills
-            else -> app.repository.bills.drop(billCount - pointCount)
-        }
-
-        var prevDateString = ""
-        var repeatCounter = 0
-        bills.forEach { bill ->
-            var dateString = bill.date.format(SHORT_DATE_FORMATTER)
-            if (dateString == prevDateString) {
-                dateString += "(${++repeatCounter})"
-            } else {
-                repeatCounter = 0
-                prevDateString = dateString
+            for (day in startDay..lastBillDay) {
+                val dayBills = billsByDay[day] ?: emptyList()
+                val dateString = day.format(SHORT_DATE_FORMATTER)
+                valueData += XYChart.Data(dateString, dayBills.totalValue)
+                costData += XYChart.Data(dateString, dayBills.totalCost)
             }
 
-            costs += XYChart.Data(dateString, bill.totalCost)
-            subsidies += XYChart.Data(dateString, bill.totalSubsidy)
+            series += XYChart.Series(strings["chart_series_totalValue"], valueData)
+            series += XYChart.Series(strings["chart_series_personalCost"], costData)
         }
+    }
 
-        spendingByBillChart.apply {
-            data = FXCollections.observableArrayList()
-            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-            data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
-            installBarTooltips()
+    private fun setupSpendingByBillChart() {
+        spendingByBillChart.enableBarTooltips()
+        spendingByBillChart.bindData(
+            app.repository.bills,
+            spendingByBillChartControlPanel.entryCountProperty
+        ) { series ->
+            val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+            val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+
+            val billCount = app.repository.bills.size
+            val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
+            val bills = when {
+                (pointCount == 0 || pointCount >= billCount) -> app.repository.bills
+                else -> app.repository.bills.drop(billCount - pointCount)
+            }
+
+            var prevDateString = ""
+            var repeatCounter = 0
+            bills.forEach { bill ->
+                var dateString = bill.date.format(SHORT_DATE_FORMATTER)
+                if (dateString == prevDateString) {
+                    dateString += "(${++repeatCounter})"
+                } else {
+                    repeatCounter = 0
+                    prevDateString = dateString
+                }
+
+                costData += XYChart.Data(dateString, bill.totalCost)
+                subsidyData += XYChart.Data(dateString, bill.totalSubsidy)
+            }
+
+            series += XYChart.Series(strings["chart_series_personalCost"], costData)
+            series += XYChart.Series(strings["chart_series_subsidy"], subsidyData)
         }
     }
 }

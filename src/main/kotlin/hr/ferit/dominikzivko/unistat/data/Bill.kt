@@ -9,6 +9,11 @@ import org.jetbrains.exposed.sql.`java-time`.datetime
 import java.time.LocalDateTime
 import java.util.*
 
+val List<Bill>.articleCount get() = sumOf { it.articleCount }
+val List<Bill>.totalValue get() = sumOf { it.totalValue }
+val List<Bill>.totalSubsidy get() = sumOf { it.totalSubsidy }
+val List<Bill>.totalCost get() = sumOf { it.totalCost }
+
 @Serializable
 data class Bill(
     @Serializable(with = LocalDateTimeSerializer::class)
@@ -29,10 +34,10 @@ data class Bill(
 
     val date get() = dateTime.toLocalDate()!!
     val articles get() = entries.map { it.article }
-    val articleCount get() = entries.sumOf { it.amount }
-    val totalValue get() = entries.sumOf { it.totalValue.toDouble() }
-    val totalSubsidy get() = entries.sumOf { it.subsidy.toDouble() }
-    val totalCost get() = entries.sumOf { it.totalCost.toDouble() }
+    val articleCount get() = entries.totalAmount
+    val totalValue get() = entries.totalValue
+    val totalSubsidy get() = entries.totalSubsidy
+    val totalCost get() = entries.totalCost
 }
 
 object Bills : LongIdTable() {

@@ -2,8 +2,11 @@ package hr.ferit.dominikzivko.unistat.ui.component
 
 import domyutil.*
 import domyutil.jfx.*
+import hr.ferit.dominikzivko.unistat.bindData
+import hr.ferit.dominikzivko.unistat.bindText
 import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.BillEntry
+import hr.ferit.dominikzivko.unistat.enablePieTooltips
 import hr.ferit.dominikzivko.unistat.ui.APP_DATE_TIME_FORMATTER
 import hr.ferit.dominikzivko.unistat.ui.floatToString
 import javafx.beans.binding.Bindings
@@ -71,6 +74,33 @@ class BillView : VBox() {
     }
 
     private fun initialize() {
+        setupBillInfoPanel()
+        setupBillEntriesTable()
+        setupValueByArticleChart()
+    }
+
+    private fun setupBillInfoPanel() {
+        lblDateTime.bindText(billProperty) {
+            strings["billView_timeOfIssue"] + ": " + bill?.dateTime?.format(APP_DATE_TIME_FORMATTER)
+        }
+        lblSource.bindText(billProperty) {
+            strings["billView_placeOfIssue"] + ": " + bill?.source
+        }
+        lblValue.bindText(billProperty) {
+            strings["billView_totalValue"] + ": " + bill?.let { floatToString(it.totalValue) }
+        }
+        lblSubsidy.bindText(billProperty) {
+            strings["billView_totalSubsidy"] + ": " + bill?.let { floatToString(it.totalSubsidy) }
+        }
+        lblCost.bindText(billProperty) {
+            strings["billView_personalCost"] + ": " + bill?.let { floatToString(it.totalCost) }
+        }
+        lblArticleCount.bindText(billProperty) {
+            strings["billView_numberOfArticles"] + ": " + bill?.articleCount
+        }
+    }
+
+    private fun setupBillEntriesTable() {
         colArticle.setCellValueFactory { Bindings.createStringBinding({ it.value.article.name }) }
         colAmount.setCellValueFactory { Bindings.createIntegerBinding({ it.value.amount }) }
         colPrice.setCellValueFactory { Bindings.createFloatBinding({ it.value.article.price }) }
@@ -84,22 +114,17 @@ class BillView : VBox() {
         colSubsidy.cellFactory = floatFormatCellFactory
         colCost.cellFactory = floatFormatCellFactory
 
-        billProperty.addListener { _, _, newValue -> newValue?.let { populate(newValue) } }
+        billEntriesTable.itemsProperty().bind(Bindings.createObjectBinding({
+            bill?.let { FXCollections.observableArrayList(bill!!.entries) }
+        }, billProperty))
     }
 
-    private fun populate(bill: Bill) {
-        lblDateTime.text = strings["billView_timeOfIssue"] + ": " + bill.dateTime.format(APP_DATE_TIME_FORMATTER)
-        lblSource.text = strings["billView_placeOfIssue"] + ": " + bill.source
-        lblValue.text = strings["billView_totalValue"] + ": " + floatToString(bill.totalValue)
-        lblSubsidy.text = strings["billView_totalSubsidy"] + ": " + floatToString(bill.totalSubsidy)
-        lblCost.text = strings["billView_personalCost"] + ": " + floatToString(bill.totalCost)
-        lblArticleCount.text = strings["billView_numberOfArticles"] + ": " + bill.articleCount
-
-        billEntriesTable.items = FXCollections.observableArrayList(bill.entries)
-
-        valueByArticleChart.data.clear()
-        bill.entries.sortedByDescending { it.totalValue }.forEach { entry ->
-            valueByArticleChart.data.add(PieChart.Data(entry.article.name, entry.totalValue.toDouble()))
+    private fun setupValueByArticleChart() {
+        valueByArticleChart.enablePieTooltips()
+        valueByArticleChart.bindData(billProperty) { pieData ->
+            bill?.entries?.sortedByDescending { it.totalValue }?.forEach { entry ->
+                pieData += PieChart.Data(entry.article.name, entry.totalValue.toDouble())
+            }
         }
     }
 }

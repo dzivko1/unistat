@@ -3,11 +3,13 @@ package hr.ferit.dominikzivko.unistat.ui
 import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
-import hr.ferit.dominikzivko.unistat.installBarTooltips
-import hr.ferit.dominikzivko.unistat.totalCost
-import hr.ferit.dominikzivko.unistat.totalSubsidy
+import hr.ferit.dominikzivko.unistat.bindData
+import hr.ferit.dominikzivko.unistat.data.totalCost
+import hr.ferit.dominikzivko.unistat.data.totalSubsidy
+import hr.ferit.dominikzivko.unistat.data.totalValue
+import hr.ferit.dominikzivko.unistat.enableBarTooltips
+import hr.ferit.dominikzivko.unistat.enablePieTooltips
 import javafx.collections.FXCollections
-import javafx.collections.ListChangeListener
 import javafx.fxml.FXML
 import javafx.scene.chart.PieChart
 import javafx.scene.chart.StackedBarChart
@@ -28,66 +30,58 @@ class GuiGeneralStats {
 
     @FXML
     private fun initialize() {
-        app.repository.bills.addListener(ListChangeListener {
-            populateCharts()
-        })
-        populateCharts()
+        setupMonthlySpendingChart()
+        setupBillsBySourceChart()
+        setupSpendingBySourceChart()
     }
 
-    private fun populateCharts() {
-        populateMonthlySpendingChart()
-        populateBillsBySourceChart()
-        populateSpendingBySourceChart()
-    }
+    private fun setupMonthlySpendingChart() {
+        monthlySpendingChart.enableBarTooltips()
+        monthlySpendingChart.bindData(app.repository.bills) { series ->
+            val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+            val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-    private fun populateMonthlySpendingChart() {
-        val costs = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-        val subsidies = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+            val billsByMonth = app.repository.bills.groupBy { it.date.yearMonth }
+            val firstBillMonth = app.repository.bills.first().date.yearMonth
+            val lastBillMonth = app.repository.bills.last().date.yearMonth
+            for (month in firstBillMonth..lastBillMonth) {
+                val monthBills = billsByMonth[month] ?: emptyList()
+                val monthString = month.format(MONTH_FORMATTER)
+                costData += XYChart.Data(monthString, monthBills.totalCost)
+                subsidyData += XYChart.Data(monthString, monthBills.totalSubsidy)
+            }
 
-        val billsByMonth = app.repository.bills.groupBy { it.date.yearMonth }
-        val firstBillMonth = app.repository.bills.first().date.yearMonth
-        val lastBillMonth = app.repository.bills.last().date.yearMonth
-        for (month in firstBillMonth..lastBillMonth) {
-            val monthBills = billsByMonth[month] ?: emptyList()
-            val monthString = month.format(MONTH_FORMATTER)
-            costs += XYChart.Data(monthString, monthBills.totalCost)
-            subsidies += XYChart.Data(monthString, monthBills.totalSubsidy)
-        }
-
-        monthlySpendingChart.apply {
-            data = FXCollections.observableArrayList()
-            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-            data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
-            installBarTooltips()
+            series += XYChart.Series(strings["chart_series_personalCost"], costData)
+            series += XYChart.Series(strings["chart_series_subsidy"], subsidyData)
         }
     }
 
-    private fun populateBillsBySourceChart() {
-        billsBySourceChart.data.clear()
-        app.repository.bills.groupingBy { it.source }
-            .eachCount().toSortedMap()
-            .forEach { (source, count) ->
-                billsBySourceChart.data.add(PieChart.Data(source, count.toDouble()))
-            }
+    private fun setupBillsBySourceChart() {
+        billsBySourceChart.enablePieTooltips()
+        billsBySourceChart.bindData(app.repository.bills) { pieData ->
+            app.repository.bills.groupingBy { it.source }
+                .eachCount().toSortedMap()
+                .forEach { (source, count) ->
+                    pieData += PieChart.Data(source, count.toDouble())
+                }
+        }
     }
 
-    private fun populateSpendingBySourceChart() {
-        val costs = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-        val subsidies = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+    private fun setupSpendingBySourceChart() {
+        spendingBySourceChart.enableBarTooltips()
+        spendingBySourceChart.bindData(app.repository.bills) { series ->
+            val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+            val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-        app.repository.bills.groupingBy { it.source }
-            .fold(Pair(0.0, 0.0)) { acc, bill -> Pair(acc.first + bill.totalCost, acc.second + bill.totalSubsidy) }
-            .toList().sortedByDescending { entry -> entry.second.run { first + second } }
-            .forEach { (source, sum) ->
-                costs += XYChart.Data(source, sum.first)
-                subsidies += XYChart.Data(source, sum.second)
-            }
+            app.repository.bills.groupBy { it.source }
+                .toList().sortedByDescending { it.second.totalValue }
+                .forEach { (source, bills) ->
+                    costData += XYChart.Data(source, bills.totalCost)
+                    subsidyData += XYChart.Data(source, bills.totalSubsidy)
+                }
 
-        spendingBySourceChart.apply {
-            data = FXCollections.observableArrayList()
-            data.add(XYChart.Series(strings["chart_series_personalCost"], costs))
-            data.add(XYChart.Series(strings["chart_series_subsidy"], subsidies))
-            installBarTooltips()
+            series += XYChart.Series(strings["chart_series_personalCost"], costData)
+            series += XYChart.Series(strings["chart_series_subsidy"], subsidyData)
         }
     }
 }
