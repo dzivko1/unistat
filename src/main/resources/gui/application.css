@@ -22,6 +22,8 @@
         -fx-dark-text-color  99.0%
     );
 
+    -fx-today-color: #9ffac1;
+    -fx-day-highlight-color: #f1de4a;
     -fx-bar-selected-color: #e15353;
 }
 
@@ -101,6 +103,96 @@
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
+
+.uncollapsable-titled-pane > .title:hover {
+	-fx-color: -fx-base;
+}
+
+
+.calendar {
+    -fx-focus-color: -fx-color;
+    -fx-faint-focus-color: -fx-color;
+	-fx-box-border: -fx-color;
+    -fx-border-color: -fx-color;
+    -fx-border-width: 0.0;
+}
+
+.calendar .column-header {
+	-fx-background-color: -fx-color;
+}
+
+.calendar-header {
+	-fx-background-color: -fx-color;
+}
+
+.calendar-header > .label {
+	-fx-text-fill: -fx-light-text-color;
+	-fx-font-size: 18.0;
+	-fx-font-weight: bold;
+}
+
+.calendar-header > .button {
+	-fx-font-size: 20.0;
+	-fx-font-weight: bold;
+	-fx-background-color: -fx-color;
+	-fx-background-radius: 30.0;
+}
+
+.calendar .table-cell {
+	-fx-border-color: derive(-fx-color, 30.0%);
+	-fx-border-radius: 6.0;
+	-fx-background-radius: 8.0;
+}
+
+.calendar .table-row-cell {
+    -fx-background-color: -fx-color;
+}
+
+.calendar .table-row-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.calendar .table-row, .calendar .table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+
+/* Allows background color modification of individual cells from code while preserving selection color
+ * Taken from: https://stackoverflow.com/a/39785232 */
+.calendar .table-cell:filled {
+    -fx-calendar-cell-background: white;
+    -fx-background-color: -fx-calendar-cell-background;
+}
+.calendar:row-selection .table-row-cell:selected .table-cell {
+    -fx-background-color: null;
+}
+.calendar:cell-selection .table-cell:selected {
+    -fx-background-color: derive(-fx-color, 40%);
+}
+/* ---- */
+
+.calendar-day-label {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-max-width: Infinity;
+    -fx-padding: 0 0 0 8;
+}
+
+.calendar-cost-label {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-max-height: Infinity;
+    -fx-padding: -20 0 -15 0;
+}
+
+.calendar-cost-label .text {
+    -fx-fill: derive(-fx-accent, 10%);
+    -fx-stroke: derive(-fx-accent, -15%);
+}
+
+.calendar-bills-label {
+    -fx-font-size: 18;
+}
+
 
 .chart-title {
     -fx-font-size: 1.2em;

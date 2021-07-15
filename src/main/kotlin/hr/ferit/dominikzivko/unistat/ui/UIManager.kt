@@ -23,7 +23,9 @@ import kotlin.reflect.full.companionObjectInstance
 
 val SERVER_DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. H:mm")
 val DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. | H:mm:ss")
+val DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy.")
 val SHORT_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yy.")
+val TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("H:mm:ss")
 val MONTH_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MM.yyyy.")
 
 val FLOAT_FORMAT = DecimalFormat("0.00").apply {
@@ -44,7 +46,10 @@ class UIManager : AppComponent {
 
     val isBaseGuiShowing get() = primaryStage.isShowing
 
-    override fun start() {}
+    override fun start() {
+        Locale.setDefault(Locale.forLanguageTag("hr-HR"))
+    }
+
     override fun stop() {}
 
     fun showBaseGui() = runFxAndWait {
