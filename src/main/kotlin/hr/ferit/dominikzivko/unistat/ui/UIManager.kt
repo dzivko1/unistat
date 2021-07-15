@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObjectInstance
 
 val SERVER_DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. H:mm")
-val APP_DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. | H:mm:ss")
+val DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. | H:mm:ss")
 val SHORT_DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yy.")
 val MONTH_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MM.yyyy.")
 

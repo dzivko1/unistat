@@ -7,7 +7,7 @@ import hr.ferit.dominikzivko.unistat.bindText
 import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.BillEntry
 import hr.ferit.dominikzivko.unistat.enablePieTooltips
-import hr.ferit.dominikzivko.unistat.ui.APP_DATE_TIME_FORMATTER
+import hr.ferit.dominikzivko.unistat.ui.DATE_TIME_FORMATTER
 import hr.ferit.dominikzivko.unistat.ui.floatToString
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
@@ -81,7 +81,7 @@ class BillView : VBox() {
 
     private fun setupBillInfoPanel() {
         lblDateTime.bindText(billProperty) {
-            strings["billView_timeOfIssue"] + ": " + bill?.dateTime?.format(APP_DATE_TIME_FORMATTER)
+            strings["billView_timeOfIssue"] + ": " + bill?.dateTime?.format(DATE_TIME_FORMATTER)
         }
         lblSource.bindText(billProperty) {
             strings["billView_placeOfIssue"] + ": " + bill?.source

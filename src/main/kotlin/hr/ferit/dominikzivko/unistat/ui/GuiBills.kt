@@ -69,7 +69,7 @@ class GuiBills {
         colValue.cellFactory = floatFormatCellFactory
         colSubsidy.cellFactory = floatFormatCellFactory
         colCost.cellFactory = floatFormatCellFactory
-        colDateTime.setStringCellFactory { it.format(APP_DATE_TIME_FORMATTER) }
+        colDateTime.setStringCellFactory { it.format(DATE_TIME_FORMATTER) }
 
         val sortedBills = SortedList(app.repository.bills)
         sortedBills.comparatorProperty().bind(billsTable.comparatorProperty())
