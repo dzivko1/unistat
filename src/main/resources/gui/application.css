@@ -173,6 +173,7 @@
 .calendar-day-label {
     -fx-font-size: 18;
     -fx-font-weight: bold;
+    -fx-text-fill: #555;
     -fx-max-width: Infinity;
     -fx-padding: 0 0 0 8;
 }

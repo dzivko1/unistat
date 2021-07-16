@@ -131,12 +131,12 @@ class GuiCalendar {
     private fun getWeeks(yearMonth: YearMonth): List<Week> {
         val weeks = mutableListOf<Week>()
 
-        val costByDate = app.repository.bills.groupingBy { it.date }
-            .fold(0.0) { acc, bill ->
+        val costByDate = app.repository.bills.filtered { it.date.month == yearMonth.month }
+            .groupingBy { it.date }.fold(0.0) { acc, bill ->
                 acc + bill.totalCost
             }
-        val lowestCost = costByDate.values.minOrNull()!!
-        val highestCost = costByDate.values.maxOrNull()!!
+        val lowestCost = costByDate.values.minOrNull()
+        val highestCost = costByDate.values.maxOrNull()
 
         val firstWeekNumber = yearMonth.atDay(1)[WeekFields.ISO.weekOfYear()]
         val lastWeekNumber = yearMonth.atEndOfMonth()[WeekFields.ISO.weekOfYear()]
@@ -149,7 +149,11 @@ class GuiCalendar {
             val days = Array(7) { dayNumber ->
                 val dayOfWeek = monday.plusDays(dayNumber.toLong())
                 val bills = app.repository.bills.filter { it.date == dayOfWeek }
-                val normalizedCost = (bills.totalCost - lowestCost) / (highestCost - lowestCost)
+                val normalizedCost = when {
+                    lowestCost == null || highestCost == null || bills.totalCost == 0.0 -> null
+                    highestCost == lowestCost -> 1.0
+                    else -> (bills.totalCost - lowestCost) / (highestCost - lowestCost)
+                }
                 Day(dayOfWeek, bills, normalizedCost)
             }
 
@@ -265,7 +269,8 @@ class GuiCalendar {
                     }
                 }
                 else -> {
-                    style = "-fx-calendar-cell-background: derive(-fx-accent, ${20 + (1 - day.normalizedCost) * 80}%)"
+                    val highlight = if (day.normalizedCost != null) (20 + (1 - day.normalizedCost) * 60) else 100
+                    style = "-fx-calendar-cell-background: derive(-fx-accent, $highlight%)"
                     effect = null
                 }
             }
@@ -281,7 +286,7 @@ class GuiCalendar {
     private class Day(
         val date: LocalDate,
         val bills: List<Bill>,
-        val normalizedCost: Double
+        val normalizedCost: Double?
     ) {
         val billCount get() = bills.size
     }
