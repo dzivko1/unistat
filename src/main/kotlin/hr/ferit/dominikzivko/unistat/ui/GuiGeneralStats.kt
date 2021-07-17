@@ -41,14 +41,16 @@ class GuiGeneralStats {
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            val billsByMonth = app.repository.bills.groupBy { it.date.yearMonth }
-            val firstBillMonth = app.repository.bills.first().date.yearMonth
-            val lastBillMonth = app.repository.bills.last().date.yearMonth
-            for (month in firstBillMonth..lastBillMonth) {
-                val monthBills = billsByMonth[month] ?: emptyList()
-                val monthString = month.format(MONTH_FORMATTER)
-                costData += XYChart.Data(monthString, monthBills.totalCost)
-                subsidyData += XYChart.Data(monthString, monthBills.totalSubsidy)
+            if (app.repository.bills.isNotEmpty()) {
+                val billsByMonth = app.repository.bills.groupBy { it.date.yearMonth }
+                val firstBillMonth = app.repository.bills.first().date.yearMonth
+                val lastBillMonth = app.repository.bills.last().date.yearMonth
+                for (month in firstBillMonth..lastBillMonth) {
+                    val monthBills = billsByMonth[month] ?: emptyList()
+                    val monthString = month.format(MONTH_FORMATTER)
+                    costData += XYChart.Data(monthString, monthBills.totalCost)
+                    subsidyData += XYChart.Data(monthString, monthBills.totalSubsidy)
+                }
             }
 
             series += XYChart.Series(strings["chart_series_personalCost"], costData)

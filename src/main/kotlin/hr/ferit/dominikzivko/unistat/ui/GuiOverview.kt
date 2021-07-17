@@ -73,18 +73,20 @@ class GuiOverview {
             val valueData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            val pointCount = dailySpendingChartControlPanel.entryCount
-            val lastBillDay = app.repository.bills.last().date
-            val startDay =
-                if (pointCount == 0) app.repository.bills.first().date
-                else lastBillDay.minusDays(pointCount.toLong() - 1L)
-            val billsByDay = app.repository.bills.groupBy { it.date }
+            if (app.repository.bills.isNotEmpty()) {
+                val pointCount = dailySpendingChartControlPanel.entryCount
+                val lastBillDay = app.repository.bills.last().date
+                val startDay =
+                    if (pointCount == 0) app.repository.bills.first().date
+                    else lastBillDay.minusDays(pointCount.toLong() - 1L)
+                val billsByDay = app.repository.bills.groupBy { it.date }
 
-            for (day in startDay..lastBillDay) {
-                val dayBills = billsByDay[day] ?: emptyList()
-                val dateString = day.format(SHORT_DATE_FORMATTER)
-                valueData += XYChart.Data(dateString, dayBills.totalValue)
-                costData += XYChart.Data(dateString, dayBills.totalCost)
+                for (day in startDay..lastBillDay) {
+                    val dayBills = billsByDay[day] ?: emptyList()
+                    val dateString = day.format(SHORT_DATE_FORMATTER)
+                    valueData += XYChart.Data(dateString, dayBills.totalValue)
+                    costData += XYChart.Data(dateString, dayBills.totalCost)
+                }
             }
 
             series += XYChart.Series(strings["chart_series_totalValue"], valueData)
@@ -101,26 +103,28 @@ class GuiOverview {
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            val billCount = app.repository.bills.size
-            val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
-            val bills = when {
-                (pointCount == 0 || pointCount >= billCount) -> app.repository.bills
-                else -> app.repository.bills.drop(billCount - pointCount)
-            }
-
-            var prevDateString = ""
-            var repeatCounter = 0
-            bills.forEach { bill ->
-                var dateString = bill.date.format(SHORT_DATE_FORMATTER)
-                if (dateString == prevDateString) {
-                    dateString += "(${++repeatCounter})"
-                } else {
-                    repeatCounter = 0
-                    prevDateString = dateString
+            if (app.repository.bills.isNotEmpty()) {
+                val billCount = app.repository.bills.size
+                val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
+                val bills = when {
+                    (pointCount == 0 || pointCount >= billCount) -> app.repository.bills
+                    else -> app.repository.bills.drop(billCount - pointCount)
                 }
 
-                costData += XYChart.Data(dateString, bill.totalCost)
-                subsidyData += XYChart.Data(dateString, bill.totalSubsidy)
+                var prevDateString = ""
+                var repeatCounter = 0
+                bills.forEach { bill ->
+                    var dateString = bill.date.format(SHORT_DATE_FORMATTER)
+                    if (dateString == prevDateString) {
+                        dateString += "(${++repeatCounter})"
+                    } else {
+                        repeatCounter = 0
+                        prevDateString = dateString
+                    }
+
+                    costData += XYChart.Data(dateString, bill.totalCost)
+                    subsidyData += XYChart.Data(dateString, bill.totalSubsidy)
+                }
             }
 
             series += XYChart.Series(strings["chart_series_personalCost"], costData)
