@@ -93,6 +93,12 @@ class GuiCalendar {
     }
 
     private fun setupCalendar() {
+
+        fun setupCalendarColumn(column: TableColumn<Week, Day>, dayOfWeek: DayOfWeek) {
+            column.text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+            column.cellValueFactory = CalendarCellValueFactory()
+            column.cellFactory = CalendarCellFactory()
+        }
         setupCalendarColumn(colMon, DayOfWeek.MONDAY)
         setupCalendarColumn(colTue, DayOfWeek.TUESDAY)
         setupCalendarColumn(colWed, DayOfWeek.WEDNESDAY)
@@ -103,9 +109,11 @@ class GuiCalendar {
 
         calTable.selectionModel.isCellSelectionEnabled = true
 
-        val cellHeight =
-            Bindings.min(Bindings.max(colMon.widthProperty(), 100), calTable.heightProperty().divide(6).subtract(5))
-        calTable.fixedCellSizeProperty().bind(cellHeight)
+        val cellHeightBinding = Bindings.min(
+            Bindings.max(colMon.widthProperty(), 100),
+            calTable.heightProperty().divide(6).subtract(5)
+        )
+        calTable.fixedCellSizeProperty().bind(cellHeightBinding)
 
         calTable.itemsProperty().bind(Bindings.createObjectBinding({
             FXCollections.observableList(getWeeks(selectedMonth))
@@ -120,12 +128,6 @@ class GuiCalendar {
                 it.tableColumn.getCellObservableValue(selectedWeek).value as Day
             }
         }, calTable.selectionModel.selectedCells))
-    }
-
-    private fun setupCalendarColumn(column: TableColumn<Week, Day>, dayOfWeek: DayOfWeek) {
-        column.text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-        column.cellValueFactory = CalendarCellValueFactory()
-        column.cellFactory = CalendarCellFactory()
     }
 
     private fun getWeeks(yearMonth: YearMonth): List<Week> {
@@ -167,22 +169,13 @@ class GuiCalendar {
         lblNoBills.visibleProperty().bind(Bindings.createBooleanBinding({
             selectedDay != null && selectedDay?.billCount == 0
         }, selectedDayProperty))
-        detailsTitle.visibleProperty().bind(selectedDayProperty.isNotNull)
 
+        detailsTitle.visibleProperty().bind(selectedDayProperty.isNotNull)
         detailsTitle.textProperty().bind(Bindings.createStringBinding({
             strings["calendar_bills"] + "  " + selectedDay?.date?.format(DATE_FORMATTER)
         }, selectedDayProperty))
 
-        billsList.setCellFactory {
-            object : ListCell<Bill>() {
-                override fun updateItem(item: Bill?, empty: Boolean) {
-                    super.updateItem(item, empty)
-                    text = if (empty || item == null) null
-                    else item.dateTime.format(TIME_FORMATTER) + " - " + floatToString(item.totalCost)
-                }
-            }
-        }
-
+        billsList.setCellFactory { BillListCell() }
         billsList.itemsProperty().bind(Bindings.createObjectBinding({
             selectedDay?.let { FXCollections.observableList(it.bills.reversed()) }
         }, selectedDayProperty))
@@ -274,6 +267,14 @@ class GuiCalendar {
                     effect = null
                 }
             }
+        }
+    }
+
+    private class BillListCell : ListCell<Bill>() {
+        override fun updateItem(item: Bill?, empty: Boolean) {
+            super.updateItem(item, empty)
+            text = if (empty || item == null) null
+            else item.dateTime.format(TIME_FORMATTER) + " - " + floatToString(item.totalCost)
         }
     }
 
