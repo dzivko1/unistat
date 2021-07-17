@@ -73,6 +73,7 @@ class GuiBills {
 
         val sortedBills = SortedList(app.repository.bills)
         sortedBills.comparatorProperty().bind(billsTable.comparatorProperty())
+        billsTable.sortOrder.setAll(colDateTime)
         billsTable.items = sortedBills
     }
 
