@@ -86,7 +86,10 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
                 }
             }
 
-            val billRows = querySelector<HtmlTable>("table").rows.reversed().dropLast(1)
+            // Sometimes the fetched bills are not ordered correctly, so we are sorting the rows to the expected order
+            val billRows = querySelector<HtmlTable>("table")
+                .rows.drop(1).sortedBy { it.extractBillDateTime() }
+
             val newBillCount = billRows.takeWhile { billExists(it).not() }.count()
 
             return List(newBillCount) { index ->
@@ -103,7 +106,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
 
                     return@List Bill(dateTime, source, userID!!, entries)
                 }
-            }.reversed()
+            }
         }
     }
 
@@ -137,13 +140,14 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
 
     private fun HtmlPage.extract(selector: String) = querySelector<DomNode>(selector).asNormalizedText()
     private fun HtmlTableRow.extract(index: Int) = getCell(index).asNormalizedText()
+    private fun HtmlTableRow.extractBillDateTime() = run {
+        val date = extract(1)
+        val time = extract(2)
+        LocalDateTime.parse("$date. $time", SERVER_DATE_TIME_FORMATTER)
+    }
     private fun HtmlTableRow.extractBillOutline() = Pair(
         extract(0),
-        run {
-            val date = extract(1)
-            val time = extract(2)
-            LocalDateTime.parse("$date. $time", SERVER_DATE_TIME_FORMATTER)
-        }
+        extractBillDateTime()
     )
 
     private fun HtmlPage.checkExpected(expectedUrl: String) {
