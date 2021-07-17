@@ -36,6 +36,7 @@ class GuiBase {
 
     private val navToggleGroup = ToggleGroup()
     private lateinit var cardsToButtons: Map<Card, ToggleButton>
+    private val cardCache = HashMap<Card, Parent>()
 
     @FXML
     private fun initialize() {
@@ -88,9 +89,9 @@ class GuiBase {
     }
 
     private fun showCard(card: Card) {
-        val cardView =
-            FXMLLoader(javaClass.getResource(card.fxmlPath), ResourceBundle.getBundle("Strings")).load<Parent>()
-        root.center = cardView
+        root.center = cardCache.computeIfAbsent(card) {
+            FXMLLoader(javaClass.getResource(card.fxmlPath), ResourceBundle.getBundle("Strings")).load()
+        }
         navToggleGroup.selectToggle(cardsToButtons[card])
     }
 }
