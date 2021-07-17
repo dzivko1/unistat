@@ -7,6 +7,7 @@ import javafx.event.Event
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.ToggleButton
 import javafx.scene.control.ToggleGroup
@@ -25,6 +26,9 @@ class GuiBase {
     private lateinit var navButtonBox: VBox
 
     @FXML
+    private lateinit var btnRefresh: Button
+
+    @FXML
     private lateinit var lblFullName: Label
 
     @FXML
@@ -34,7 +38,8 @@ class GuiBase {
     private lateinit var cardsToButtons: Map<Card, ToggleButton>
 
     @FXML
-    fun initialize() {
+    private fun initialize() {
+        btnRefresh.disableProperty().bind(app.offlineModeProperty)
         setupNavButtons()
         setupUserInfoPanel()
         showCard(Card.Overview)
@@ -75,6 +80,11 @@ class GuiBase {
     @FXML
     private fun logout() {
         app.logout()
+    }
+
+    @FXML
+    private fun refresh() {
+        app.refreshUserData()
     }
 
     private fun showCard(card: Card) {

@@ -4,13 +4,13 @@ import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.data.*
 import hr.ferit.dominikzivko.unistat.ui.UIManager
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.ext.inject
 import java.util.concurrent.*
-import kotlin.properties.Delegates
 
 class AppBase(
     val uiManager: UIManager,
@@ -19,8 +19,8 @@ class AppBase(
 ) {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
-    var offlineMode by Delegates.notNull<Boolean>()
-        private set
+    val offlineModeProperty = SimpleBooleanProperty(this, "offlineMode")
+    var offlineMode: Boolean by offlineModeProperty
 
     fun start(primaryStage: Stage, offlineMode: Boolean) {
         this.offlineMode = offlineMode

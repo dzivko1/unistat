@@ -119,8 +119,9 @@ class Repository(var dataSource: DataSource) : AppComponent {
 
     private fun reload() = transaction {
         user = UserDAO.find { Users.id eq dataSource.userID }.firstOrNull()?.let { User(it) }
-        if (user != null)
+        if (user != null) runFxAndWait {
             _bills.setAll(BillDAO.find { Bills.user eq user!!.id }.map { Bill(it) })
+        }
         else _bills.clear()
     }
 }
