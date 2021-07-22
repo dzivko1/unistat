@@ -1,6 +1,7 @@
 package domyutil.jfx
 
 import javafx.application.Platform
+import javafx.beans.value.ObservableValue
 import javafx.beans.value.WritableValue
 import javafx.event.Event
 import javafx.event.EventHandler
@@ -21,7 +22,7 @@ import kotlin.reflect.KProperty
 val strings: ResourceBundle by lazy { ResourceBundle.getBundle("Strings") }
 operator fun ResourceBundle.get(key: String): String = getString(key)
 
-operator fun <T> WritableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
+operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
 operator fun <T> WritableValue<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
 
 /**
