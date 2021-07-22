@@ -12,11 +12,10 @@ object Alerts {
         title: String? = null,
         blocking: Boolean = true
     ) {
-        logger?.error("Error message: $message", throwable)
-
+        logger?.error("Showing exception message: $message", throwable)
         runFxAndWait {
             Alert(Alert.AlertType.ERROR).apply {
-                if (title != null) setTitle(title)
+                setTitle(title ?: strings["error"])
                 contentText = message
                 dialogPane.expandableContent = TextArea(throwable.stackTraceToString())
                 if (blocking) showAndWait()
