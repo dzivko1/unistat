@@ -66,8 +66,7 @@ class Repository(var dataSource: DataSource) : AppComponent {
         checkCancelled()
 
         if (app.offlineMode) {
-            user = newUser
-            _bills.setAll(newBills)
+            setData(newUser, newBills)
         } else {
             persist(newUser, newBills)
             reload()
@@ -118,10 +117,15 @@ class Repository(var dataSource: DataSource) : AppComponent {
     }
 
     private fun reload() = transaction {
-        user = UserDAO.find { Users.id eq dataSource.userID }.firstOrNull()?.let { User(it) }
-        if (user != null) runFxAndWait {
-            _bills.setAll(BillDAO.find { Bills.user eq user!!.id }.map { Bill(it) })
-        }
-        else _bills.clear()
+        val newUser = UserDAO.find { Users.id eq dataSource.userID }.firstOrNull()?.let { User(it) }
+        val newBills = newUser?.let { BillDAO.find { Bills.user eq user!!.id }.map { Bill(it) } }
+        setData(newUser, newBills)
+    }
+
+    private fun setData(newUser: User?, newBills: List<Bill>?) = runFxAndWait {
+        user = newUser
+        if (newUser != null) {
+            _bills.setAll(newBills)
+        } else _bills.clear()
     }
 }
