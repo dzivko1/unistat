@@ -37,14 +37,14 @@ class GuiGeneralStats {
 
     private fun setupMonthlySpendingChart() {
         monthlySpendingChart.enableBarTooltips()
-        monthlySpendingChart.bindData(app.repository.bills) { series ->
+        monthlySpendingChart.bindData(app.repository.filteredBills) { series ->
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            if (app.repository.bills.isNotEmpty()) {
-                val billsByMonth = app.repository.bills.groupBy { it.date.yearMonth }
-                val firstBillMonth = app.repository.bills.first().date.yearMonth
-                val lastBillMonth = app.repository.bills.last().date.yearMonth
+            if (app.repository.filteredBills.isNotEmpty()) {
+                val billsByMonth = app.repository.filteredBills.groupBy { it.date.yearMonth }
+                val firstBillMonth = app.repository.filteredBills.first().date.yearMonth
+                val lastBillMonth = app.repository.filteredBills.last().date.yearMonth
                 for (month in firstBillMonth..lastBillMonth) {
                     val monthBills = billsByMonth[month] ?: emptyList()
                     val monthString = month.format(MONTH_FORMATTER)
@@ -60,8 +60,8 @@ class GuiGeneralStats {
 
     private fun setupBillsBySourceChart() {
         billsBySourceChart.enablePieTooltips()
-        billsBySourceChart.bindData(app.repository.bills) { pieData ->
-            app.repository.bills.groupingBy { it.source }
+        billsBySourceChart.bindData(app.repository.filteredBills) { pieData ->
+            app.repository.filteredBills.groupingBy { it.source }
                 .eachCount().toSortedMap()
                 .forEach { (source, count) ->
                     pieData += PieChart.Data(source, count.toDouble())
@@ -71,11 +71,11 @@ class GuiGeneralStats {
 
     private fun setupSpendingBySourceChart() {
         spendingBySourceChart.enableBarTooltips()
-        spendingBySourceChart.bindData(app.repository.bills) { series ->
+        spendingBySourceChart.bindData(app.repository.filteredBills) { series ->
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            app.repository.bills.groupBy { it.source }
+            app.repository.filteredBills.groupBy { it.source }
                 .toList().sortedByDescending { it.second.totalValue }
                 .forEach { (source, bills) ->
                     costData += XYChart.Data(source, bills.totalCost)

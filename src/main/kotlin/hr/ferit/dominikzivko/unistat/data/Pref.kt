@@ -12,6 +12,8 @@ object Pref {
         preference(userPref, key, defaultValue)
 
 
+    const val LATEST_UPPER_BOUND = "latest"
+
     var url_base by preference("url_base", "https://issp.srce.hr")
     var url_loginBase by preference("url_login_base", "https://login.aaiedu.hr/sso/module.php/core/loginuserpass.php")
     var url_logout by preference("url_logout", "https://issp.srce.hr/Account/Odjava")
@@ -22,4 +24,7 @@ object Pref {
     var savedUsername by preference("user_id", "")
     var savedPassword by preference("al_pwd", "")
     var userCredentials by preference("user_credentials", "")
+
+    var lowerDateBound by preference("lower_date_bound", "")
+    var upperDateBound by preference("upper_date_bound", "")
 }

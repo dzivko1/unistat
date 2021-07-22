@@ -52,34 +52,34 @@ class GuiOverview {
         }
 
         billSummaryBox.children += listOf(
-            BillSummary(strings["summary_today"], app.repository.bills.filtered { it.date.isToday() }),
+            BillSummary(strings["summary_today"], app.repository.filteredBills.filtered { it.date.isToday() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_yesterday"], app.repository.bills.filtered { it.date.isYesterday() }),
+            BillSummary(strings["summary_yesterday"], app.repository.filteredBills.filtered { it.date.isYesterday() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_thisWeek"], app.repository.bills.filtered { it.date.isPastWeek() }),
+            BillSummary(strings["summary_thisWeek"], app.repository.filteredBills.filtered { it.date.isPastWeek() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_thisMonth"], app.repository.bills.filtered { it.date.isPastMonth() }),
+            BillSummary(strings["summary_thisMonth"], app.repository.filteredBills.filtered { it.date.isPastMonth() }),
             Separator(Orientation.VERTICAL),
-            BillSummary(strings["summary_total"], app.repository.bills),
+            BillSummary(strings["summary_total"], app.repository.filteredBills),
             Separator(Orientation.VERTICAL)
         )
     }
 
     private fun setupDailySpendingChart() {
         dailySpendingChart.bindData(
-            app.repository.bills,
+            app.repository.filteredBills,
             dailySpendingChartControlPanel.entryCountProperty
         ) { series ->
             val valueData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            if (app.repository.bills.isNotEmpty()) {
+            if (app.repository.filteredBills.isNotEmpty()) {
                 val pointCount = dailySpendingChartControlPanel.entryCount
-                val lastBillDay = app.repository.bills.last().date
+                val lastBillDay = app.repository.filteredBills.last().date
                 val startDay =
-                    if (pointCount == 0) app.repository.bills.first().date
+                    if (pointCount == 0) app.repository.filteredBills.first().date
                     else lastBillDay.minusDays(pointCount.toLong() - 1L)
-                val billsByDay = app.repository.bills.groupBy { it.date }
+                val billsByDay = app.repository.filteredBills.groupBy { it.date }
 
                 for (day in startDay..lastBillDay) {
                     val dayBills = billsByDay[day] ?: emptyList()
@@ -97,18 +97,18 @@ class GuiOverview {
     private fun setupSpendingByBillChart() {
         spendingByBillChart.enableBarTooltips()
         spendingByBillChart.bindData(
-            app.repository.bills,
+            app.repository.filteredBills,
             spendingByBillChartControlPanel.entryCountProperty
         ) { series ->
             val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
             val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            if (app.repository.bills.isNotEmpty()) {
-                val billCount = app.repository.bills.size
+            if (app.repository.filteredBills.isNotEmpty()) {
+                val billCount = app.repository.filteredBills.size
                 val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
                 val bills = when {
-                    (pointCount == 0 || pointCount >= billCount) -> app.repository.bills
-                    else -> app.repository.bills.drop(billCount - pointCount)
+                    (pointCount == 0 || pointCount >= billCount) -> app.repository.filteredBills
+                    else -> app.repository.filteredBills.drop(billCount - pointCount)
                 }
 
                 var prevDateString = ""

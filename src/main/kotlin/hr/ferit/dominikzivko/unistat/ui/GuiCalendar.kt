@@ -117,7 +117,7 @@ class GuiCalendar {
 
         calTable.itemsProperty().bind(Bindings.createObjectBinding({
             FXCollections.observableList(getWeeks(selectedMonth))
-        }, selectedMonthProperty, app.repository.bills))
+        }, selectedMonthProperty, app.repository.filteredBills))
 
         lblYearMonth.bindText(selectedMonthProperty) { selectedMonth.format(MONTH_FORMATTER) }
 
@@ -133,7 +133,7 @@ class GuiCalendar {
     private fun getWeeks(yearMonth: YearMonth): List<Week> {
         val weeks = mutableListOf<Week>()
 
-        val costByDate = app.repository.bills.filtered { it.date.month == yearMonth.month }
+        val costByDate = app.repository.filteredBills.filtered { it.date.month == yearMonth.month }
             .groupingBy { it.date }.fold(0.0) { acc, bill ->
                 acc + bill.totalCost
             }
@@ -150,7 +150,7 @@ class GuiCalendar {
 
             val days = Array(7) { dayNumber ->
                 val dayOfWeek = monday.plusDays(dayNumber.toLong())
-                val bills = app.repository.bills.filter { it.date == dayOfWeek }
+                val bills = app.repository.filteredBills.filter { it.date == dayOfWeek }
                 val normalizedCost = when {
                     lowestCost == null || highestCost == null || bills.totalCost == 0.0 -> null
                     highestCost == lowestCost -> 1.0

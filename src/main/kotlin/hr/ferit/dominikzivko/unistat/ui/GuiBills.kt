@@ -1,5 +1,6 @@
 package hr.ferit.dominikzivko.unistat.ui
 
+import com.jfoenix.controls.JFXDatePicker
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.data.Bill
@@ -7,6 +8,7 @@ import hr.ferit.dominikzivko.unistat.ui.component.BillView
 import javafx.beans.binding.Bindings
 import javafx.collections.transformation.SortedList
 import javafx.fxml.FXML
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
@@ -40,6 +42,19 @@ class GuiBills {
 
 
     @FXML
+    private lateinit var startDatePicker: JFXDatePicker
+
+    @FXML
+    private lateinit var endDatePicker: JFXDatePicker
+
+    @FXML
+    private lateinit var btnEarliest: Button
+
+    @FXML
+    private lateinit var btnLatest: Button
+
+
+    @FXML
     private lateinit var detailsPanel: StackPane
 
     @FXML
@@ -52,6 +67,7 @@ class GuiBills {
     @FXML
     private fun initialize() {
         setupBillsTable()
+        setupDateRangePicker()
         setupDetailsPanel()
     }
 
@@ -71,10 +87,25 @@ class GuiBills {
         colCost.cellFactory = floatFormatCellFactory
         colDateTime.setStringCellFactory { it.format(DATE_TIME_FORMATTER) }
 
-        val sortedBills = SortedList(app.repository.bills)
+        val sortedBills = SortedList(app.repository.filteredBills)
         sortedBills.comparatorProperty().bind(billsTable.comparatorProperty())
         billsTable.sortOrder.setAll(colDateTime)
         billsTable.items = sortedBills
+    }
+
+    private fun setupDateRangePicker() {
+        btnEarliest.disableProperty().bind(Bindings.createBooleanBinding({
+            startDatePicker.value == app.repository.earliestBillDate
+        }, startDatePicker.valueProperty(), app.repository.bills))
+
+        btnLatest.disableProperty().bind(Bindings.createBooleanBinding({
+            endDatePicker.value == app.repository.latestBillDate
+        }, endDatePicker.valueProperty(), app.repository.bills))
+
+        with(app.repository.billFilter) {
+            Bindings.bindBidirectional(startDatePicker.valueProperty(), lowerBoundProperty)
+            Bindings.bindBidirectional(endDatePicker.valueProperty(), upperBoundProperty)
+        }
     }
 
     private fun setupDetailsPanel() {
@@ -82,5 +113,15 @@ class GuiBills {
         billView.visibleProperty().bind(selectedBillProperty.isNotNull)
         billView.billProperty.bind(selectedBillProperty)
         detailsPanel.children += billView
+    }
+
+    @FXML
+    private fun setToEarliest() {
+        startDatePicker.value = app.repository.earliestBillDate
+    }
+
+    @FXML
+    private fun setToLatest() {
+        endDatePicker.value = app.repository.latestBillDate
     }
 }

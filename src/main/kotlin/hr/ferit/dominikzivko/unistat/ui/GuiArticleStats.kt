@@ -86,9 +86,9 @@ class GuiArticleStats {
         billsByArticleProperty.bind(Bindings.createObjectBinding({
             FXCollections.observableMap(
                 app.repository.articles.associateWith { article ->
-                    app.repository.bills.filter { it.articles.contains(article) }
+                    app.repository.filteredBills.filter { it.articles.contains(article) }
                 })
-        }, app.repository.bills))
+        }, app.repository.filteredBills))
 
         sortedBillsByArticleProperty.bind(Bindings.createObjectBinding({
             FXCollections.observableList(

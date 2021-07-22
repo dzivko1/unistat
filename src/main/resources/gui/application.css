@@ -86,6 +86,10 @@
     -fx-text-fill: -fx-dark-text-color
 }
 
+.jfx-date-picker, .jfx-time-picker {
+	-jfx-default-color: -fx-color;
+}
+
 .title{
 	-fx-font-size: 16.0;
 	-fx-font-weight: bold;
