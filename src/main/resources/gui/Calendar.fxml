@@ -11,8 +11,8 @@
         <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="50.0" styleClass="calendar-header">
             <Region HBox.hgrow="ALWAYS"/>
             <Button mnemonicParsing="false" onAction="#prevMonth" text="⮜"/>
-            <Label fx:id="lblYearMonth" alignment="CENTER" maxWidth="1.7976931348623157E308"
-                   text="&lt;year-month&gt;" HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblYearMonth" alignment="CENTER" maxWidth="1.7976931348623157E308" text="&lt;year-month&gt;"
+                   HBox.hgrow="ALWAYS"/>
             <Button mnemonicParsing="false" onAction="#nextMonth" text="⮞"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
@@ -60,11 +60,13 @@
                 </ImageView>
             </graphic>
         </Label>
-        <VBox fx:id="detailsPanel" prefHeight="200.0" prefWidth="100.0">
+        <VBox fx:id="detailsPanel">
             <TitledPane fx:id="detailsTitle" collapsible="false" styleClass="uncollapsable-titled-pane"
-                        text="&lt;selected-date&gt;">
+                        text="&lt;selected-date&gt;" VBox.vgrow="NEVER">
                 <ListView fx:id="billsList" minHeight="-Infinity" prefHeight="118.0"/>
             </TitledPane>
+            <ScrollPane fx:id="billDetailsPanel" fitToHeight="true" fitToWidth="true" pannable="true"
+                        VBox.vgrow="ALWAYS"/>
         </VBox>
     </StackPane>
 </SplitPane>

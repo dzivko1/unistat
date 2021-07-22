@@ -7,8 +7,8 @@
 <?import javafx.scene.layout.*?>
 <VBox prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiOverview">
-    <ScrollPane fitToHeight="true" fitToWidth="true" minViewportHeight="110.0" prefViewportHeight="110.0"
-                vbarPolicy="NEVER" vmax="0.0">
+    <ScrollPane fitToHeight="true" fitToWidth="true" minViewportHeight="110.0" pannable="true"
+                prefViewportHeight="110.0" vbarPolicy="NEVER" vmax="0.0">
         <HBox fx:id="billSummaryBox" styleClass="header" stylesheets="@application.css">
             <VBox minWidth="150.0">
                 <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14;"
@@ -23,9 +23,10 @@
             <Separator orientation="VERTICAL" prefHeight="200.0"/>
         </HBox>
     </ScrollPane>
-    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+    <ScrollPane fitToWidth="true" pannable="true" VBox.vgrow="ALWAYS">
         <VBox>
-            <LineChart fx:id="dailySpendingChart" createSymbols="false" title="%chart_title_dailySpending">
+            <LineChart fx:id="dailySpendingChart" createSymbols="false" minWidth="500.0"
+                       title="%chart_title_dailySpending">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>
@@ -34,7 +35,7 @@
                 </yAxis>
             </LineChart>
             <ChartControlPanel fx:id="dailySpendingChartControlPanel"/>
-            <StackedBarChart fx:id="spendingByBillChart" title="%chart_title_spendingByBill">
+            <StackedBarChart fx:id="spendingByBillChart" minWidth="500.0" title="%chart_title_spendingByBill">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>

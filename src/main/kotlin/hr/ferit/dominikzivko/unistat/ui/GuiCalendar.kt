@@ -64,6 +64,9 @@ class GuiCalendar {
     private lateinit var detailsPanel: VBox
 
     @FXML
+    private lateinit var billDetailsPanel: ScrollPane
+
+    @FXML
     private lateinit var detailsTitle: TitledPane
 
     @FXML
@@ -169,8 +172,8 @@ class GuiCalendar {
         lblNoBills.visibleProperty().bind(Bindings.createBooleanBinding({
             selectedDay != null && selectedDay?.billCount == 0
         }, selectedDayProperty))
+        detailsPanel.visibleProperty().bind(selectedBillProperty.isNotNull)
 
-        detailsTitle.visibleProperty().bind(selectedDayProperty.isNotNull)
         detailsTitle.textProperty().bind(Bindings.createStringBinding({
             strings["calendar_bills"] + "  " + selectedDay?.date?.format(DATE_FORMATTER)
         }, selectedDayProperty))
@@ -184,7 +187,7 @@ class GuiCalendar {
 
         billView.visibleProperty().bind(selectedBillProperty.isNotNull)
         billView.billProperty.bind(selectedBillProperty)
-        detailsPanel.children += billView
+        billDetailsPanel.content = billView
     }
 
     @FXML

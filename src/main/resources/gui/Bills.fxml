@@ -17,8 +17,7 @@
                 <Insets bottom="10.0" top="5.0"/>
             </padding>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="btnEarliest" mnemonicParsing="false" onAction="#setToEarliest"
-                    text="%bills_btn_earliest"/>
+            <Button fx:id="btnEarliest" mnemonicParsing="false" onAction="#setToEarliest" text="%bills_btn_earliest"/>
             <JFXDatePicker fx:id="startDatePicker"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button fx:id="btnLatest" mnemonicParsing="false" onAction="#setToLatest" text="%bills_btn_latest"/>
@@ -45,17 +44,19 @@
             </columnResizePolicy>
         </TableView>
     </VBox>
-    <StackPane fx:id="detailsPanel" prefHeight="150.0" prefWidth="200.0">
-        <Label fx:id="lblNoBill" contentDisplay="TOP" graphicTextGap="15.0" styleClass="pick-instruction"
-               text="%pickBill">
-            <graphic>
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                    <effect>
-                        <ColorAdjust brightness="0.5" contrast="-1.0" saturation="1.0"/>
-                    </effect>
-                    <Image url="@../images/bill.png"/>
-                </ImageView>
-            </graphic>
-        </Label>
-    </StackPane>
+    <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
+        <StackPane fx:id="detailsPanel">
+            <Label fx:id="lblNoBill" contentDisplay="TOP" graphicTextGap="15.0" styleClass="pick-instruction"
+                   text="%pickBill">
+                <graphic>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <effect>
+                            <ColorAdjust brightness="0.5" contrast="-1.0" saturation="1.0"/>
+                        </effect>
+                        <Image url="@../images/bill.png"/>
+                    </ImageView>
+                </graphic>
+            </Label>
+        </StackPane>
+    </ScrollPane>
 </SplitPane>

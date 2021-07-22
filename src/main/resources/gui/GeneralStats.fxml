@@ -4,8 +4,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<ScrollPane fitToWidth="true" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiGeneralStats">
+<ScrollPane fitToWidth="true" pannable="true" prefHeight="720.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiGeneralStats">
     <VBox>
         <StackedBarChart fx:id="monthlySpendingChart" title="%chart_title_monthlySpending">
             <xAxis>
