@@ -9,6 +9,7 @@ import hr.ferit.dominikzivko.unistat.ui.component.Prompt
 import hr.ferit.dominikzivko.unistat.ui.component.PromptCompanion
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
+import javafx.scene.image.Image
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import javafx.stage.StageStyle
@@ -48,6 +49,11 @@ class UIManager : AppComponent {
 
     override fun start() {
         Locale.setDefault(Locale.forLanguageTag("hr-HR"))
+        primaryStage.icons += listOf(
+            Image(javaClass.getResourceAsStream("/images/UniStat-logo-16.png")),
+            Image(javaClass.getResourceAsStream("/images/UniStat-logo-32.png")),
+            Image(javaClass.getResourceAsStream("/images/UniStat-logo-64.png"))
+        )
     }
 
     override fun stop() {}

@@ -24,8 +24,8 @@ class AppBase(
 
     fun start(primaryStage: Stage, offlineMode: Boolean) {
         this.offlineMode = offlineMode
-        uiManager.start()
         uiManager.primaryStage = primaryStage
+        uiManager.start()
         repository.start()
         refreshUserData()
     }
