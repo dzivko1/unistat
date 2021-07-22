@@ -16,12 +16,10 @@ import java.time.LocalDate
 
 fun LocalDate.isToday() = this == LocalDate.now()
 fun LocalDate.isYesterday() = this == LocalDate.now().minusDays(1)
-fun LocalDate.isPastWeek() = this > LocalDate.now().minusWeeks(1) && this <= LocalDate.now()
-fun LocalDate.isPastMonth() = this > LocalDate.now().minusMonths(1) && this <= LocalDate.now()
+fun LocalDate.isPastWeek() = this in LocalDate.now().minusWeeks(1)..LocalDate.now()
+fun LocalDate.isPastMonth() = this in LocalDate.now().minusMonths(1)..LocalDate.now()
 
 val HtmlPage.urlString: String get() = url.toExternalForm()
-
-
 
 
 fun boundLabelFor(vararg dependencies: Observable, func: () -> String?) = Label().apply {
