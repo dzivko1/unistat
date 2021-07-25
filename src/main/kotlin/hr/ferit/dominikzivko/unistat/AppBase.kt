@@ -6,6 +6,8 @@ import hr.ferit.dominikzivko.unistat.data.*
 import hr.ferit.dominikzivko.unistat.ui.UIManager
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.stage.Stage
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
@@ -14,8 +16,7 @@ import java.util.concurrent.*
 
 class AppBase(
     val uiManager: UIManager,
-    val repository: Repository,
-    val exporter: Exporter
+    val repository: Repository
 ) {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
@@ -64,10 +65,19 @@ class AppBase(
         uiManager.showBaseGui()
     }
 
-    fun exportBills(bills: List<Bill>) {
-        val location = uiManager.showSaveDialog(extensionFilters = App.billFileExtensionFilters)
-            ?: return
-        exporter.exportBills(bills, location)
+    fun exportFilteredBills() {
+        exportBills(repository.filteredBills)
+    }
+
+    private fun exportBills(bills: List<Bill>) {
+        val location = uiManager.showSaveDialog(
+            title = strings["exportAs"],
+            extensionFilters = App.billFileExtensionFilters
+        ) ?: return
+
+        log.info("Exporting ${bills.size} bills to $location.")
+        val json = Json.encodeToString(bills)
+        location.writeText(json)
     }
 
     fun logout() = runBackground {

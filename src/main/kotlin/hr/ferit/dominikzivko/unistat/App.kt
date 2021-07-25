@@ -135,10 +135,9 @@ class App : Application() {
 }
 
 val baseModule = module {
-    single { AppBase(get(), get(), get()) }
+    single { AppBase(get(), get()) }
     single { UIManager() }
     single { Repository(get()) }
-    single { Exporter() }
 }
 
 val remoteDatasourceModule = module {

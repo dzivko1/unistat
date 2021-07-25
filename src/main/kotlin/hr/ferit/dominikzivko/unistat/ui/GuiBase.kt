@@ -84,6 +84,11 @@ class GuiBase {
     }
 
     @FXML
+    private fun exportFilteredBills() {
+        app.exportFilteredBills()
+    }
+
+    @FXML
     private fun refresh() {
         app.refreshUserData()
     }
