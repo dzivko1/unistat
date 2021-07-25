@@ -1,5 +1,6 @@
 package hr.ferit.dominikzivko.unistat.data
 
+import hr.ferit.dominikzivko.unistat.workDir
 import org.apache.logging.log4j.LogManager
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -14,7 +15,8 @@ object AppDatabase {
 
     fun initialize() {
         log.info("Initializing database.")
-        Database.connect("jdbc:sqlite:file:sqlite.db", "org.sqlite.JDBC")
+        val dbPath = workDir.resolve("sqlite.db")
+        Database.connect("jdbc:sqlite:file:$dbPath", "org.sqlite.JDBC")
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
 
         transaction {

@@ -12,7 +12,10 @@ import javafx.scene.chart.XYChart
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
 import javafx.util.Duration
+import java.nio.file.Path
 import java.time.LocalDate
+
+val workDir: Path get() = Path.of(System.getProperty("app.workdir"))
 
 fun LocalDate.isToday() = this == LocalDate.now()
 fun LocalDate.isYesterday() = this == LocalDate.now().minusDays(1)
