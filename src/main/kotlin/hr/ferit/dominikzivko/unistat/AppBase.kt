@@ -47,7 +47,7 @@ class AppBase(
                 repository.refresh(monitor)
             }.onFailure {
                 when (it) {
-                    is SwitchToSampleException -> {
+                    is OpenExportedBillsException -> {
                         setupOfflineMode()
                         return@runBackground
                     }

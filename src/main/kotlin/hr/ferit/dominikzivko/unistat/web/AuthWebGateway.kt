@@ -35,7 +35,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         web.stop()
     }
 
-    @Throws(InputCancelledException::class, SwitchToSampleException::class, NotLoggedInException::class)
+    @Throws(InputCancelledException::class, OpenExportedBillsException::class, NotLoggedInException::class)
     fun fetchAuthorized(
         url: String,
         progressMonitor: ProgressMonitor? = null,
@@ -49,7 +49,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         }
     }
 
-    @Throws(InputCancelledException::class, SwitchToSampleException::class, NotLoggedInException::class)
+    @Throws(InputCancelledException::class, OpenExportedBillsException::class, NotLoggedInException::class)
     private fun authConnect(
         url: String,
         loginPage: HtmlPage,
@@ -95,11 +95,11 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         }
     }
 
-    @Throws(InputCancelledException::class, SwitchToSampleException::class)
+    @Throws(InputCancelledException::class, OpenExportedBillsException::class)
     private fun askForLogin(errorMessage: String? = null): LoginDetails {
         uiManager.promptLogin(errorMessage).run {
             if (cancelled) throw InputCancelledException()
-            if (goOffline) throw SwitchToSampleException()
+            if (openExportedBills) throw OpenExportedBillsException()
 
             return LoginDetails(username, password)
                 .also { if (remember) enableAutoLogin(it) }

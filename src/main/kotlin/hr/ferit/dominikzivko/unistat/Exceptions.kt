@@ -27,6 +27,6 @@ open class InputCancelledException : Exception {
     constructor(message: String) : super(message)
 }
 
-open class SwitchToSampleException : Exception()
+open class OpenExportedBillsException : Exception()
 
 open class BackgroundTaskException(cause: Throwable, val shouldExit: Boolean = false) : Exception(cause)
