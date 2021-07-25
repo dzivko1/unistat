@@ -31,10 +31,9 @@ class App : Application() {
         log.info("Application started.")
         try {
             Platform.setImplicitExit(false)
-            val isOfflineMode = true //TODO temp
-            startKoin { modules(getModules(isOfflineMode)) }
+            startKoin { modules(baseModule, remoteDatasourceModule) }
             AppDatabase.initialize()
-            appBase.start(primaryStage, isOfflineMode)
+            appBase.start(primaryStage)
         } catch (t: Throwable) {
             log.fatal("Fatal error", t)
             Alerts.catching(strings["msg_errorOccurred"], t)
@@ -48,12 +47,6 @@ class App : Application() {
         stopKoin()
         super.stop()
     }
-
-    private fun getModules(offlineMode: Boolean) = listOf(
-        baseModule,
-        if (offlineMode) localDatasourceModule
-        else remoteDatasourceModule
-    )
 
 
     companion object {

@@ -1,13 +1,14 @@
 package hr.ferit.dominikzivko.unistat.data
 
 import domyutil.jfx.*
+import hr.ferit.dominikzivko.unistat.App
+import hr.ferit.dominikzivko.unistat.CancellationException
 import hr.ferit.dominikzivko.unistat.gui.UIManager
 import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import org.koin.core.context.GlobalContext
-import java.io.File
 import java.util.*
 
 class LocalDataSource : DataSource {
@@ -25,9 +26,12 @@ class LocalDataSource : DataSource {
 
     override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor): List<Bill> {
         progressMonitor.hide()
-        //val billsFile = uiManager.showOpenDialog(extensionFilters = App.billFileExtensionFilters)
-           // ?: throw CancellationException()
-        val billsFile = File("C:\\Users\\domyz\\desktop\\t.json")
+
+        val billsFile = uiManager.showOpenDialog(
+            title = strings["title_open"],
+            extensionFilters = App.billFileExtensionFilters
+        ) ?: throw CancellationException()
+
         progressMonitor.applyFx {
             message = strings["loadingBills"]
             progress = -1

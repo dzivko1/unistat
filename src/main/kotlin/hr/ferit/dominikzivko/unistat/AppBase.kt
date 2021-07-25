@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.ext.inject
-import java.util.concurrent.*
+import java.util.concurrent.TimeUnit
 
 class AppBase(
     val uiManager: UIManager,
@@ -20,11 +20,10 @@ class AppBase(
 ) {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
-    val offlineModeProperty = SimpleBooleanProperty(this, "offlineMode")
+    val offlineModeProperty = SimpleBooleanProperty(this, "offlineMode", false)
     var offlineMode: Boolean by offlineModeProperty
 
-    fun start(primaryStage: Stage, offlineMode: Boolean) {
-        this.offlineMode = offlineMode
+    fun start(primaryStage: Stage) {
         uiManager.primaryStage = primaryStage
         uiManager.start()
         repository.start()
@@ -71,7 +70,7 @@ class AppBase(
 
     private fun exportBills(bills: List<Bill>) {
         val location = uiManager.showSaveDialog(
-            title = strings["exportAs"],
+            title = strings["title_exportAs"],
             extensionFilters = App.billFileExtensionFilters
         ) ?: return
 

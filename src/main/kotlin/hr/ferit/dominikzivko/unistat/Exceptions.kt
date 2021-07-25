@@ -22,6 +22,8 @@ open class LoginFailedException : Exception {
     }
 }
 
+open class CancellationException : Exception()
+
 open class InputCancelledException : Exception {
     constructor() : super()
     constructor(message: String) : super(message)
