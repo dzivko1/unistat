@@ -55,7 +55,12 @@ class AppBase(
                         App.exit()
                         return@runBackground
                     }
-                    is CancellationException -> log.info("Data refresh cancelled by user.")
+                    is CancellationException -> {
+                        if (offlineMode) {
+                            setupOnlineMode()
+                            return@runBackground
+                        } else log.info("Data refresh cancelled by user.")
+                    }
                     else -> throw BackgroundTaskException(it, shouldExit = !uiManager.isBaseGuiShowing)
                 }
             }
