@@ -1,4 +1,4 @@
-package hr.ferit.dominikzivko.unistat.ui.component
+package hr.ferit.dominikzivko.unistat.gui.component
 
 import javafx.stage.Stage
 

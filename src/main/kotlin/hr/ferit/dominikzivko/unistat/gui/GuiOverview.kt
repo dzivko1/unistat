@@ -1,12 +1,12 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.*
 import hr.ferit.dominikzivko.unistat.data.totalCost
 import hr.ferit.dominikzivko.unistat.data.totalValue
-import hr.ferit.dominikzivko.unistat.ui.component.BillSummary
-import hr.ferit.dominikzivko.unistat.ui.component.ChartControlPanel
+import hr.ferit.dominikzivko.unistat.gui.component.BillSummary
+import hr.ferit.dominikzivko.unistat.gui.component.ChartControlPanel
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.geometry.Orientation

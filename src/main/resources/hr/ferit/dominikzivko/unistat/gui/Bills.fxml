@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <SplitPane dividerPositions="0.55" prefHeight="720.0" prefWidth="1280.0" stylesheets="@application.css"
            xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiBills">
+           fx:controller="hr.ferit.dominikzivko.unistat.gui.GuiBills">
     <VBox>
         <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="%bills_dateRange"/>
         <HBox alignment="CENTER" spacing="10.0">
@@ -53,7 +53,7 @@
                         <effect>
                             <ColorAdjust brightness="0.5" contrast="-1.0" saturation="1.0"/>
                         </effect>
-                        <Image url="@../images/bill.png"/>
+                        <Image url="@images/bill.png"/>
                     </ImageView>
                 </graphic>
             </Label>

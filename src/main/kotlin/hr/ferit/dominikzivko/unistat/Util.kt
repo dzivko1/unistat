@@ -1,7 +1,7 @@
 package hr.ferit.dominikzivko.unistat
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage
-import hr.ferit.dominikzivko.unistat.ui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.floatToString
 import javafx.beans.Observable
 import javafx.beans.binding.Bindings
 import javafx.beans.value.ObservableValue

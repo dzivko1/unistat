@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.ferit.dominikzivko.unistat.ui.GuiBase">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.ferit.dominikzivko.unistat.gui.GuiBase">
     <left>
         <VBox prefWidth="180.0" styleClass="sidebar" BorderPane.alignment="CENTER">
             <VBox fx:id="navButtonBox"/>
@@ -19,7 +19,7 @@
                             <effect>
                                 <ColorAdjust brightness="1.0"/>
                             </effect>
-                            <Image url="@../images/logout.png"/>
+                            <Image url="@images/logout.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -31,7 +31,7 @@
                             <effect>
                                 <ColorAdjust brightness="1.0"/>
                             </effect>
-                            <Image url="@../images/exportBills.png"/>
+                            <Image url="@images/exportBills.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -43,7 +43,7 @@
                             <effect>
                                 <ColorAdjust brightness="1.0"/>
                             </effect>
-                            <Image url="@../images/refresh.png"/>
+                            <Image url="@images/refresh.png"/>
                         </ImageView>
                     </graphic>
                 </Button>

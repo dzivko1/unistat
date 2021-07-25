@@ -5,9 +5,9 @@ import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.UnexpectedResponseException
 import hr.ferit.dominikzivko.unistat.checkCancelled
-import hr.ferit.dominikzivko.unistat.ui.FLOAT_FORMAT
-import hr.ferit.dominikzivko.unistat.ui.SERVER_DATE_TIME_FORMATTER
-import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.gui.FLOAT_FORMAT
+import hr.ferit.dominikzivko.unistat.gui.SERVER_DATE_TIME_FORMATTER
+import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import hr.ferit.dominikzivko.unistat.urlString
 import hr.ferit.dominikzivko.unistat.web.AuthWebGateway
 import org.apache.logging.log4j.LogManager

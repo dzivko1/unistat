@@ -3,7 +3,7 @@ package hr.ferit.dominikzivko.unistat
 import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.data.*
-import hr.ferit.dominikzivko.unistat.ui.UIManager
+import hr.ferit.dominikzivko.unistat.gui.UIManager
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.stage.Stage
 import kotlinx.serialization.encodeToString

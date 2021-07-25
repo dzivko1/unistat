@@ -7,8 +7,8 @@ import hr.ferit.dominikzivko.unistat.*
 import hr.ferit.dominikzivko.unistat.data.LoginDetails
 import hr.ferit.dominikzivko.unistat.data.Pref
 import hr.ferit.dominikzivko.unistat.data.UserLogon
-import hr.ferit.dominikzivko.unistat.ui.UIManager
-import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.gui.UIManager
+import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import org.apache.logging.log4j.LogManager
 import org.koin.core.context.GlobalContext
 

@@ -1,8 +1,8 @@
 package hr.ferit.dominikzivko.unistat.data
 
 import domyutil.jfx.*
-import hr.ferit.dominikzivko.unistat.ui.UIManager
-import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.gui.UIManager
+import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager

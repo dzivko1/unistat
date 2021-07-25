@@ -1,4 +1,4 @@
-package hr.ferit.dominikzivko.unistat.ui.component
+package hr.ferit.dominikzivko.unistat.gui.component
 
 import domyutil.*
 import domyutil.jfx.*
@@ -7,8 +7,8 @@ import hr.ferit.dominikzivko.unistat.bindText
 import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.BillEntry
 import hr.ferit.dominikzivko.unistat.enablePieTooltips
-import hr.ferit.dominikzivko.unistat.ui.DATE_TIME_FORMATTER
-import hr.ferit.dominikzivko.unistat.ui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.DATE_TIME_FORMATTER
+import hr.ferit.dominikzivko.unistat.gui.floatToString
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
@@ -66,7 +66,7 @@ class BillView : VBox() {
     private lateinit var valueByArticleChart: PieChart
 
     init {
-        FXMLLoader(javaClass.getResource("/gui/BillView.fxml"), ResourceBundle.getBundle("Strings")).apply {
+        FXMLLoader(javaClass.getResource("BillView.fxml"), ResourceBundle.getBundle("Strings")).apply {
             setRoot(this@BillView)
             setController(this@BillView)
         }.load<VBox>()

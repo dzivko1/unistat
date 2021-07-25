@@ -1,10 +1,10 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import com.jfoenix.controls.JFXDatePicker
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.data.Bill
-import hr.ferit.dominikzivko.unistat.ui.component.BillView
+import hr.ferit.dominikzivko.unistat.gui.component.BillView
 import javafx.beans.binding.Bindings
 import javafx.collections.transformation.SortedList
 import javafx.fxml.FXML

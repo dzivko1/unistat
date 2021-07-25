@@ -1,9 +1,9 @@
-package hr.ferit.dominikzivko.unistat.ui.component
+package hr.ferit.dominikzivko.unistat.gui.component
 
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.*
 import hr.ferit.dominikzivko.unistat.data.*
-import hr.ferit.dominikzivko.unistat.ui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.floatToString
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
@@ -34,7 +34,7 @@ class ArticleView : HBox() {
     private lateinit var amountBySourceChart: PieChart
 
     init {
-        FXMLLoader(javaClass.getResource("/gui/ArticleView.fxml"), ResourceBundle.getBundle("Strings")).apply {
+        FXMLLoader(javaClass.getResource("ArticleView.fxml"), ResourceBundle.getBundle("Strings")).apply {
             setRoot(this@ArticleView)
             setController(this@ArticleView)
         }.load<HBox>()

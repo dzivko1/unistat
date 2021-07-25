@@ -2,7 +2,7 @@ package hr.ferit.dominikzivko.unistat
 
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.data.*
-import hr.ferit.dominikzivko.unistat.ui.UIManager
+import hr.ferit.dominikzivko.unistat.gui.UIManager
 import hr.ferit.dominikzivko.unistat.web.AuthWebGateway
 import hr.ferit.dominikzivko.unistat.web.WebGateway
 import javafx.application.Application
@@ -63,7 +63,7 @@ class App : Application() {
         private val log by lazy { LogManager.getLogger(App::class.java) }
 
         val mainStylesheet: String by lazy {
-            App::class.java.getResource("/gui/application.css").toExternalForm()
+            App::class.java.getResource("gui/application.css").toExternalForm()
         }
 
         val billFileExtensionFilters = listOf(

@@ -1,4 +1,4 @@
-package hr.ferit.dominikzivko.unistat.ui.component
+package hr.ferit.dominikzivko.unistat.gui.component
 
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.boundLabelFor
@@ -6,7 +6,7 @@ import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.articleCount
 import hr.ferit.dominikzivko.unistat.data.totalCost
 import hr.ferit.dominikzivko.unistat.data.totalValue
-import hr.ferit.dominikzivko.unistat.ui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.floatToString
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty

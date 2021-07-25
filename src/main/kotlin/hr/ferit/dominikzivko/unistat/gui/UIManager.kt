@@ -1,12 +1,12 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import domyutil.*
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.App
 import hr.ferit.dominikzivko.unistat.AppComponent
-import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
-import hr.ferit.dominikzivko.unistat.ui.component.Prompt
-import hr.ferit.dominikzivko.unistat.ui.component.PromptCompanion
+import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.gui.component.Prompt
+import hr.ferit.dominikzivko.unistat.gui.component.PromptCompanion
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -50,9 +50,9 @@ class UIManager : AppComponent {
     override fun start() {
         Locale.setDefault(Locale.forLanguageTag("hr-HR"))
         primaryStage.icons += listOf(
-            Image(javaClass.getResourceAsStream("/images/UniStat-logo-16.png")),
-            Image(javaClass.getResourceAsStream("/images/UniStat-logo-32.png")),
-            Image(javaClass.getResourceAsStream("/images/UniStat-logo-64.png"))
+            Image(javaClass.getResourceAsStream("images/UniStat-logo-16.png")),
+            Image(javaClass.getResourceAsStream("images/UniStat-logo-32.png")),
+            Image(javaClass.getResourceAsStream("images/UniStat-logo-64.png"))
         )
     }
 
@@ -71,7 +71,7 @@ class UIManager : AppComponent {
 
     private fun initBaseGui() {
         log.info("Loading main window.")
-        baseScene = Scene(FXMLLoader(javaClass.getResource("/gui/Base.fxml")).load()).apply {
+        baseScene = Scene(FXMLLoader(javaClass.getResource("Base.fxml"), ResourceBundle.getBundle("Strings")).load()).apply {
             stylesheets += App.mainStylesheet
         }
         primaryStage.apply {

@@ -1,7 +1,7 @@
 package hr.ferit.dominikzivko.unistat.data
 
 import hr.ferit.dominikzivko.unistat.AppComponent
-import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import java.util.*
 
 interface DataSource : AppComponent {

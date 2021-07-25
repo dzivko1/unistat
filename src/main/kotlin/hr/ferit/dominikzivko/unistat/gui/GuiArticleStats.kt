@@ -1,11 +1,11 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.bindData
 import hr.ferit.dominikzivko.unistat.data.*
 import hr.ferit.dominikzivko.unistat.enableBarTooltips
-import hr.ferit.dominikzivko.unistat.ui.component.ArticleView
+import hr.ferit.dominikzivko.unistat.gui.component.ArticleView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleMapProperty

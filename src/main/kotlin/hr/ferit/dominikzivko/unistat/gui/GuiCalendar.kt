@@ -1,4 +1,4 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import domyutil.*
 import domyutil.jfx.*
@@ -6,8 +6,8 @@ import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.bindText
 import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.totalCost
+import hr.ferit.dominikzivko.unistat.gui.component.BillView
 import hr.ferit.dominikzivko.unistat.isToday
-import hr.ferit.dominikzivko.unistat.ui.component.BillView
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.value.ObservableValue
@@ -228,7 +228,7 @@ class GuiCalendar {
             lblDay.styleClass += "calendar-day-label"
             lblCost.styleClass += "calendar-cost-label"
             lblBills.styleClass += "calendar-bills-label"
-            lblBills.graphic = ImageView("/images/bill-small.png").apply {
+            lblBills.graphic = ImageView("/hr/ferit/dominikzivko/unistat/gui/images/bill-small.png").apply {
                 fitWidth = 20.0
                 fitHeight = 20.0
                 effect = ColorAdjust(0.0, 1.0, 0.5, -1.0)

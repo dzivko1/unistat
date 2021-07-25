@@ -1,4 +1,4 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import domyutil.*
 import domyutil.jfx.*

@@ -1,9 +1,9 @@
-package hr.ferit.dominikzivko.unistat.ui
+package hr.ferit.dominikzivko.unistat.gui
 
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.App
-import hr.ferit.dominikzivko.unistat.ui.component.Prompt
-import hr.ferit.dominikzivko.unistat.ui.component.PromptCompanion
+import hr.ferit.dominikzivko.unistat.gui.component.Prompt
+import hr.ferit.dominikzivko.unistat.gui.component.PromptCompanion
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
 import javafx.scene.control.Label
@@ -96,7 +96,7 @@ class GuiLogin : Prompt {
     )
 
     companion object Companion : PromptCompanion {
-        override val fxmlPath = "/gui/Login.fxml"
+        override val fxmlPath = "Login.fxml"
         override val title = "${App.APPNAME} - ${strings["title_login"]}"
     }
 }

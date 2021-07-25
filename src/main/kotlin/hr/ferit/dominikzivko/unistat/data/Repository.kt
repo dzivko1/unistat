@@ -5,7 +5,7 @@ import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import hr.ferit.dominikzivko.unistat.AppComponent
 import hr.ferit.dominikzivko.unistat.checkCancelled
-import hr.ferit.dominikzivko.unistat.ui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import javafx.beans.binding.Bindings
 import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.beans.property.ReadOnlyObjectWrapper
