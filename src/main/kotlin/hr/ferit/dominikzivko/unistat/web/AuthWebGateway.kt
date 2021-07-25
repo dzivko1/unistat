@@ -140,6 +140,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
     fun logout() {
         log.info("Logging off the webserver...")
         web.get(Pref.url_logout)
+        web.clearCookies()
         currentUser = null
         disableAutoLogin()
         log.info("Logoff finished.")

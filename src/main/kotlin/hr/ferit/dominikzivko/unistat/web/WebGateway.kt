@@ -44,6 +44,13 @@ class WebGateway : AppComponent {
         }
     }
 
+    fun clearCookies(): Unit = transaction {
+        log.info("Clearing cookies.")
+        runCatching {
+            Cookies.deleteAll()
+        }.onFailure { log.error("Could not clear cookies", it) }
+    }
+
     private fun saveCookies(): Unit = transaction {
         log.info("Saving cookies.")
         runCatching {

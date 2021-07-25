@@ -82,6 +82,8 @@ class Repository(var dataSource: DataSource) : AppComponent {
     }
 
     override fun stop() {
+        if (user != null && !Pref.autoLogin)
+            forget()
         dataSource.stop()
     }
 
@@ -90,7 +92,12 @@ class Repository(var dataSource: DataSource) : AppComponent {
             user = null
             _bills.clear()
         }
+
+        Pref.lowerDateBound = ""
+        Pref.upperDateBound = ""
+
         dataSource.revokeAuthorization()
+
         future.get()
     }
 
@@ -162,7 +169,7 @@ class Repository(var dataSource: DataSource) : AppComponent {
 
     private fun reload() = transaction {
         val newUser = UserDAO.find { Users.id eq dataSource.userID }.firstOrNull()?.let { User(it) }
-        val newBills = newUser?.let { BillDAO.find { Bills.user eq user!!.id }.map { Bill(it) } }
+        val newBills = newUser?.let { BillDAO.find { Bills.user eq newUser.id }.map { Bill(it) } }
         setData(newUser, newBills)
     }
 
