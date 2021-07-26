@@ -15,14 +15,12 @@ val List<BillEntry>.totalCost get() = sumOf { it.totalCost.toDouble() }
 data class BillEntry(
     val article: Article,
     val amount: Int,
-    val subsidy: Float,
-    val id: Long? = null
+    val subsidy: Float
 ) {
     constructor(dao: BillEntryDAO) : this(
         Article(dao.article),
         dao.amount,
-        dao.subsidy,
-        dao.id.value
+        dao.subsidy
     )
 
     val totalValue get() = amount * article.price

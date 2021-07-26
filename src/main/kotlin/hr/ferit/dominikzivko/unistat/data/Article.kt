@@ -9,10 +9,9 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 @Serializable
 data class Article(
     val name: String,
-    val price: Float,
-    val id: Int? = null
+    val price: Float
 ) {
-    constructor(dao: ArticleDAO) : this(dao.name, dao.price, dao.id.value)
+    constructor(dao: ArticleDAO) : this(dao.name, dao.price)
 
     fun areDetailsEqual(other: Article): Boolean {
         return name == other.name && price == other.price

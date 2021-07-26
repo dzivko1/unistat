@@ -1,6 +1,7 @@
 package hr.ferit.dominikzivko.unistat.data
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -19,17 +20,15 @@ data class Bill(
     @Serializable(with = LocalDateTimeSerializer::class)
     val dateTime: LocalDateTime,
     val source: String,
-    @Serializable(with = UuidSerializer::class)
-    val user: UUID,
-    val entries: List<BillEntry>,
-    val id: Long? = null
+    @Transient
+    val user: UUID = LOCAL_USER.id,
+    val entries: List<BillEntry>
 ) {
     constructor(dao: BillDAO) : this(
         dao.dateTime,
         dao.source,
         dao.user.id.value,
-        dao.entries.map { BillEntry(it) },
-        dao.id.value
+        dao.entries.map { BillEntry(it) }
     )
 
     val date get() = dateTime.toLocalDate()!!
