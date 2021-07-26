@@ -136,7 +136,7 @@ class GuiCalendar {
     private fun getWeeks(yearMonth: YearMonth): List<Week> {
         val weeks = mutableListOf<Week>()
 
-        val costByDate = app.repository.filteredBills.filtered { it.date.month == yearMonth.month }
+        val costByDate = app.repository.filteredBills.filter { it.date.yearMonth == yearMonth }
             .groupingBy { it.date }.fold(0.0) { acc, bill ->
                 acc + bill.totalCost
             }
@@ -265,8 +265,8 @@ class GuiCalendar {
                     }
                 }
                 else -> {
-                    val highlight = if (day.normalizedCost != null) (20 + (1 - day.normalizedCost) * 60) else 100
-                    style = "-fx-calendar-cell-background: derive(-fx-accent, $highlight%)"
+                    val highlight = if (day.normalizedCost != null) (15.0 + day.normalizedCost * 55.0) else 0.0
+                    style = "-fx-calendar-cell-background: derive(-fx-accent, ${100.0 - highlight}%)"
                     effect = null
                 }
             }
