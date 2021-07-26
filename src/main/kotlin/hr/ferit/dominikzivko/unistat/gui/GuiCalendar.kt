@@ -180,7 +180,7 @@ class GuiCalendar {
 
         billsList.setCellFactory { BillListCell() }
         billsList.itemsProperty().bind(Bindings.createObjectBinding({
-            selectedDay?.let { FXCollections.observableList(it.bills.reversed()) }
+            selectedDay?.let { FXCollections.observableList(it.bills) }
         }, selectedDayProperty))
 
         selectedDayProperty.addListener { _, _, _ -> billsList.selectionModel.selectFirst() }
