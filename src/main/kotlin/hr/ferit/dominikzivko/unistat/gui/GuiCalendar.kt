@@ -82,10 +82,10 @@ class GuiCalendar {
     private val billView = BillView()
 
     private val selectedMonthProperty = SimpleObjectProperty(YearMonth.now())
-    private var selectedMonth by selectedMonthProperty
+    private var selectedMonth: YearMonth by selectedMonthProperty
 
     private val selectedDayProperty = SimpleObjectProperty<Day?>()
-    private val selectedDay by selectedDayProperty
+    private val selectedDay: Day? by selectedDayProperty
 
     private val selectedBillProperty get() = billsList.selectionModel.selectedItemProperty()
 
@@ -131,6 +131,8 @@ class GuiCalendar {
                 it.tableColumn.getCellObservableValue(selectedWeek).value as Day
             }
         }, calTable.selectionModel.selectedCells))
+
+        app.repository.latestBillDate?.let { selectedMonth = it.yearMonth }
     }
 
     private fun getWeeks(yearMonth: YearMonth): List<Week> {
