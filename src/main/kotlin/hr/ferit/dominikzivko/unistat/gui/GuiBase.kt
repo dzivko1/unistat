@@ -3,6 +3,7 @@ package hr.ferit.dominikzivko.unistat.gui
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.AppBase
 import javafx.beans.binding.Bindings
+import javafx.collections.ListChangeListener
 import javafx.event.Event
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -43,6 +44,12 @@ class GuiBase {
         btnRefresh.disableProperty().bind(app.offlineModeProperty)
         setupNavButtons()
         setupUserInfoPanel()
+
+        // This forces the cards to reload when opened again, which quick-fixes some issues with list sorting through bindings
+        app.repository.filteredBills.addListener(ListChangeListener {
+            cardCache.clear()
+        })
+
         showCard(Card.Overview)
     }
 
