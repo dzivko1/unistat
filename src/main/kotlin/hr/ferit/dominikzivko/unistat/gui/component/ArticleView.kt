@@ -58,7 +58,7 @@ class ArticleView : HBox() {
     }
 
     private fun setupAmountBySourceChart() {
-        amountBySourceChart.enablePieTooltips()
+        amountBySourceChart.enablePieTooltips(isValueInteger = true)
         amountBySourceChart.bindData(dataProperty) { pieData ->
             data?.relevantBills?.groupBy { it.source }?.forEach { (source, bills) ->
                 val amount = bills.sumOf { bill ->

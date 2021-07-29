@@ -59,7 +59,7 @@ class GuiGeneralStats {
     }
 
     private fun setupBillsBySourceChart() {
-        billsBySourceChart.enablePieTooltips()
+        billsBySourceChart.enablePieTooltips(isValueInteger = true)
         billsBySourceChart.bindData(app.repository.filteredBills) { pieData ->
             app.repository.filteredBills.groupingBy { it.source }
                 .eachCount().toSortedMap()

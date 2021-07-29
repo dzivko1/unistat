@@ -57,10 +57,11 @@ private fun <T> makeChartBinding(
  *
  * **Note:** This should be called before binding the data property to ensure tooltips are installed on the first dataset.
  */
-fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.5)) {
+fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.5), isValueInteger: Boolean = false) {
     dataProperty().addListener { _, _, newValue ->
         newValue.forEach { item ->
-            val tooltip = Tooltip(item.name + "\n" + floatToString(item.pieValue)).apply {
+            val yString = if (isValueInteger) item.pieValue.toInt() else floatToString(item.pieValue)
+            val tooltip = Tooltip(item.name + "\n" + yString).apply {
                 this.showDelay = showDelay
             }
             Tooltip.install(item.node, tooltip)
