@@ -26,7 +26,7 @@
     <ScrollPane fitToWidth="true" pannable="true" VBox.vgrow="ALWAYS">
         <VBox>
             <LineChart fx:id="dailySpendingChart" createSymbols="false" minWidth="500.0"
-                       title="%chart_title_dailySpending">
+                       title="%chart_title_dailySpending" animated="false">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>
@@ -35,7 +35,8 @@
                 </yAxis>
             </LineChart>
             <ChartControlPanel fx:id="dailySpendingChartControlPanel"/>
-            <StackedBarChart fx:id="spendingByBillChart" minWidth="500.0" title="%chart_title_spendingByBill">
+            <StackedBarChart fx:id="spendingByBillChart" minWidth="500.0" title="%chart_title_spendingByBill"
+                             animated="false">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>

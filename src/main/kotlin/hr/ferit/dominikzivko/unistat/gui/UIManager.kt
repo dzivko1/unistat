@@ -22,6 +22,13 @@ import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObjectInstance
 
+/*
+Some info:
+    Animation on XYChart types has a bug where x axis labels are incorrectly drawn after being dynamically changed.
+    That is why it is disabled (in FXML).
+    Issue: JDK-8198830
+*/
+
 val SERVER_DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. H:mm")
 val DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy. | H:mm:ss")
 val DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d.M.yyyy.")

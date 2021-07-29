@@ -8,7 +8,7 @@
             xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hr.ferit.dominikzivko.unistat.gui.GuiGeneralStats">
     <VBox>
-        <StackedBarChart fx:id="monthlySpendingChart" title="%chart_title_monthlySpending">
+        <StackedBarChart fx:id="monthlySpendingChart" title="%chart_title_monthlySpending" animated="false">
             <xAxis>
                 <CategoryAxis side="BOTTOM"/>
             </xAxis>
@@ -21,7 +21,7 @@
                       title="%chart_title_billsBySource" HBox.hgrow="SOMETIMES"/>
             <StackedBarChart fx:id="spendingBySourceChart" minWidth="400.0"
                              style="CHART_COLOR_1: CHART_COLOR_3; CHART_COLOR_2: CHART_COLOR_4;"
-                             title="%chart_title_spendingBySource" HBox.hgrow="ALWAYS">
+                             title="%chart_title_spendingBySource" HBox.hgrow="ALWAYS" animated="false">
                 <xAxis>
                     <CategoryAxis side="BOTTOM" tickLabelRotation="0.01"/>
                 </xAxis>

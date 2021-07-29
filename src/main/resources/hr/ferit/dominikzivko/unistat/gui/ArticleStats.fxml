@@ -15,7 +15,7 @@
                     vbarPolicy="NEVER">
             <VBox>
                 <StackedBarChart fx:id="spendingByArticleChart" categoryGap="2.0" minHeight="200.0"
-                                 style="CHART_COLOR_1: CHART_COLOR_3; CHART_COLOR_2: CHART_COLOR_4;">
+                                 style="CHART_COLOR_1: CHART_COLOR_3; CHART_COLOR_2: CHART_COLOR_4;" animated="false">
                     <xAxis>
                         <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"/>
                     </xAxis>
@@ -24,7 +24,7 @@
                     </yAxis>
                 </StackedBarChart>
                 <BarChart fx:id="amountByArticleChart" barGap="0.0" categoryGap="2.0" minHeight="200.0"
-                          style="CHART_COLOR_1: CHART_COLOR_2;">
+                          style="CHART_COLOR_1: CHART_COLOR_2;" animated="false">
                     <xAxis>
                         <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"/>
                     </xAxis>
