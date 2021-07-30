@@ -155,6 +155,8 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
 
     private fun verifyUser() {
         log.info("Verifying user credentials.")
+        if (Pref.userCredentials.isEmpty()) return
+
         val studentPage = ensureStudentPage(web.lastPage)
         val actualOib = extractUserOib(studentPage)
         val (username, expectedOib) = deobfuscate(Pref.userCredentials).split('|')
