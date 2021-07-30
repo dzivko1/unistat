@@ -28,3 +28,20 @@ interface PromptCompanion {
     val title: String
 }
 
+abstract class PromptBase : Prompt {
+
+    protected var cancelled = false
+
+    @FXML
+    override fun accept() {
+        cancelled = false
+        stage.close()
+    }
+
+    @FXML
+    override fun cancel() {
+        cancelled = true
+        stage.close()
+    }
+}
+

@@ -25,7 +25,7 @@ class ProgressMonitor(
     var message: String by messageProperty
 
     val onCancelProperty = SimpleObjectProperty<(() -> Unit)?>(this, "onCancel", initialOnCancel)
-    var onCancel by onCancelProperty
+    var onCancel: (() -> Unit)? by onCancelProperty
 
     val stage: Stage get() = scene.window as Stage
 

@@ -6,8 +6,8 @@ import java.util.*
 
 interface DataSource : AppComponent {
     val userID: UUID?
-    fun fetchGeneralData(progressMonitor: ProgressMonitor): User
-    fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor): List<Bill>
+    fun fetchGeneralData(progressMonitor: ProgressMonitor? = null): User
+    fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor? = null): List<Bill>
 
     /**
      * Revokes any and all rights to data access that a user might have through this data source, requiring fresh

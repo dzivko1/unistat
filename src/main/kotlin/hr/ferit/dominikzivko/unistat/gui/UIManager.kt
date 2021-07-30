@@ -88,12 +88,12 @@ class UIManager : AppComponent {
         }
     }
 
-    fun promptLogin(errorMessage: String? = null) = runFxAndWait<LoginPromptResult> {
+    fun promptLogin(errorMessage: String? = null) = runFxAndWait<GuiLogin.Result> {
         log.info("Prompting user login.")
         hideBaseGui()
         loadPrompt(GuiLogin::class).run {
             this.errorMessage = errorMessage
-            acquireInput() as LoginPromptResult
+            acquireInput() as GuiLogin.Result
         }
     }
 

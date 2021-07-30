@@ -20,19 +20,19 @@ class LocalDataSource : DataSource {
     override fun start() {}
     override fun stop() {}
 
-    override fun fetchGeneralData(progressMonitor: ProgressMonitor): User {
+    override fun fetchGeneralData(progressMonitor: ProgressMonitor?): User {
         return User(LOCAL_USER.username, "(${strings["demo"]})", "---", "---", 0f, LOCAL_USER.id)
     }
 
-    override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor): List<Bill> {
-        progressMonitor.hide()
+    override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor?): List<Bill> {
+        progressMonitor?.hide()
 
         val billsFile = uiManager.showOpenDialog(
             title = strings["title_open"],
             extensionFilters = App.billFileExtensionFilters
         ) ?: throw CancellationException()
 
-        progressMonitor.applyFx {
+        progressMonitor?.applyFx {
             message = strings["loadingBills"]
             progress = -1
             show()

@@ -26,7 +26,7 @@ class Repository(var dataSource: DataSource) : AppComponent {
 
     private val _userProperty = ReadOnlyObjectWrapper<User?>(this, "user")
     val userProperty: ReadOnlyObjectProperty<User?> get() = _userProperty.readOnlyProperty
-    var user
+    var user: User?
         get() = _userProperty.value
         private set(value) {
             _userProperty.value = value
@@ -51,6 +51,12 @@ class Repository(var dataSource: DataSource) : AppComponent {
     override fun start() {
         dataSource.start()
         setupBillFilter()
+    }
+
+    override fun stop() {
+        if (user != null && !Pref.autoLogin)
+            forget()
+        dataSource.stop()
     }
 
     private fun setupBillFilter() {
@@ -81,12 +87,6 @@ class Repository(var dataSource: DataSource) : AppComponent {
         })
     }
 
-    override fun stop() {
-        if (user != null && !Pref.autoLogin)
-            forget()
-        dataSource.stop()
-    }
-
     fun importBills(toAdd: List<Bill>) {
         val valid = toAdd.minus(_bills.intersect(toAdd))
         if (app.offlineMode) _bills += valid
@@ -98,8 +98,7 @@ class Repository(var dataSource: DataSource) : AppComponent {
 
     fun forget() {
         val future = runFx<Unit> {
-            user = null
-            _bills.clear()
+            setData(null, null)
         }
 
         Pref.lowerDateBound = ""

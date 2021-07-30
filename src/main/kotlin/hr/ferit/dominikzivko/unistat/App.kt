@@ -22,6 +22,8 @@ import java.nio.file.Paths
 import javax.swing.JOptionPane
 import kotlin.system.exitProcess
 
+val workDir: Path get() = Path.of(System.getProperty("app.workdir"))
+
 class App : Application() {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
@@ -33,7 +35,7 @@ class App : Application() {
             Platform.setImplicitExit(false)
             startKoin { modules(baseModule, remoteDatasourceModule) }
             AppDatabase.initialize()
-            appBase.start(primaryStage)
+            appBase.start(primaryStage, false)
         } catch (t: Throwable) {
             log.fatal("Fatal error", t)
             Alerts.catching(strings["msg_errorOccurred"], t)

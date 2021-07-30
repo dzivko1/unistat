@@ -26,7 +26,6 @@ class BillSummary(
 ) : GridPane() {
 
     private val titleProperty = SimpleStringProperty(this, "title", initialTitle)
-    private var title: String by titleProperty
 
     private val billsProperty = SimpleListProperty<Bill>(this, "bills")
     private var bills: ObservableList<Bill> by billsProperty

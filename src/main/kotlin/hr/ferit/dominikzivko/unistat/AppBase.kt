@@ -21,11 +21,12 @@ class AppBase(
 ) {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
-    val offlineModeProperty = SimpleBooleanProperty(this, "offlineMode", false)
+    val offlineModeProperty = SimpleBooleanProperty(this, "offlineMode")
     var offlineMode: Boolean by offlineModeProperty
 
-    fun start(primaryStage: Stage) {
+    fun start(primaryStage: Stage, offlineMode: Boolean) {
         uiManager.primaryStage = primaryStage
+        this.offlineMode = offlineMode
         uiManager.start()
         repository.start()
         refreshUserData()

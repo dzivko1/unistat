@@ -3,6 +3,7 @@ package hr.ferit.dominikzivko.unistat.gui
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.App
 import hr.ferit.dominikzivko.unistat.gui.component.Prompt
+import hr.ferit.dominikzivko.unistat.gui.component.PromptBase
 import hr.ferit.dominikzivko.unistat.gui.component.PromptCompanion
 import javafx.fxml.FXML
 import javafx.scene.control.CheckBox
@@ -12,15 +13,7 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 
-data class LoginPromptResult(
-    override val cancelled: Boolean,
-    val username: String,
-    val password: String,
-    val remember: Boolean,
-    val openExportedBills: Boolean
-) : Prompt.Result
-
-class GuiLogin : Prompt {
+class GuiLogin : PromptBase() {
     @FXML
     private lateinit var header: StackPane
 
@@ -36,7 +29,6 @@ class GuiLogin : Prompt {
     @FXML
     private lateinit var errorMessageLabel: Label
 
-    private var cancelled = false
     private var openExportedBills = false
 
     override val stage get() = usernameField.scene.window as Stage
@@ -58,42 +50,35 @@ class GuiLogin : Prompt {
     }
 
     @FXML
-    override fun accept() {
-        stage.close()
-    }
-
-    @FXML
-    override fun cancel() {
-        cancelled = true
-        stage.close()
-    }
-
-    @FXML
     fun openExportedBills() {
         openExportedBills = true
-        stage.close()
+        accept()
     }
 
     override fun reset() {
-        clearInputs()
-        cancelled = false
+        usernameField.clear()
+        passwordField.clear()
         openExportedBills = false
         remember.isSelected = false
         errorMessage = null
     }
 
-    fun clearInputs() {
-        usernameField.clear()
-        passwordField.clear()
-    }
-
-    override fun makeResult() = LoginPromptResult(
+    override fun makeResult() = Result(
         cancelled,
         usernameField.text,
         passwordField.text,
         remember.isSelected,
         openExportedBills
     )
+
+    data class Result(
+        override val cancelled: Boolean,
+        val username: String,
+        val password: String,
+        val remember: Boolean,
+        val openExportedBills: Boolean
+    ) : Prompt.Result
+
 
     companion object Companion : PromptCompanion {
         override val fxmlPath = "Login.fxml"

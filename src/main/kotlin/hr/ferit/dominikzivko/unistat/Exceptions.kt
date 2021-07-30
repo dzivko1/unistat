@@ -5,10 +5,7 @@ open class UnexpectedResponseException : RuntimeException {
     constructor(message: String) : super(message)
 }
 
-open class NotLoggedInException : Exception {
-    constructor() : super()
-    constructor(message: String) : super(message)
-}
+open class NotLoggedInException : Exception()
 
 open class LoginFailedException : Exception {
     val userFriendlyMessage: String?
@@ -24,10 +21,7 @@ open class LoginFailedException : Exception {
 
 open class CancellationException : Exception()
 
-open class InputCancelledException : Exception {
-    constructor() : super()
-    constructor(message: String) : super(message)
-}
+open class InputCancelledException : Exception()
 
 open class OpenExportedBillsException : Exception()
 

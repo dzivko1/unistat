@@ -29,10 +29,10 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         web.stop()
     }
 
-    override fun fetchGeneralData(progressMonitor: ProgressMonitor): User {
+    override fun fetchGeneralData(progressMonitor: ProgressMonitor?): User {
         log.debug("Fetching general data...")
 
-        progressMonitor.applyFx {
+        progressMonitor?.applyFx {
             message = strings["fetchingGeneralData"] + "..."
             progress = -1
         }
@@ -53,9 +53,9 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         }
     }
 
-    override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor): List<Bill> {
+    override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor?): List<Bill> {
         log.debug("Fetching bills...")
-        progressMonitor.applyFx {
+        progressMonitor?.applyFx {
             message = strings["fetchingBills"] + "..."
             progress = -1
         }
@@ -99,7 +99,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
                     val (source, dateTime) = extractBillOutline()
                     val entries = fetchEntries(this)
 
-                    progressMonitor.applyFx {
+                    progressMonitor?.applyFx {
                         message = "${strings["downloadedBills"]}: ${index + 1}/$newBillCount"
                         progress = (index + 1.0) / newBillCount
                     }
