@@ -41,6 +41,21 @@
                         <Tooltip text="%tooltip_exportCurrentBills"/>
                     </tooltip>
                 </Button>
+                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" onAction="#importBills" prefHeight="32.0" prefWidth="32.0">
+                    <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                            <effect>
+                                <ColorAdjust brightness="1.0"/>
+                            </effect>
+                            <Image url="@images/importBills.png"/>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="%tooltip_importBills"/>
+                    </tooltip>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="btnRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                         minWidth="-Infinity" mnemonicParsing="false" onAction="#refresh" prefHeight="32.0"
                         prefWidth="32.0">

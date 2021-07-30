@@ -6,6 +6,7 @@ import hr.ferit.dominikzivko.unistat.data.*
 import hr.ferit.dominikzivko.unistat.gui.UIManager
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.stage.Stage
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
@@ -67,6 +68,18 @@ class AppBase(
 
         }
         uiManager.showBaseGui()
+    }
+
+    fun importBills() {
+        val location = uiManager.showOpenDialog(
+            title = strings["title_import"],
+            extensionFilters = App.billFileExtensionFilters
+        ) ?: return
+
+        log.info("Importing bills from $location")
+        val json = location.readText()
+        val decoded = Json.decodeFromString<List<Bill>>(json)
+        repository.importBills(decoded)
     }
 
     fun exportFilteredBills() {

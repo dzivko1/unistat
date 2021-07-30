@@ -42,6 +42,7 @@ class GuiBase {
     @FXML
     private fun initialize() {
         btnRefresh.disableProperty().bind(app.offlineModeProperty)
+
         setupNavButtons()
         setupUserInfoPanel()
 
@@ -88,6 +89,11 @@ class GuiBase {
     @FXML
     private fun logout() {
         app.logout()
+    }
+
+    @FXML
+    private fun importBills() {
+        app.importBills()
     }
 
     @FXML

@@ -87,6 +87,15 @@ class Repository(var dataSource: DataSource) : AppComponent {
         dataSource.stop()
     }
 
+    fun importBills(toAdd: List<Bill>) {
+        val valid = toAdd.minus(_bills.intersect(toAdd))
+        if (app.offlineMode) _bills += valid
+        else {
+            persist(newBills = valid)
+            reload()
+        }
+    }
+
     fun forget() {
         val future = runFx<Unit> {
             user = null
@@ -126,11 +135,14 @@ class Repository(var dataSource: DataSource) : AppComponent {
         log.info("Data refresh finished.")
     }
 
-    private fun persist(newUser: User, newBills: List<Bill>) {
+    private fun persist(newUser: User? = null, newBills: List<Bill>) {
+        check(!app.offlineMode)
+
         log.debug("Saving data...")
         transaction {
-            val userDAO = (newUser.dao ?: UserDAO.new(nameUUIDFromString(newUser.username)) {})
-                .apply { update(newUser) }
+            val theUser = newUser ?: user!!
+            val userDAO = (theUser.dao ?: UserDAO.new(nameUUIDFromString(theUser.username)) {})
+                .apply { update(theUser) }
 
             newBills.forEach { newBill ->
                 val billDAO = BillDAO.new {
