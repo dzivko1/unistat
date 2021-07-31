@@ -189,7 +189,7 @@ class Repository(var dataSource: DataSource) : AppComponent {
     private fun setData(newUser: User?, newBills: List<Bill>?) = runFxAndWait {
         user = newUser
         if (newUser != null) {
-            _bills.setAll(newBills)
+            _bills.setAll(newBills?.sortedBy { it.dateTime })
         } else _bills.clear()
     }
 }
