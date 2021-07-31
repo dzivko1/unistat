@@ -80,7 +80,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
 
             // Sometimes the fetched bills are not ordered correctly, so we are sorting the rows to the expected order
             val billRows = querySelector<HtmlTable>("table")
-                .rows.drop(1).sortedBy { it.extractBillDateTime() }
+                .rows.drop(1).sortedByDescending { it.extractBillDateTime() }
 
             val newBillCount = billRows.takeWhile { billExists(it).not() }.count()
 
@@ -98,7 +98,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
 
                     return@List Bill(dateTime, source, userID!!, entries)
                 }
-            }
+            }.reversed()
         }
     }
 
