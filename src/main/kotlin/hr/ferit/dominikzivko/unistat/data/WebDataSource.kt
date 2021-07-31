@@ -155,6 +155,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         val time = extract(2)
         LocalDateTime.parse("$date. $time", SERVER_DATE_TIME_FORMATTER)
     }
+
     private fun HtmlTableRow.extractBillOutline() = Pair(
         extract(0),
         extractBillDateTime()

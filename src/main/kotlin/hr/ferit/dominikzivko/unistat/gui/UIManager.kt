@@ -106,9 +106,15 @@ class UIManager : AppComponent {
 
     private fun initBaseGui() {
         log.info("Loading main window.")
-        baseScene = Scene(FXMLLoader(javaClass.getResource("Base.fxml"), ResourceBundle.getBundle("Strings")).load()).apply {
+        baseScene = Scene(
+            FXMLLoader(
+                javaClass.getResource("Base.fxml"),
+                ResourceBundle.getBundle("Strings")
+            ).load()
+        ).apply {
             stylesheets += App.mainStylesheet
         }
+
         primaryStage.apply {
             scene = baseScene
             title = strings["unistat"]
