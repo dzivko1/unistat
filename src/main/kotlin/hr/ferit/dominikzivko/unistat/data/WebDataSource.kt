@@ -68,21 +68,13 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
             checkExpected(billsUrl)
 
             fun billExists(row: HtmlTableRow) = existingBills.any { existingBill ->
-                fun areEntriesEqual(a: List<BillEntry>, b: List<BillEntry>): Boolean {
-                    return if (a.size != b.size) false
-                    else a.toSet().all { entryA ->
-                        b.toSet().any { entryB ->
-                            entryA.areDetailsEqual(entryB)
-                        }
-                    }
-                }
                 val (source, dateTime) = row.extractBillOutline()
                 return@any if (dateTime != existingBill.dateTime || source != existingBill.source) false
                 else {
                     checkCancelled()
                     log.debug("Checking if new bills ended.")
                     val newEntries = fetchEntries(row)
-                    areEntriesEqual(newEntries, existingBill.entries)
+                    newEntries == existingBill.entries
                 }
             }
 

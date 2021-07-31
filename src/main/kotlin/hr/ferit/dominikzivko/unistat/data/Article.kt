@@ -12,10 +12,6 @@ data class Article(
     val price: Float
 ) {
     constructor(dao: ArticleDAO) : this(dao.name, dao.price)
-
-    fun areDetailsEqual(other: Article): Boolean {
-        return name == other.name && price == other.price
-    }
 }
 
 object Articles : IntIdTable() {
