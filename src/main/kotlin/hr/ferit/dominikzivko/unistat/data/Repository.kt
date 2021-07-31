@@ -88,7 +88,9 @@ class Repository(var dataSource: DataSource) : AppComponent {
     }
 
     fun importBills(toAdd: List<Bill>) {
-        val valid = toAdd.minus(_bills.intersect(toAdd))
+        val valid = toAdd.filterNot { new ->
+            bills.any { existing -> new.contentEquals(existing) }
+        }
         if (app.offlineMode) _bills += valid
         else {
             persist(newBills = valid)

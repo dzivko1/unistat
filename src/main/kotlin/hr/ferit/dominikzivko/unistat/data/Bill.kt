@@ -37,6 +37,13 @@ data class Bill(
     val totalValue get() = entries.totalValue
     val totalSubsidy get() = entries.totalSubsidy
     val totalCost get() = entries.totalCost
+
+    /**
+     * Checks if the contents of this bill are equal to the contents of the other bill, ignoring the user property.
+     * Two bills are equal by content if all of their properties besides the user property are equal.
+     */
+    fun contentEquals(other: Bill) =
+        dateTime == other.dateTime && source == other.source && entries == other.entries
 }
 
 object Bills : LongIdTable() {
