@@ -7,6 +7,7 @@ import hr.ferit.dominikzivko.unistat.data.totalCost
 import hr.ferit.dominikzivko.unistat.data.totalValue
 import hr.ferit.dominikzivko.unistat.gui.component.BillSummary
 import hr.ferit.dominikzivko.unistat.gui.component.ChartControlPanel
+import javafx.beans.binding.Bindings
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.geometry.Orientation
@@ -16,7 +17,9 @@ import javafx.scene.chart.XYChart
 import javafx.scene.control.Label
 import javafx.scene.control.Separator
 import javafx.scene.layout.HBox
+import javafx.scene.layout.VBox
 import org.koin.core.context.GlobalContext
+import kotlin.math.max
 
 class GuiOverview {
     private val app: AppBase by lazy { GlobalContext.get().get() }
@@ -26,6 +29,9 @@ class GuiOverview {
 
     @FXML
     private lateinit var lblAvailableSubsidy: Label
+
+    @FXML
+    private lateinit var container: VBox
 
     @FXML
     private lateinit var dailySpendingChart: LineChart<String, Number>
@@ -95,40 +101,47 @@ class GuiOverview {
     }
 
     private fun setupSpendingByBillChart() {
-        spendingByBillChart.enableBarTooltips()
-        spendingByBillChart.bindData(
-            app.repository.filteredBills,
-            spendingByBillChartControlPanel.entryCountProperty
-        ) { series ->
-            val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
-            val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+        spendingByBillChart.apply {
+            enableBarTooltips()
+            bindData(
+                app.repository.filteredBills,
+                spendingByBillChartControlPanel.entryCountProperty
+            ) { series ->
+                val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
+                val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-            if (app.repository.filteredBills.isNotEmpty()) {
-                val billCount = app.repository.filteredBills.size
-                val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
-                val bills = when {
-                    (pointCount == 0 || pointCount >= billCount) -> app.repository.filteredBills
-                    else -> app.repository.filteredBills.drop(billCount - pointCount)
-                }
-
-                var prevDateString = ""
-                var repeatCounter = 0
-                bills.forEach { bill ->
-                    var dateString = bill.date.format(SHORT_DATE_FORMATTER)
-                    if (dateString == prevDateString) {
-                        dateString += "(${++repeatCounter})"
-                    } else {
-                        repeatCounter = 0
-                        prevDateString = dateString
+                if (app.repository.filteredBills.isNotEmpty()) {
+                    val billCount = app.repository.filteredBills.size
+                    val pointCount = spendingByBillChartControlPanel.entryCount.toInt()
+                    val bills = when {
+                        (pointCount == 0 || pointCount >= billCount) -> app.repository.filteredBills
+                        else -> app.repository.filteredBills.drop(billCount - pointCount)
                     }
 
-                    costData += XYChart.Data(dateString, bill.totalCost)
-                    subsidyData += XYChart.Data(dateString, bill.totalSubsidy)
-                }
-            }
+                    var prevDateString = ""
+                    var repeatCounter = 0
+                    bills.forEach { bill ->
+                        var dateString = bill.date.format(SHORT_DATE_FORMATTER)
+                        if (dateString == prevDateString) {
+                            dateString += "(${++repeatCounter})"
+                        } else {
+                            repeatCounter = 0
+                            prevDateString = dateString
+                        }
 
-            series += XYChart.Series(strings["chart_series_personalCost"], costData)
-            series += XYChart.Series(strings["chart_series_subsidy"], subsidyData)
+                        costData += XYChart.Data(dateString, bill.totalCost)
+                        subsidyData += XYChart.Data(dateString, bill.totalSubsidy)
+                    }
+                }
+
+                series += XYChart.Series(strings["chart_series_personalCost"], costData)
+                series += XYChart.Series(strings["chart_series_subsidy"], subsidyData)
+            }
+            prefWidthProperty().bind(
+                Bindings.createDoubleBinding({
+                    max(container.width - 15, data[0].data.size * 8.0)
+                }, container.widthProperty(), dataProperty())
+            )
         }
     }
 }
