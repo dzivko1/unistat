@@ -78,9 +78,13 @@ class AppBase(
         ) ?: return
 
         log.info("Importing bills from $location")
-        val json = location.readText()
-        val decoded = Json.decodeFromString<List<Bill>>(json)
-        repository.importBills(decoded)
+        uiManager.monitorProgress(strings["importingBills"]) {
+            runBackground {
+                val json = location.readText()
+                val decoded = Json.decodeFromString<List<Bill>>(json)
+                repository.importBills(decoded)
+            }
+        }
     }
 
     fun exportFilteredBills() {
@@ -94,8 +98,12 @@ class AppBase(
         ) ?: return
 
         log.info("Exporting ${bills.size} bills to $location.")
-        val json = Json.encodeToString(bills)
-        location.writeText(json)
+        uiManager.monitorProgress(strings["exportingBills"]) {
+            runBackground {
+                val json = Json.encodeToString(bills)
+                location.writeText(json)
+            }
+        }
     }
 
     fun logout() = runBackground {
