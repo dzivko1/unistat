@@ -45,7 +45,7 @@ class BackgroundThread(target: Runnable, name: String) : Thread(target, name) {
 }
 
 /**
- * Submits the specified block to be executed on a background thread.
+ * Submits the specified function block to be executed on a background thread.
  */
 fun runBackground(shouldNest: Boolean = false, block: () -> Unit) {
     if (shouldNest || Thread.currentThread() !is BackgroundThread) {

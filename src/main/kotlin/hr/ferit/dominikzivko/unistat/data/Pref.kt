@@ -4,6 +4,10 @@ import domyutil.*
 import hr.ferit.dominikzivko.unistat.App
 import java.util.prefs.Preferences
 
+/**
+ * An access point for all stored preferences of the application. This includes various user preferences as well as
+ * non-user-managed configurations. The [Preferences] API is used for data management.
+ */
 object Pref {
 
     private val userPref by lazy { Preferences.userNodeForPackage(App::class.java) }

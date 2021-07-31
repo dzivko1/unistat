@@ -20,6 +20,9 @@ import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 
+/**
+ * A GUI component showing a summary of a list of [Bill]s.
+ */
 class BillSummary(
     initialTitle: String,
     observableBills: ObservableList<Bill> = FXCollections.emptyObservableList()

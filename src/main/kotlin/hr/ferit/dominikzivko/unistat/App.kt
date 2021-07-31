@@ -1,3 +1,25 @@
+/*
+Ovaj projekt je dio studentskog završnog rada.
+
+Naziv rada: Aplikacija za analizu potrošnje na X-ici
+Studij: Preddiplomski sveučilišni studij Računarstvo
+Student: Dominik Živko
+Mentor: Alfonzo Baumgartner
+
+Aplikacija je pisana u programskom jeziku Kotlin uz korištenje JavaFX programskog okvira za izradu desktop aplikacija.
+Izvorni projekt je pohranjen na GitLab repozitoriju:
+    https://gitlab.com/domy.zivko/unistat2
+
+Sav sadržaj programskog koda, kao i njegova dokumentacija pisani su na engleskom jeziku radi poštivanja industrijskog
+standarda.
+
+
+Key terms:
+    Bill - the main data unit of the application; represents a single receipt; the name 'bill' was chosen over 'receipt'
+        or 'invoice' because of its similar meaning and shorter spelling
+    Webserver - a term representing the website from which the students' data is gathered
+*/
+
 package hr.ferit.dominikzivko.unistat
 
 import domyutil.jfx.*
@@ -22,6 +44,7 @@ import java.nio.file.Paths
 import javax.swing.JOptionPane
 import kotlin.system.exitProcess
 
+/** A path representing the directory where application data is stored between runs. */
 val workDir: Path get() = Path.of(System.getProperty("app.workdir"))
 
 class App : Application() {
@@ -57,14 +80,17 @@ class App : Application() {
 
         private val log by lazy { LogManager.getLogger(App::class.java) }
 
+        /** String locator of the application UI stylesheet. */
         val mainStylesheet: String by lazy {
             App::class.java.getResource("gui/application.css").toExternalForm()
         }
 
+        /** A collection of valid file extension filters for files containing bill data. */
         val billFileExtensionFilters = listOf(
             FileChooser.ExtensionFilter("JSON Files", "*.json")
         )
 
+        /** Initiates a full application shutdown. */
         fun exit() {
             Platform.exit()
         }
@@ -82,6 +108,10 @@ class App : Application() {
             }
         }
 
+        /**
+         * Sets up an application-wide directory path to serve as a data store. The work directory path should be
+         * accessed through the [workDir] property.
+         */
         private fun initWorkDirectory() {
             val appdata = System.getenv("APPDATA")
             val workDirPath: Path = if (!appdata.isNullOrBlank()) Paths.get(appdata, AUTHOR, APPNAME)
@@ -89,6 +119,10 @@ class App : Application() {
             System.setProperty("app.workdir", workDirPath.toString())
         }
 
+        /**
+         * Sets up a lock file that prevents two instances of this application from running at the same time. The lock
+         * must be open for a new instance to start.
+         */
         private fun applock() {
             try {
                 val applockFile = Paths.get(System.getProperty("app.workdir"), "app.lock")
@@ -129,23 +163,30 @@ class App : Application() {
     }
 }
 
+/** The main Koin module that should always be loaded for the application to function. */
 val baseModule = module {
     single { AppBase(get(), get()) }
     single { UIManager() }
     single { Repository(get()) }
 }
 
+/** A Koin module which supports sourcing data from the webserver. */
 val remoteDatasourceModule = module {
     single { WebGateway() }
     single { AuthWebGateway(get()) }
     single<DataSource> { WebDataSource(get()) }
 }
 
+/** A Koin module which supports sourcing data from a local file. */
 val localDatasourceModule = module {
     single<DataSource> { LocalDataSource() }
 }
 
+/** Basic exit codes. */
 object ExitCodes {
+    /** A general failure exit code. */
     const val FAIL = 1
+
+    /** An exit code denoting that the application is already running. */
     const val ALREADY_RUNNING = 10
 }

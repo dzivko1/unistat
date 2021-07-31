@@ -11,6 +11,12 @@ import org.apache.logging.log4j.LogManager
 import org.koin.core.context.GlobalContext
 import java.util.*
 
+/**
+ * An implementation of [DataSource] which gathers data from a user-specified file. The user is asked to specify the
+ * file at the time of fetching.
+ *
+ * This implementation does not mandate any authentication described in the [DataSource] interface.
+ */
 class LocalDataSource : DataSource {
     private val log by lazy { LogManager.getLogger(javaClass) }
     private val uiManager: UIManager get() = GlobalContext.get().get()

@@ -5,6 +5,10 @@ import java.time.Period
 import java.time.YearMonth
 import java.time.temporal.TemporalAmount
 
+/*
+This file includes the necessary extensions to provide an iterable range of temporal data objects.
+ */
+
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.from(this)
 

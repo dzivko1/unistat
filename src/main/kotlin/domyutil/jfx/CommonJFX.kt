@@ -19,14 +19,21 @@ import java.util.concurrent.Future
 import java.util.concurrent.FutureTask
 import kotlin.reflect.KProperty
 
-val strings: ResourceBundle by lazy { ResourceBundle.getBundle("Strings") }
-operator fun ResourceBundle.get(key: String): String = getString(key)
-
+/*
+Delegated property accessors for JavaFX properties.
+ */
 operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
 operator fun <T> WritableValue<T>.setValue(thisRef: Any, property: KProperty<*>, value: T?) = setValue(value)
 
+
 /**
- * Run the specified block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
+ * A [ResourceBundle] for localization strings.
+ */
+val strings: ResourceBundle by lazy { ResourceBundle.getBundle("Strings") }
+operator fun ResourceBundle.get(key: String): String = getString(key)
+
+/**
+ * Run the specified function block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
  * called from that thread. If called from a thread other than the JavaFX Application Thread, this method will post
  * the specified block to the event queue and then return immediately to the caller.
  * @param block code that needs to be executed on the JavaFX Application Thread
@@ -37,7 +44,7 @@ fun runFx(block: () -> Unit): Unit =
     else Platform.runLater(block)
 
 /**
- * Run the specified block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
+ * Run the specified function block on the JavaFX Application Thread at some unspecified time in the future, or immediately if
  * called from that thread. The block is wrapped in a [FutureTask] before being executed. If called from a thread other
  * than the JavaFX Application Thread, this method will post the task to the event queue and then return immediately to
  * the caller.
@@ -52,7 +59,7 @@ fun <T> runFx(block: () -> T): Future<T> {
 }
 
 /**
- * Run the specified block on the JavaFX Application Thread at some unspecified time in the future and wait until
+ * Run the specified function block on the JavaFX Application Thread at some unspecified time in the future and wait until
  * it is executed. If this is called from the JavaFX Application Thread, the runnable is run immediately instead of
  * being posted to the event queue.
  * @param block code that needs to be executed on the JavaFX Application Thread
@@ -77,7 +84,7 @@ fun runFxAndWait(block: () -> Unit) {
 }
 
 /**
- * Run the specified block on the JavaFX Application Thread at some unspecified time in the future and wait until
+ * Run the specified function block on the JavaFX Application Thread at some unspecified time in the future and wait until
  * it is executed. The block is wrapped in a [FutureTask] before being executed. If this is called from the JavaFX
  * Application Thread, the runnable is run immediately instead of being posted to the event queue.
  * @param block code that needs to be executed on the JavaFX Application Thread
@@ -86,6 +93,10 @@ fun runFxAndWait(block: () -> Unit) {
  */
 fun <T> runFxAndWait(block: () -> T): T = runFx(block).get()
 
+/**
+ * An event handler that prevents direct deselection of a selected toggle in a [ToggleGroup].
+ * This event handler should be added as an event filter to toggles which should not be directly deselected.
+ */
 class DeselectionFilter(val toggleGroup: ToggleGroup) : EventHandler<Event> {
     override fun handle(event: Event) {
         if (
@@ -97,6 +108,11 @@ class DeselectionFilter(val toggleGroup: ToggleGroup) : EventHandler<Event> {
     }
 }
 
+/**
+ * An event handler that handles manual dragging of the stage by the component to which this handler is attached.
+ * This event handler should be registered for `onMousePressed`, `onMouseDragged` and `onMouseReleased` events of the
+ * component that should have the ability drag the stage.
+ */
 class ManualStageDrag : EventHandler<MouseEvent> {
     private var dragging = false
     private var dragX = 0.0
@@ -126,7 +142,9 @@ class ManualStageDrag : EventHandler<MouseEvent> {
     }
 }
 
-
+/**
+ * A cell factory for [TableCell]s which can format an item object of a defined type to a string.
+ */
 abstract class StringCellFactory<S, T> : Callback<TableColumn<S, T>, TableCell<S, T>> {
 
     override fun call(param: TableColumn<S, T>?): TableCell<S, T> {
@@ -138,9 +156,15 @@ abstract class StringCellFactory<S, T> : Callback<TableColumn<S, T>, TableCell<S
         }
     }
 
+    /**
+     * Formats the specified item of type [T] to a string to be shown as text in a [TableCell].
+     */
     abstract fun format(item: T): String
 }
 
+/**
+ * Configures a [TableColumn] to have a [StringCellFactory] with the specified [format] function as its cell factory.
+ */
 fun <S, T> TableColumn<S, T>.setStringCellFactory(format: (item: T) -> String) {
     cellFactory = object : StringCellFactory<S, T>() {
         override fun format(item: T) = format(item)

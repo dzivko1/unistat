@@ -10,6 +10,10 @@ import javafx.scene.control.Spinner
 import javafx.scene.layout.HBox
 import javafx.util.StringConverter
 
+/**
+ * A GUI component for controlling the amount of chart entries that should be shown. It contains a spinner for choosing
+ * the number and a button for setting all possible entries to be shown.
+ */
 class ChartControlPanel : HBox() {
 
     val entryCountProperty = SimpleIntegerProperty(this, "entryCount")

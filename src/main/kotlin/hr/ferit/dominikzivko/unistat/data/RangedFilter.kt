@@ -8,6 +8,12 @@ import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import java.util.function.Predicate
 
+/**
+ * An [ObservableList] wrapper which provides the ability to filter a list by a given range of comparable values.
+ *
+ * This class takes the specified source list and wraps it in a [FilteredList], exposing its unmodifiable view.
+ * The predicate of the filtered list depends on the lower and upper range bound properties of this class.
+ */
 class RangedFilter<T, S : Comparable<S>>(
     source: ObservableList<T>,
     extractor: (T) -> S

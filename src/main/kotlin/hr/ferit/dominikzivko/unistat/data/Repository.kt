@@ -19,6 +19,18 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.context.GlobalContext
 import java.time.LocalDate
 
+/**
+ * An [AppComponent] handling data acquisition and storage.
+ *
+ * The data fetching is done by a [DataSource] which changes according to the current offline/online mode of the app.
+ *
+ * Data provided by this repository include:
+ * - Current user
+ * - All user's bills
+ * - User's bills filtered by a date range (derived)
+ * - Dates of the earliest and latest bills, filtered and unfiltered (derived)
+ * - Articles that the user has bought at least once (derived)
+ */
 class Repository(var dataSource: DataSource) : AppComponent {
 
     private val log by lazy { LogManager.getLogger(javaClass) }
@@ -89,6 +101,9 @@ class Repository(var dataSource: DataSource) : AppComponent {
         })
     }
 
+    /**
+     * Adds the not-already-existing bills from the specified collection to the pool of existing bills.
+     */
     fun importBills(toAdd: List<Bill>) {
         val valid = toAdd.filterNot { new ->
             bills.any { existing -> new.contentEquals(existing) }
@@ -100,6 +115,9 @@ class Repository(var dataSource: DataSource) : AppComponent {
         }
     }
 
+    /**
+     * Forgets all user-bound data and revokes authorization from the [DataSource].
+     */
     fun forget() {
         val future = runFx<Unit> {
             setData(null, null)
@@ -113,6 +131,10 @@ class Repository(var dataSource: DataSource) : AppComponent {
         future.get()
     }
 
+    /**
+     * Refreshes all user data while tracking progress with the specified [ProgressMonitor]. This operation supports
+     * cancelling through [hr.ferit.dominikzivko.unistat.BackgroundThread].
+     */
     fun refresh(progressMonitor: ProgressMonitor) {
         log.info("Refreshing user data...")
         val newUser = dataSource.fetchGeneralData(progressMonitor)
@@ -138,6 +160,11 @@ class Repository(var dataSource: DataSource) : AppComponent {
         log.info("Data refresh finished.")
     }
 
+    /**
+     * Adds the specified new data to the app database. If the [newUser] is null, the [newBills] are added for the
+     * current [user] who may not be null at the time of execution of this function. This should not be called when the
+     * app is in offline mode, as offline data is temporary and not persisted to the database.
+     */
     private fun persist(newUser: User? = null, newBills: List<Bill>) {
         check(!app.offlineMode)
 
@@ -182,12 +209,19 @@ class Repository(var dataSource: DataSource) : AppComponent {
         log.debug("Saving finished.")
     }
 
+    /**
+     * Reads the user and bill data from the app database and stores it in properties of this repository.
+     */
     private fun reload() = transaction {
         val newUser = UserDAO.find { Users.id eq dataSource.userID }.firstOrNull()?.let { User(it) }
         val newBills = newUser?.let { BillDAO.find { Bills.user eq newUser.id }.map { Bill(it) } }
         setData(newUser, newBills)
     }
 
+    /**
+     * Sets the new data to properties of this repository.
+     * This runs on the FX thread and returns after completion
+     */
     private fun setData(newUser: User?, newBills: List<Bill>?) = runFxAndWait {
         user = newUser
         if (newUser != null) {

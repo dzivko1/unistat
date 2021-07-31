@@ -21,6 +21,9 @@ import javafx.scene.control.TableView
 import javafx.scene.layout.VBox
 import java.util.*
 
+/**
+ * A GUI component that shows the details of a single [Bill].
+ */
 class BillView : VBox() {
 
     val billProperty = SimpleObjectProperty<Bill>(this, "bill")

@@ -15,6 +15,12 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
 
+/**
+ * An [AppComponent] handling all communication with the webserver.
+ *
+ * The cookies acquired by processing requests are saved and loaded if they are needed for auto-login purposes. They can
+ * also be cleared on demand.
+ */
 class WebGateway : AppComponent {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
@@ -33,6 +39,9 @@ class WebGateway : AppComponent {
         if (Pref.autoLogin) saveCookies()
     }
 
+    /**
+     * Fetches a web page with the specified URL and returns the resulting [HtmlPage].
+     */
     fun get(url: String): HtmlPage {
         val fullUrl = if (url.startsWith("http")) url else Pref.url_base + url
         log.debug("Connecting to: $fullUrl")

@@ -15,15 +15,27 @@ import org.koin.core.context.unloadKoinModules
 import org.koin.ext.inject
 import java.util.concurrent.TimeUnit
 
+/**
+ * The base class of the application. It contains most of the app context and enables running top-level actions such as
+ * refreshing the user's data.
+ *
+ * The first layer of [AppComponent]s is stored here. Their start and stop methods are called from methods in this class
+ * which have the same name (even though this class does not officially implement the AppComponent interface).
+ */
 class AppBase(
     val uiManager: UIManager,
     val repository: Repository
 ) {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
+    /** Whether the data is sourced locally or remotely from the webserver. */
     val offlineModeProperty = SimpleBooleanProperty(this, "offlineMode")
     var offlineMode: Boolean by offlineModeProperty
 
+    /**
+     * Initializes the application state at startup.
+     * @param primaryStage the primary stage provided by JavaFx
+     */
     fun start(primaryStage: Stage, offlineMode: Boolean) {
         uiManager.primaryStage = primaryStage
         this.offlineMode = offlineMode
@@ -32,6 +44,7 @@ class AppBase(
         refreshUserData()
     }
 
+    /** Prepares the application for shutdown. */
     fun stop() {
         uiManager.stop()
         repository.stop()
@@ -39,6 +52,13 @@ class AppBase(
         taskExecutor.awaitTermination(10, TimeUnit.SECONDS)
     }
 
+    /**
+     * A top-level action that refreshes the user's data. The action is posted to a background thread and run
+     * asynchronously.
+     *
+     * The way data is refreshed depends on the current offline/online state of the application. The result of this
+     * action can change that state and cause this action to be run again recursively.
+     */
     fun refreshUserData() = runBackground {
         uiManager.monitorProgress { monitor ->
             val theThread = Thread.currentThread() as BackgroundThread
@@ -71,6 +91,10 @@ class AppBase(
         uiManager.showBaseGui()
     }
 
+    /**
+     * A top-level action that imports a collection of bills from a file selected by the user to the pool of existing
+     * bills which are already loaded.
+     */
     fun importBills() {
         val location = uiManager.showOpenDialog(
             title = strings["title_import"],
@@ -87,6 +111,10 @@ class AppBase(
         }
     }
 
+    /**
+     * A top-level action that exports the collection of bills currently showing in the application to a file selected
+     * by the user.
+     */
     fun exportFilteredBills() {
         exportBills(repository.filteredBills)
     }
@@ -106,6 +134,10 @@ class AppBase(
         }
     }
 
+    /**
+     * A top-level action that logs the user out of the application and the webserver (if applicable), and reinitiates
+     * the app in online mode, causing a new data refresh and subsequently a login prompt.
+     */
     fun logout() = runBackground {
         uiManager.monitorProgress(strings["loggingOut"]) {
             repository.forget()
@@ -113,6 +145,9 @@ class AppBase(
         setupOnlineMode()
     }
 
+    /**
+     * Ensures that the app is in online mode and starts the data refresh action
+     */
     private fun setupOnlineMode() {
         if (offlineMode) {
             log.info("Setting up online mode.")
@@ -124,6 +159,9 @@ class AppBase(
         refreshUserData()
     }
 
+    /**
+     * Ensures that the app is in offline mode and starts the data refresh action.
+     */
     private fun setupOfflineMode() {
         if (!offlineMode) {
             log.info("Setting up offline mode.")

@@ -12,14 +12,29 @@ import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
 import org.apache.logging.log4j.LogManager
 import org.koin.core.context.GlobalContext
 
+/**
+ * An [AppComponent] handling authorized communication with the webserver. [WebGateway] is used to talk to the webserver.
+ *
+ * The user will be asked to log in to the webserver if at the time of requested access to a web resource the webserver
+ * responds with a login page and the application is not permitted to, or does not possess the means of automatically
+ * logging the user in.
+ *
+ * During the user's login input, they can choose to switch to offline mode (open exported bills), or cancel the input.
+ * In those situations, [OpenExportedBillsException] or [InputCancelledException] will be thrown appropriately.
+ *
+ * Due to the webserver's unpredictability, there exists a possibility of an unexpected response, in case of which the
+ * appropriate [UnexpectedResponseException] will be thrown.
+ */
 class AuthWebGateway(val web: WebGateway) : AppComponent {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
     private val uiManager: UIManager get() = GlobalContext.get().get()
 
+    /** The user currently considered logged on the webserver and, as such, the application. */
     var currentUser: UserLogon? = null
         private set
 
+    /** Determines whether the user that is supposedly logged on the webserver is the user that is actually stored in the app. */
     private val isUserVerified: Boolean
         get() {
             if (currentUser == null)
@@ -35,6 +50,21 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         web.stop()
     }
 
+    /**
+     * Fetches a web page denoted by the specified URL, fulfilling any authentication requirements imposed by the webserver.
+     *
+     * In the case of a required login, the app shall attempt an automated login if it possesses the means and is
+     * permitted to do so, otherwise the user will be continually asked to login manually until a successful login
+     * is made (assuming [canPromptLogin] is true). If at any point in the process occurs an event which prevents this
+     * method from completing meaningfully, an appropriate exception will be thrown as described in this class' documentation.
+     *
+     * @return the resulting page of trying to connect with the specified URL
+     *
+     * @throws NotLoggedInException if [canPromptLogin] is false, and the user cannot be automatically logged in when
+     * requested by the webserver
+     * @throws InputCancelledException if the user cancels the login prompt when asked to log in
+     * @throws OpenExportedBillsException if the user chooses to switch to offline mode
+     */
     @Throws(InputCancelledException::class, OpenExportedBillsException::class, NotLoggedInException::class)
     fun fetchAuthorized(
         url: String,
@@ -49,6 +79,11 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         }
     }
 
+    /**
+     * Attempts to login the user either automatically or with their input, and re-fetch the specified resource.
+     * This process is recursively repeated until a successful login is made, or if stopped by an exception, as
+     * described in this class' documentation.
+     */
     @Throws(InputCancelledException::class, OpenExportedBillsException::class, NotLoggedInException::class)
     private fun authConnect(
         url: String,
@@ -95,6 +130,10 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         }
     }
 
+    /**
+     * Prompts the user to log in to the webserver and returns the input [LoginDetails]. If cancelled or asked to open
+     * exported bills, the appropriate exception is thrown.
+     */
     @Throws(InputCancelledException::class, OpenExportedBillsException::class)
     private fun askForLogin(errorMessage: String? = null): LoginDetails {
         uiManager.promptLogin(errorMessage).run {
@@ -106,6 +145,10 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         }
     }
 
+    /**
+     * Performs a login to the specified [loginPage] with the specified [loginDetails], throwing a [LoginFailedException]
+     * with a user-friendly error message in case of failure.
+     */
     @Throws(LoginFailedException::class)
     private fun login(loginDetails: LoginDetails, loginPage: HtmlPage) {
         requireLoginPage(loginPage)
@@ -137,6 +180,9 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         log.info("Login successful.")
     }
 
+    /**
+     * Logs the user out from the webserver, clears cookies and disables auto-login if enabled.
+     */
     fun logout() {
         log.info("Logging off the webserver...")
         web.get(Pref.url_logout)
@@ -146,6 +192,9 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         log.info("Logoff finished.")
     }
 
+    /**
+     * Stores the user's identifying information to be used for confirmation later.
+     */
     private fun storeUserCredentials(username: String, page: HtmlPage) {
         log.info("Storing user credentials.")
         val studentPage = ensureStudentPage(page)
@@ -153,6 +202,9 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         Pref.userCredentials = obfuscate("$username|$userOib")
     }
 
+    /**
+     * Verifies that the webserver's returned data belongs to the user that the application expects.
+     */
     private fun verifyUser() {
         log.info("Verifying user credentials.")
         if (Pref.userCredentials.isEmpty()) return
@@ -169,6 +221,9 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         currentUser = UserLogon(username)
     }
 
+    /**
+     * Returns the specified page if it is the login page, otherwise tries to fetch it.
+     */
     private fun ensureStudentPage(page: HtmlPage?) = page?.takeIf { it.isStudentPage }
         ?: web.get(Pref.url_student).takeIf { it.isStudentPage }
         ?: throw UnexpectedResponseException("Could not obtain student page.")

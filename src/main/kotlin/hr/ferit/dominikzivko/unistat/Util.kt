@@ -22,18 +22,30 @@ fun LocalDate.isPastMonth() = this in LocalDate.now().minusMonths(1)..LocalDate.
 val HtmlPage.urlString: String get() = url.toExternalForm()
 
 
+/**
+ * Returns a new [Label] whose text property is bound to the results of the specified function triggered by the specified dependencies.
+ */
 fun boundLabelFor(vararg dependencies: Observable, func: () -> String?) = Label().apply {
     bindText(*dependencies, func = func)
 }
 
+/**
+ * Binds the text property to the results of the specified function triggered by the specified dependencies.
+ */
 fun Label.bindText(vararg dependencies: Observable, func: () -> String?) {
     textProperty().bind(Bindings.createStringBinding(func, *dependencies))
 }
 
+/**
+ * Binds the data property to a new dataset filled by the specified function triggered by the specified dependencies.
+ */
 fun PieChart.bindData(vararg dependencies: Observable, func: (MutableList<PieChart.Data>) -> Unit) {
     dataProperty().bind(makeChartBinding(dependencies, func))
 }
 
+/**
+ * Binds the data property to a new dataset filled by the specified function triggered by the specified dependencies.
+ */
 fun <X, Y> XYChart<X, Y>.bindData(vararg dependencies: Observable, func: (MutableList<XYChart.Series<X, Y>>) -> Unit) {
     dataProperty().bind(makeChartBinding(dependencies, func))
 }
@@ -66,6 +78,11 @@ fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.5), isVa
     }
 }
 
+/**
+ * Adds a data change listener that installs tooltips on bars for all new data that is set after this call.
+ *
+ * **Note:** This should be called before binding the data property to ensure tooltips are installed on the first dataset.
+ */
 fun <X, Y : Number> XYChart<X, Y>.enableBarTooltips(showDelay: Duration = Duration.seconds(0.5)) {
     dataProperty().addListener { _, _, newValue ->
         newValue.forEach { series ->

@@ -14,8 +14,15 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import java.util.*
 
+/**
+ * A GUI component that shows the details of a single [Article] with all the [Bill]s that contain it as context from
+ * which the details are gathered.
+ */
 class ArticleView : HBox() {
 
+    /**
+     * A wrapper for an [Article] and [Bill]s relevant to it, to be shown in an [ArticleView].
+     */
     class Data(
         val article: Article,
         val relevantBills: List<Bill>

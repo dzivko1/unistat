@@ -6,6 +6,10 @@ import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
+/**
+ * Hides the specified string in a way that prevents it from being read in plain text. Note that this is not equivalent
+ * to encryption and should not be used as such. The purpose of this is only to obfuscate potentially sensitive information.
+ */
 fun obfuscate(input: String): String {
     val key = KeyGenerator.getInstance("AES").generateKey()
     val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
@@ -16,6 +20,11 @@ fun obfuscate(input: String): String {
     return base64Encode(stitched.toByteArray())
 }
 
+/**
+ * Deobfuscates a string previously obfuscated by passing it through the [obfuscate] function. Note that this kind of
+ * obfuscation is not equivalent to encryption and should not be used as such. The purpose of this is only to obfuscate
+ * potentially sensitive information.
+ */
 fun deobfuscate(input: String): String {
     val parts = base64Decode(input).decodeToString().split(':')
     val keyBytes = base64Decode(parts[0])

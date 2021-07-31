@@ -14,9 +14,17 @@ import org.apache.logging.log4j.LogManager
 import java.time.LocalDateTime
 import java.util.*
 
+/**
+ * An implementation of [DataSource] which gathers data from the webserver. Loading web pages is done through an
+ * [AuthWebGateway].
+ *
+ * This implementation requires user authentication with the webserver and will ask for it at the time it is requested
+ * by said webserver.
+ */
 class WebDataSource(val web: AuthWebGateway) : DataSource {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
+    /** The identifying part of a URL leading to the user's bills page. */
     private lateinit var billsUrlIdentifier: String
 
     override val userID: UUID? get() = web.currentUser?.id
@@ -29,6 +37,9 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         web.stop()
     }
 
+    /**
+     * Fetches the user's general data while requiring authentication as outlined in [AuthWebGateway].
+     */
     override fun fetchGeneralData(progressMonitor: ProgressMonitor?): User {
         log.debug("Fetching general data...")
 
@@ -53,6 +64,9 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         }
     }
 
+    /**
+     * Fetches the user's bill data while requiring authentication as outlined in [AuthWebGateway].
+     */
     override fun fetchBills(existingBills: List<Bill>, progressMonitor: ProgressMonitor?): List<Bill> {
         log.debug("Fetching bills...")
         progressMonitor?.applyFx {
@@ -119,6 +133,10 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         }
     }
 
+    /**
+     * Revokes the current user's authorization by logging them out of the webserver.
+     * @see AuthWebGateway.logout
+     */
     override fun revokeAuthorization() {
         web.logout()
     }
