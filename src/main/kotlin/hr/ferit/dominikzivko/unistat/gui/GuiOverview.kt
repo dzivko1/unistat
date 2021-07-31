@@ -75,9 +75,9 @@ class GuiOverview {
 
             if (app.repository.filteredBills.isNotEmpty()) {
                 val pointCount = dailySpendingChartControlPanel.entryCount
-                val lastBillDay = app.repository.filteredBills.last().date
+                val lastBillDay = app.repository.latestFilteredBillDate!!
                 val startDay =
-                    if (pointCount == 0) app.repository.filteredBills.first().date
+                    if (pointCount == 0) app.repository.earliestFilteredBillDate!!
                     else lastBillDay.minusDays(pointCount.toLong() - 1L)
                 val billsByDay = app.repository.filteredBills.groupBy { it.date }
 

@@ -132,7 +132,7 @@ class GuiCalendar {
             }
         }, calTable.selectionModel.selectedCells))
 
-        app.repository.latestBillDate?.let { selectedMonth = it.yearMonth }
+        app.repository.latestFilteredBillDate?.let { selectedMonth = it.yearMonth }
     }
 
     private fun getWeeks(yearMonth: YearMonth): List<Week> {

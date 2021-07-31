@@ -39,7 +39,9 @@ class Repository(var dataSource: DataSource) : AppComponent {
     val filteredBills: ObservableList<Bill> get() = billFilter.filteredView
 
     val earliestBillDate get() = _bills.minOfOrNull { it.date }
+    val earliestFilteredBillDate get() = filteredBills.minOfOrNull { it.date }
     val latestBillDate get() = _bills.maxOfOrNull { it.date }
+    val latestFilteredBillDate get() = filteredBills.maxOfOrNull { it.date }
 
     private val _articles = SimpleListProperty<Article>().apply {
         bind(Bindings.createObjectBinding({
