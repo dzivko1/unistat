@@ -142,7 +142,7 @@ class GuiArticleStats {
 
     private fun setupArticlesTable() {
         colName.setCellValueFactory { Bindings.createStringBinding({ it.value.name }) }
-        colPrice.setCellValueFactory { Bindings.createFloatBinding({ it.value.price }) }
+        colPrice.setCellValueFactory { Bindings.createFloatBinding({ it.value.fPrice }) }
         colAmount.setCellValueFactory { cellData ->
             Bindings.createIntegerBinding({
                 billsByArticle[cellData.value]?.sumOf { bill ->

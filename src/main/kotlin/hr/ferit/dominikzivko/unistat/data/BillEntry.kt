@@ -5,6 +5,7 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
+import java.math.BigDecimal
 
 val List<BillEntry>.totalAmount get() = sumOf { it.amount }
 val List<BillEntry>.totalValue get() = sumOf { it.totalValue.toDouble() }
@@ -15,7 +16,8 @@ val List<BillEntry>.totalCost get() = sumOf { it.totalCost.toDouble() }
 data class BillEntry(
     val article: Article,
     val amount: Int,
-    val subsidy: Float
+    @Serializable(with = BigDecimalSerializer::class)
+    val subsidy: BigDecimal
 ) {
     constructor(dao: BillEntryDAO) : this(
         Article(dao.article),
@@ -23,15 +25,16 @@ data class BillEntry(
         dao.subsidy
     )
 
-    val totalValue get() = amount * article.price
-    val totalCost get() = amount * article.price - subsidy
+    val fSubsidy get() = subsidy.toFloat()
+    val totalValue get() = amount * article.price.toFloat()
+    val totalCost get() = amount * article.price.toFloat() - subsidy.toFloat()
 }
 
 object BillEntries : LongIdTable() {
     val bill = reference("bill", Bills)
     val article = reference("article", Articles)
     val amount = integer("amount")
-    val subsidy = float("subsidy")
+    val subsidy = decimal("subsidy", 5, 2)
 }
 
 class BillEntryDAO(id: EntityID<Long>) : LongEntity(id) {

@@ -126,8 +126,8 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
             entriesTable.getRow(index + 1).run {
                 val name = extract(0)
                 val amount = extract(1).toInt()
-                val price = extract(2).toFloat(FLOAT_FORMAT)
-                val subsidy = extract(4).toFloat(FLOAT_FORMAT)
+                val price = extractDecimal(2).toBigDecimal().setScale(2)
+                val subsidy = extractDecimal(4).toBigDecimal().setScale(2)
                 return@List BillEntry(Article(name, price), amount, subsidy)
             }
         }
@@ -150,6 +150,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
 
     private fun HtmlPage.extract(selector: String) = querySelector<DomNode>(selector).asNormalizedText()
     private fun HtmlTableRow.extract(index: Int) = getCell(index).asNormalizedText()
+    private fun HtmlTableRow.extractDecimal(index: Int) = extract(index).replace(',', '.')
     private fun HtmlTableRow.extractBillDateTime() = run {
         val date = extract(1)
         val time = extract(2)

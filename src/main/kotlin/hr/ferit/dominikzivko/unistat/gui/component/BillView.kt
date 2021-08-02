@@ -106,8 +106,8 @@ class BillView : VBox() {
     private fun setupBillEntriesTable() {
         colArticle.setCellValueFactory { Bindings.createStringBinding({ it.value.article.name }) }
         colAmount.setCellValueFactory { Bindings.createIntegerBinding({ it.value.amount }) }
-        colPrice.setCellValueFactory { Bindings.createFloatBinding({ it.value.article.price }) }
-        colSubsidy.setCellValueFactory { Bindings.createFloatBinding({ it.value.subsidy }) }
+        colPrice.setCellValueFactory { Bindings.createFloatBinding({ it.value.article.fPrice }) }
+        colSubsidy.setCellValueFactory { Bindings.createFloatBinding({ it.value.fSubsidy }) }
         colCost.setCellValueFactory { Bindings.createFloatBinding({ it.value.totalCost }) }
 
         val floatFormatCellFactory = object : StringCellFactory<BillEntry, Number>() {
