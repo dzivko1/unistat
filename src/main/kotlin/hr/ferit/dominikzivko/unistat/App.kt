@@ -43,6 +43,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import javax.swing.JOptionPane
+import kotlin.io.path.createDirectories
 import kotlin.system.exitProcess
 
 /** A path representing the directory where application data is stored between runs. */
@@ -118,6 +119,8 @@ class App : Application() {
             val appdata = System.getenv("APPDATA")
             val workDirPath: Path = if (!appdata.isNullOrBlank()) Paths.get(appdata, AUTHOR, APPNAME)
             else Paths.get(System.getProperty("user.home"), AUTHOR, APPNAME)
+
+            workDirPath.createDirectories()
             System.setProperty("app.workdir", workDirPath.toString())
         }
 
