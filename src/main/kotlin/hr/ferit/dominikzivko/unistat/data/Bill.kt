@@ -43,7 +43,7 @@ data class Bill(
      * Two bills are equal by content if all of their properties besides the user property are equal.
      */
     fun contentEquals(other: Bill) =
-        dateTime == other.dateTime && source == other.source && entries == other.entries
+        dateTime == other.dateTime && source == other.source && entries.toSet() == other.entries.toSet()
 }
 
 object Bills : LongIdTable() {
