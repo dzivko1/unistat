@@ -23,12 +23,12 @@ apply plugin: 'koin'
 group 'hr.ferit.dominikzivko'
 version '1.0.0'
 
+mainClassName = 'hr.ferit.dominikzivko.unistat.Launcher'
+
 javafx {
     version = "16"
     modules = ['javafx.controls', 'javafx.fxml']
 }
-
-mainClassName = 'hr.ferit.dominikzivko.unistat.App'
 
 repositories {
     jcenter()
