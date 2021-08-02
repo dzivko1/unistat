@@ -36,6 +36,7 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import java.awt.SplashScreen
 import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.file.Files
@@ -58,6 +59,7 @@ class App : Application() {
             Platform.setImplicitExit(false)
             startKoin { modules(baseModule, remoteDatasourceModule) }
             AppDatabase.initialize()
+            SplashScreen.getSplashScreen()?.close()
             appBase.start(primaryStage, false)
         } catch (t: Throwable) {
             log.fatal("Fatal error", t)
