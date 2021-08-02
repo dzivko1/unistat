@@ -28,7 +28,6 @@ class WebGateway : AppComponent {
         options.isThrowExceptionOnScriptError = false
         options.isRedirectEnabled = true
         options.isJavaScriptEnabled = true
-        options.isCssEnabled = false
 
         // When the app image is exported, an error claiming that the handshake failed pops up. This fixes it.
         // The idea came from an (outdated) SO answer: https://stackoverflow.com/a/47670855/6640693
