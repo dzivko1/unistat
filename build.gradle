@@ -80,6 +80,7 @@ dependencies {
 }
 
 run {
+    environment += [ 'project_version': "$project.version" ]
     jvmArgs = [
             '--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED',
             '--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED',

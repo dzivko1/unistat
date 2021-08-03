@@ -55,7 +55,8 @@ class App : Application() {
     private val appBase: AppBase by lazy { GlobalContext.get().get() }
 
     override fun start(primaryStage: Stage) {
-        log.info("Application started.")
+        val version = System.getenv("project_version")
+        log.info("Application started ($version)")
         try {
             Platform.setImplicitExit(false)
             startKoin { modules(baseModule, remoteDatasourceModule) }
