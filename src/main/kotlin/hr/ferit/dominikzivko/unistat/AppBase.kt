@@ -101,9 +101,9 @@ class AppBase(
             extensionFilters = App.billFileExtensionFilters
         ) ?: return
 
-        log.info("Importing bills from $location")
         uiManager.monitorProgress(strings["importingBills"]) {
             runBackground {
+                log.info("Importing bills from $location")
                 val json = location.readText()
                 val decoded = Json.decodeFromString<List<Bill>>(json)
                 repository.importBills(decoded)
@@ -125,9 +125,9 @@ class AppBase(
             extensionFilters = App.billFileExtensionFilters
         ) ?: return
 
-        log.info("Exporting ${bills.size} bills to $location.")
         uiManager.monitorProgress(strings["exportingBills"]) {
             runBackground {
+                log.info("Exporting ${bills.size} bills to $location.")
                 val json = Json.encodeToString(bills)
                 location.writeText(json)
             }
