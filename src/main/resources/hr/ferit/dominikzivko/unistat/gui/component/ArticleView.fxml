@@ -19,5 +19,5 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
         </padding>
     </GridPane>
-    <PieChart fx:id="amountBySourceChart" minHeight="250.0" HBox.hgrow="ALWAYS"/>
+    <PieChart fx:id="amountBySourceChart" labelLineLength="10.0" minHeight="250.0" HBox.hgrow="ALWAYS"/>
 </fx:root>

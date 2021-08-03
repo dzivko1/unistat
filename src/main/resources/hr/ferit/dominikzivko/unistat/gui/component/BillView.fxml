@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
@@ -35,6 +34,6 @@
             <Insets top="5.0"/>
         </VBox.margin>
     </TableView>
-    <PieChart fx:id="valueByArticleChart" labelLineLength="10.0" scaleShape="false" title="%chart_title_valueByArticle"
+    <PieChart fx:id="valueByArticleChart" labelsVisible="false" scaleShape="false" title="%chart_title_valueByArticle"
               VBox.vgrow="ALWAYS"/>
 </fx:root>
