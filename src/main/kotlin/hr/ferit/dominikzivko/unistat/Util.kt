@@ -66,7 +66,7 @@ private fun <T> makeChartBinding(
  *
  * **Note:** This should be called before binding the data property to ensure tooltips are installed on the first dataset.
  */
-fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.5), isValueInteger: Boolean = false) {
+fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.2), isValueInteger: Boolean = false) {
     dataProperty().addListener { _, _, newValue ->
         newValue.forEach { item ->
             val yString = if (isValueInteger) item.pieValue.toInt() else floatToString(item.pieValue)
@@ -83,7 +83,7 @@ fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.5), isVa
  *
  * **Note:** This should be called before binding the data property to ensure tooltips are installed on the first dataset.
  */
-fun <X, Y : Number> XYChart<X, Y>.enableBarTooltips(showDelay: Duration = Duration.seconds(0.5)) {
+fun <X, Y : Number> XYChart<X, Y>.enableBarTooltips(showDelay: Duration = Duration.seconds(0.2)) {
     dataProperty().addListener { _, _, newValue ->
         newValue.forEach { series ->
             series.data.forEach { item ->
