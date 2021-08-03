@@ -96,7 +96,7 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         log.info("Webserver requested authentication.")
 
         val loginDetails = when {
-            Pref.autoLogin -> LoginDetails(Pref.savedUsername, Pref.savedPassword)
+            Pref.autoLogin -> LoginDetails(deobfuscate(Pref.savedUsername), deobfuscate(Pref.savedPassword))
             canPromptLogin -> {
                 progressMonitor?.hide()
                 askForLogin(loginErrorMessage).also { progressMonitor?.show() }
