@@ -49,6 +49,16 @@ class GuiLogin : PromptBase() {
         }
     }
 
+    override fun show() {
+        usernameField.requestFocus()
+        super.show()
+    }
+
+    override fun showAndWait() {
+        usernameField.requestFocus()
+        super.showAndWait()
+    }
+
     @FXML
     fun openExportedBills() {
         openExportedBills = true
