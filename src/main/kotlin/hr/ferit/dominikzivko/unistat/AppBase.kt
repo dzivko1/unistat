@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.ext.inject
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -82,6 +83,13 @@ class AppBase(
                             setupOnlineMode()
                             return@runBackground
                         } else log.info("Data refresh cancelled by user.")
+                    }
+                    is IOException -> {
+                        Alerts.catching(strings["msg_communicationError"], it)
+                        val shouldRetry = Alerts.confirmation(strings["msg_retryRefresh"])
+                        if (shouldRetry) setupOnlineMode()
+                        else App.exit()
+                        return@runBackground
                     }
                     else -> throw BackgroundTaskException(it, shouldExit = !uiManager.isBaseGuiShowing)
                 }

@@ -1,6 +1,8 @@
 package domyutil.jfx
 
+import javafx.scene.Node
 import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.control.TextArea
 import org.apache.logging.log4j.Logger
 
@@ -21,15 +23,41 @@ object Alerts {
         blocking: Boolean = true
     ) {
         logger?.error("Showing exception message: $message", throwable)
-        runFxAndWait {
-            Alert(Alert.AlertType.ERROR).apply {
-                setTitle(title ?: strings["error"])
-                contentText = message
-                dialogPane.expandableContent = TextArea(throwable.stackTraceToString())
-                if (blocking) showAndWait()
-                else show()
-            }
+        showAlert(
+            Alert.AlertType.ERROR,
+            message,
+            title ?: strings["error"],
+            blocking,
+            TextArea(throwable.stackTraceToString())
+        )
+    }
+
+    fun confirmation(
+        message: String,
+        logger: Logger? = null,
+        title: String? = null,
+        blocking: Boolean = true
+    ): Boolean {
+        logger?.info("Showing confirmation message: $message")
+        val alert = showAlert(Alert.AlertType.CONFIRMATION, message, title, blocking)
+        return alert.result == ButtonType.OK
+    }
+
+    private fun showAlert(
+        alertType: Alert.AlertType,
+        message: String,
+        title: String? = null,
+        blocking: Boolean = true,
+        expandableContent: Node? = null
+    ) = runFxAndWait<Alert> {
+        Alert(alertType).apply {
+            this.title = title
+            contentText = message
+            dialogPane.expandableContent = expandableContent
+            if (blocking) showAndWait()
+            else show()
         }
     }
+
 
 }
