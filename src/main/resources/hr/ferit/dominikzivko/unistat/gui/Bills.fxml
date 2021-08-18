@@ -27,7 +27,7 @@
         <TableView fx:id="billsTable" minWidth="400.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colSource" editable="false" minWidth="150.0" prefWidth="-1.0"
-                             text="%bills_restaurant"/>
+                             text="%bills_source"/>
                 <TableColumn fx:id="colArticleCount" editable="false" maxWidth="80.0" minWidth="80.0" resizable="false"
                              style="-fx-alignment: center;" text="%bills_numberOfArticles"/>
                 <TableColumn fx:id="colValue" editable="false" maxWidth="80.0" minWidth="80.0" resizable="false"
