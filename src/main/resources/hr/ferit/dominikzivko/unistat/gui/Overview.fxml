@@ -14,19 +14,27 @@
                 <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14;"
                        text="%overview_availableSubsidy">
                     <padding>
-                        <Insets bottom="5.0" left="10.0" right="10.0" top="40.0"/>
+                        <Insets left="10.0" right="10.0" top="20.0"/>
                     </padding>
                 </Label>
                 <Label fx:id="lblAvailableSubsidy" alignment="CENTER" maxWidth="1.7976931348623157E308"
                        styleClass="strong" text="&lt;value&gt;"/>
+                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-font-size: 14;"
+                       text="%overview_subsidyLevel">
+                    <padding>
+                        <Insets left="10.0" right="10.0" top="15.0"/>
+                    </padding>
+                </Label>
+                <Label fx:id="lblLevel" alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="strong"
+                       text="&lt;value&gt;"/>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0"/>
         </HBox>
     </ScrollPane>
     <ScrollPane pannable="true" VBox.vgrow="ALWAYS">
         <VBox>
-            <LineChart fx:id="dailySpendingChart" createSymbols="false" minWidth="500.0"
-                       title="%chart_title_dailySpending" animated="false">
+            <LineChart fx:id="dailySpendingChart" animated="false" createSymbols="false" minWidth="500.0"
+                       title="%chart_title_dailySpending">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>
@@ -35,8 +43,8 @@
                 </yAxis>
             </LineChart>
             <ChartControlPanel fx:id="dailySpendingChartControlPanel"/>
-            <StackedBarChart fx:id="spendingByBillChart" categoryGap="3.0" minWidth="500.0" title="%chart_title_spendingByBill"
-                             animated="false">
+            <StackedBarChart fx:id="spendingByBillChart" animated="false" categoryGap="3.0" minWidth="500.0"
+                             title="%chart_title_spendingByBill">
                 <xAxis>
                     <CategoryAxis side="BOTTOM"/>
                 </xAxis>

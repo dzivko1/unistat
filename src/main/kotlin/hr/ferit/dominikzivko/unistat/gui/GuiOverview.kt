@@ -31,6 +31,9 @@ class GuiOverview {
     private lateinit var lblAvailableSubsidy: Label
 
     @FXML
+    private lateinit var lblLevel: Label
+
+    @FXML
     private lateinit var container: VBox
 
     @FXML
@@ -55,6 +58,9 @@ class GuiOverview {
     private fun setupBillSummary() {
         lblAvailableSubsidy.bindText(app.repository.userProperty) {
             "${app.repository.user?.balance.toString()} $shortCurrencyStr"
+        }
+        lblLevel.bindText(app.repository.userProperty) {
+            app.repository.user?.level
         }
 
         billSummaryBox.children += listOf(
