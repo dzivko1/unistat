@@ -3,7 +3,7 @@ package hr.ferit.dominikzivko.unistat.gui.component
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.boundLabelFor
 import hr.ferit.dominikzivko.unistat.data.*
-import hr.ferit.dominikzivko.unistat.gui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.formatted
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
@@ -51,11 +51,11 @@ class BillSummary(
             alignment = Pos.CENTER
             textProperty().bind(titleProperty)
         }
-        val lblBills = boundLabelFor(billsProperty) { bills.size.toString() }
-        val lblArticles = boundLabelFor(billsProperty) { bills.articleCount.toString() }
-        val lblValue = boundLabelFor(billsProperty) { floatToString(bills.totalValue) }
-        val lblSubsidy = boundLabelFor(billsProperty) { floatToString(bills.totalSubsidy) }
-        val lblCost = boundLabelFor(billsProperty) { floatToString(bills.totalCost) }
+        val lblBills = boundLabelFor(billsProperty) { bills.size.formatted }
+        val lblArticles = boundLabelFor(billsProperty) { bills.articleCount.formatted }
+        val lblValue = boundLabelFor(billsProperty) { bills.totalValue.formatted }
+        val lblSubsidy = boundLabelFor(billsProperty) { bills.totalSubsidy.formatted }
+        val lblCost = boundLabelFor(billsProperty) { bills.totalCost.formatted }
 
         add(lblTitle, 0, 0, 2, 1)
         addRow(1, Label(strings["summary_bills"] + ":"), lblBills)

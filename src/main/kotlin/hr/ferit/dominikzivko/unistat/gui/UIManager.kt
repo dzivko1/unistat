@@ -48,13 +48,22 @@ val TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("H:mm")
 val MONTH_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MM.yyyy.")
 
 
-/** A decimal format of pattern "0.00" with a comma (,) decimal separator. */
-val FLOAT_FORMAT = DecimalFormat("0.00").apply {
-    decimalFormatSymbols = DecimalFormatSymbols().apply { decimalSeparator = ',' }
+/** A decimal format used for showing integers. */
+val INT_FORMAT = DecimalFormat("#,###,###").apply {
+    decimalFormatSymbols = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
 }
 
-/** A function which converts a floating point number to a UI-appropriate string. */
-val floatToString = { float: Number -> float.toString("%.2f") }
+/** A decimal format used in fetching and showing decimal numbers. */
+val FLOAT_FORMAT = DecimalFormat("#,###,##0.00").apply {
+    decimalFormatSymbols = DecimalFormatSymbols().apply { decimalSeparator = ','; groupingSeparator = ' ' }
+}
+
+/** A UI-oriented string representation of this number. */
+val Number.formatted: String
+    get() = when (this) {
+        is Float, is Double -> FLOAT_FORMAT.format(this)
+        else -> INT_FORMAT.format(this)
+    }
 
 /** A UI-oriented string representing a short form of the used currency. */
 val shortCurrencyStr = "kn"

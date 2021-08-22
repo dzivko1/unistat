@@ -80,7 +80,7 @@ class GuiBills {
         colDateTime.setCellValueFactory { Bindings.createObjectBinding({ it.value.dateTime }) }
 
         val floatFormatCellFactory = object : StringCellFactory<Bill, Number>() {
-            override fun format(item: Number) = floatToString(item)
+            override fun format(item: Number) = item.formatted
         }
         colValue.cellFactory = floatFormatCellFactory
         colSubsidy.cellFactory = floatFormatCellFactory

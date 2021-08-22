@@ -158,7 +158,7 @@ class GuiArticleStats {
             })
         }
 
-        colPrice.setStringCellFactory(floatToString)
+        colPrice.setStringCellFactory { it.formatted }
 
         val sortedArticles = SortedList(app.repository.articles)
         sortedArticles.comparatorProperty().bind(articlesTable.comparatorProperty())

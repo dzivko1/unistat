@@ -8,7 +8,7 @@ import hr.ferit.dominikzivko.unistat.data.Bill
 import hr.ferit.dominikzivko.unistat.data.BillEntry
 import hr.ferit.dominikzivko.unistat.enablePieTooltips
 import hr.ferit.dominikzivko.unistat.gui.DATE_TIME_FORMATTER
-import hr.ferit.dominikzivko.unistat.gui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.formatted
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
@@ -90,13 +90,13 @@ class BillView : VBox() {
             strings["billView_placeOfIssue"] + ": " + bill?.source
         }
         lblValue.bindText(billProperty) {
-            strings["billView_totalValue"] + ": " + bill?.let { floatToString(it.totalValue) }
+            strings["billView_totalValue"] + ": " + bill?.totalValue?.formatted
         }
         lblSubsidy.bindText(billProperty) {
-            strings["billView_totalSubsidy"] + ": " + bill?.let { floatToString(it.totalSubsidy) }
+            strings["billView_totalSubsidy"] + ": " + bill?.totalSubsidy?.formatted
         }
         lblCost.bindText(billProperty) {
-            strings["billView_personalCost"] + ": " + bill?.let { floatToString(it.totalCost) }
+            strings["billView_personalCost"] + ": " + bill?.totalCost?.formatted
         }
         lblArticleCount.bindText(billProperty) {
             strings["billView_numberOfArticles"] + ": " + bill?.articleCount
@@ -111,7 +111,7 @@ class BillView : VBox() {
         colCost.setCellValueFactory { Bindings.createFloatBinding({ it.value.totalCost }) }
 
         val floatFormatCellFactory = object : StringCellFactory<BillEntry, Number>() {
-            override fun format(item: Number) = floatToString(item)
+            override fun format(item: Number) = item.formatted
         }
         colPrice.cellFactory = floatFormatCellFactory
         colSubsidy.cellFactory = floatFormatCellFactory

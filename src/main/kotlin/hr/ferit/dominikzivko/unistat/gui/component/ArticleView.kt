@@ -3,7 +3,7 @@ package hr.ferit.dominikzivko.unistat.gui.component
 import domyutil.jfx.*
 import hr.ferit.dominikzivko.unistat.*
 import hr.ferit.dominikzivko.unistat.data.*
-import hr.ferit.dominikzivko.unistat.gui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.formatted
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.fxml.FXML
@@ -54,10 +54,10 @@ class ArticleView : HBox() {
     }
 
     private fun setupDetailsGrid() {
-        val lblAmount = boundLabelFor(dataProperty) { data?.relevantEntries?.totalAmount.toString() }
-        val lblValue = boundLabelFor(dataProperty) { data?.let { floatToString(it.relevantEntries.totalValue) } }
-        val lblSubsidy = boundLabelFor(dataProperty) { data?.let { floatToString(it.relevantEntries.totalSubsidy) } }
-        val lblCost = boundLabelFor(dataProperty) { data?.let { floatToString(it.relevantEntries.totalCost) } }
+        val lblAmount = boundLabelFor(dataProperty) { data?.relevantEntries?.totalAmount?.formatted }
+        val lblValue = boundLabelFor(dataProperty) { data?.relevantEntries?.totalValue?.formatted }
+        val lblSubsidy = boundLabelFor(dataProperty) { data?.relevantEntries?.totalSubsidy?.formatted }
+        val lblCost = boundLabelFor(dataProperty) { data?.relevantEntries?.totalCost?.formatted }
         detailsGrid.addRow(0, Label(strings["articleView_amountBought"] + ": "), lblAmount)
         detailsGrid.addRow(1, Label(strings["articleView_totalValue"] + ": "), lblValue)
         detailsGrid.addRow(2, Label(strings["articleView_totalSubsidy"] + ": "), lblSubsidy)

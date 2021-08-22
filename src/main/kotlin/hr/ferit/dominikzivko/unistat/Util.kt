@@ -1,7 +1,7 @@
 package hr.ferit.dominikzivko.unistat
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage
-import hr.ferit.dominikzivko.unistat.gui.floatToString
+import hr.ferit.dominikzivko.unistat.gui.formatted
 import javafx.beans.Observable
 import javafx.beans.binding.Bindings
 import javafx.beans.value.ObservableValue
@@ -69,7 +69,7 @@ private fun <T> makeChartBinding(
 fun PieChart.enablePieTooltips(showDelay: Duration = Duration.seconds(0.2), isValueInteger: Boolean = false) {
     dataProperty().addListener { _, _, newValue ->
         newValue.forEach { item ->
-            val yString = if (isValueInteger) item.pieValue.toInt() else floatToString(item.pieValue)
+            val yString = if (isValueInteger) item.pieValue.toInt().formatted else item.pieValue.formatted
             val tooltip = Tooltip(item.name + "\n" + yString).apply {
                 this.showDelay = showDelay
             }
@@ -87,11 +87,7 @@ fun <X, Y : Number> XYChart<X, Y>.enableBarTooltips(showDelay: Duration = Durati
     dataProperty().addListener { _, _, newValue ->
         newValue.forEach { series ->
             series.data.forEach { item ->
-                val yString = when (item.yValue) {
-                    is Float, is Double -> floatToString(item.yValue)
-                    else -> item.yValue.toString()
-                }
-                val tooltip = Tooltip(item.xValue.toString() + "\n" + yString).apply {
+                val tooltip = Tooltip(item.xValue.toString() + "\n" + item.yValue.formatted).apply {
                     this.showDelay = showDelay
                 }
                 Tooltip.install(item.node, tooltip)

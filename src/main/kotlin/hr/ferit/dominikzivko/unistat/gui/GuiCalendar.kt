@@ -252,7 +252,7 @@ class GuiCalendar {
         private fun updateContent(day: Day) {
             lblDay.text = day.date.dayOfMonth.toString()
             lblBills.text = day.billCount.toString()
-            lblCost.text = if (day.bills.totalCost != 0.0) floatToString(day.bills.totalCost) else ""
+            lblCost.text = if (day.bills.totalCost != 0.0) day.bills.totalCost.formatted else ""
             lblBills.isVisible = day.billCount != 0
 
             when {
@@ -279,7 +279,7 @@ class GuiCalendar {
         override fun updateItem(item: Bill?, empty: Boolean) {
             super.updateItem(item, empty)
             text = if (empty || item == null) null
-            else item.dateTime.format(TIME_FORMATTER) + " - " + floatToString(item.totalCost)
+            else item.dateTime.format(TIME_FORMATTER) + " - " + item.totalCost.formatted
         }
     }
 
