@@ -63,8 +63,11 @@ class GuiArticleStats {
     private val billsByArticleProperty = SimpleMapProperty<Article, List<Bill>>()
     private val billsByArticle: ObservableMap<Article, List<Bill>> by billsByArticleProperty
 
-    private val sortedBillsByArticleProperty = SimpleListProperty<Pair<Article, List<Bill>>>()
-    private val sortedBillsByArticle: ObservableList<Pair<Article, List<Bill>>> by sortedBillsByArticleProperty
+    private val entriesByArticleProperty = SimpleMapProperty<Article, List<BillEntry>>()
+    private val entriesByArticle: ObservableMap<Article, List<BillEntry>> by entriesByArticleProperty
+
+    private val sortedEntriesByArticleProperty = SimpleListProperty<Pair<Article, List<BillEntry>>>()
+    private val sortedEntriesByArticle: ObservableList<Pair<Article, List<BillEntry>>> by sortedEntriesByArticleProperty
 
     private val selectedArticleProperty get() = articlesTable.selectionModel.selectedItemProperty()
     private val selectedArticle get() = selectedArticleProperty.value
@@ -90,24 +93,33 @@ class GuiArticleStats {
                 })
         }, app.repository.filteredBills))
 
-        sortedBillsByArticleProperty.bind(Bindings.createObjectBinding({
-            FXCollections.observableList(
-                billsByArticle.toList().sortedByDescending { it.second.totalValue }
-            )
+        entriesByArticleProperty.bind(Bindings.createObjectBinding({
+            FXCollections.observableMap(
+                billsByArticle.mapValues { (article, bills) ->
+                    bills.map { bill ->
+                        bill.entries.find { it.article == article }!!
+                    }
+                })
         }, billsByArticleProperty))
+
+        sortedEntriesByArticleProperty.bind(Bindings.createObjectBinding({
+            FXCollections.observableList(
+                entriesByArticle.toList().sortedByDescending { it.second.totalValue }
+            )
+        }, entriesByArticleProperty))
     }
 
     private fun setupSpendingByArticleChart() {
         spendingByArticleChart.apply {
             addClickSelection()
             enableBarTooltips(Duration.ZERO)
-            bindData(sortedBillsByArticleProperty) { series ->
+            bindData(sortedEntriesByArticleProperty) { series ->
                 val costData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
                 val subsidyData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-                sortedBillsByArticle.forEach { (article, bills) ->
-                    costData += XYChart.Data(article.name, bills.totalCost)
-                    subsidyData += XYChart.Data(article.name, bills.totalSubsidy)
+                sortedEntriesByArticle.forEach { (article, entries) ->
+                    costData += XYChart.Data(article.name, entries.totalCost)
+                    subsidyData += XYChart.Data(article.name, entries.totalSubsidy)
                 }
 
                 series += XYChart.Series(strings["chart_series_personalCost"], costData)
@@ -115,7 +127,7 @@ class GuiArticleStats {
             }
             prefWidthProperty().bind(
                 Bindings.createDoubleBinding({
-                    max(articleChartHolder.width, billsByArticle.size * 10.0)
+                    max(articleChartHolder.width, entriesByArticle.size * 10.0)
                 }, articleChartHolder.widthProperty())
             )
         }
@@ -125,14 +137,11 @@ class GuiArticleStats {
         amountByArticleChart.apply {
             addClickSelection()
             enableBarTooltips(Duration.ZERO)
-            bindData(sortedBillsByArticleProperty) { series ->
+            bindData(sortedEntriesByArticleProperty) { series ->
                 val amountData = FXCollections.observableArrayList<XYChart.Data<String, Number>>()
 
-                sortedBillsByArticle.forEach { (article, bills) ->
-                    val amount = bills.sumOf { bill ->
-                        bill.entries.find { it.article == article }!!.amount
-                    }
-                    amountData += XYChart.Data(article.name, amount)
+                sortedEntriesByArticle.forEach { (article, entries) ->
+                    amountData += XYChart.Data(article.name, entries.totalAmount)
                 }
 
                 series += XYChart.Series(strings["chart_series_amountBought"], amountData)
@@ -145,9 +154,7 @@ class GuiArticleStats {
         colPrice.setCellValueFactory { Bindings.createFloatBinding({ it.value.fPrice }) }
         colAmount.setCellValueFactory { cellData ->
             Bindings.createIntegerBinding({
-                billsByArticle[cellData.value]?.sumOf { bill ->
-                    bill.entries.find { it.article == cellData.value }!!.amount
-                } ?: 0
+                entriesByArticle[cellData.value]?.totalAmount
             })
         }
 
