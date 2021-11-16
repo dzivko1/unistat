@@ -74,8 +74,17 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         require(!url.startsWith(Pref.url_loginBase)) { "A privileged connection cannot be made to the login page." }
         return web.get(url).let { page ->
             checkCancelled()
-            if (!page.isLoginPage && isUserVerified) page
-            else authConnect(url, page, progressMonitor, canPromptLogin)
+
+            if (!page.isLoginChoicePage && !isUserVerified) {
+                logout()
+                return fetchAuthorized(url, progressMonitor, canPromptLogin)
+            }
+
+            if (page.isLoginChoicePage) {
+                val loginPage = web.get(Pref.url_loginRequest)
+                return@let authConnect(url, loginPage, progressMonitor, canPromptLogin)
+            }
+            return@let page
         }
     }
 
@@ -213,12 +222,9 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
         val actualOib = extractUserOib(studentPage)
         val (username, expectedOib) = deobfuscate(Pref.userCredentials).split('|')
 
-        if (actualOib != expectedOib) {
-            logout()
-            throw IllegalStateException("The user logged on the webserver does not have expected credentials.")
-        }
-
-        currentUser = UserLogon(username)
+        if (actualOib == expectedOib) {
+            currentUser = UserLogon(username)
+        } else log.warn("The user logged on the webserver does not have expected credentials.")
     }
 
     /**
@@ -230,8 +236,8 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
 
     private fun extractUserOib(studentPage: HtmlPage): String {
         val userInfoDiv =
-            studentPage.querySelector<HtmlDivision>("section:nth-of-type(1) .row:nth-of-type(2) .col:nth-of-type(1)")
-        return userInfoDiv.asNormalizedText().substringAfter("OIB: ").takeWhile { it.isDigit() }
+            studentPage.querySelector<HtmlDivision>("#mainDivContent .col-7 > div:nth-of-type(3) > div")
+        return userInfoDiv.safeText.substringAfter("OIB: ").takeWhile { it.isDigit() }
     }
 
     private fun enableAutoLogin(loginDetails: LoginDetails) {
@@ -256,5 +262,6 @@ class AuthWebGateway(val web: WebGateway) : AppComponent {
     }
 
     private val HtmlPage.isLoginPage get() = urlString.startsWith(Pref.url_loginBase)
+    private val HtmlPage.isLoginChoicePage get() = urlString.startsWith(Pref.url_loginChoice)
     private val HtmlPage.isStudentPage get() = urlString.startsWith(Pref.url_student)
 }

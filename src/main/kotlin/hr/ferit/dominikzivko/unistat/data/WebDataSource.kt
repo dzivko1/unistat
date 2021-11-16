@@ -8,6 +8,7 @@ import hr.ferit.dominikzivko.unistat.checkCancelled
 import hr.ferit.dominikzivko.unistat.gui.FLOAT_FORMAT
 import hr.ferit.dominikzivko.unistat.gui.SERVER_DATE_TIME_FORMATTER
 import hr.ferit.dominikzivko.unistat.gui.component.ProgressMonitor
+import hr.ferit.dominikzivko.unistat.safeText
 import hr.ferit.dominikzivko.unistat.urlString
 import hr.ferit.dominikzivko.unistat.web.AuthWebGateway
 import org.apache.logging.log4j.LogManager
@@ -51,11 +52,13 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         web.fetchAuthorized(Pref.url_student, progressMonitor, canPromptLogin = true).run {
             checkExpected(Pref.url_student)
 
+            val infoDiv = querySelector<DomNode>("#mainDivContent .col-7")
+
             val username = web.currentUser!!.username
-            val fullName = extract("section:nth-of-type(1) .card-title")
-            val institution = extract("section:nth-of-type(1) .font-italic").substringAfter(": ")
-            val level = extract("section:nth-of-type(1) .row:nth-of-type(1) .col:nth-of-type(1) p:nth-of-type(2)")
-            val balance = extract("section:nth-of-type(1) .row:nth-of-type(1) .col:nth-of-type(2) p:nth-of-type(2)")
+            val fullName = infoDiv.extract("./h2[1]")
+            val institution = infoDiv.extract("./p[1]").substringAfter(": ")
+            val level = infoDiv.extract("./div[1]/div[1]/p[2]")
+            val balance = infoDiv.extract("./div[1]/div[2]/p[2]")
                 .substringBefore(' ').toFloat(FLOAT_FORMAT)
 
             extractBillsUrlIdentifier(this)
@@ -117,7 +120,7 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
     }
 
     private fun fetchEntries(billTableRow: HtmlTableRow): List<BillEntry> {
-        val detailsLocation = billTableRow.getCell(6).querySelector<HtmlAnchor>("a").hrefAttribute
+        val detailsLocation = billTableRow.querySelector<HtmlAnchor>("a").hrefAttribute
         val detailsPage = web.fetchAuthorized(detailsLocation)
         val entriesTable = detailsPage.querySelector<HtmlTable>("table")
         val entryCount = entriesTable.rowCount - 2
@@ -142,14 +145,17 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
     }
 
     private fun extractBillsUrlIdentifier(studentPage: HtmlPage? = null) {
-        (studentPage ?: log.info("Finding bill page location...").let { web.fetchAuthorized(Pref.url_student) }).run {
-            billsUrlIdentifier = "?" + querySelector<HtmlAnchor>("section:nth-of-type(1) a.btn")
+        (studentPage ?: {
+            log.info("Finding bill page location...")
+            web.fetchAuthorized(Pref.url_student)
+        } as HtmlPage).run {
+            billsUrlIdentifier = "?" + getFirstByXPath<HtmlAnchor>("//div[@id='mainDivContent']/div[2]/div/div/div/div/div[1]/div[2]/div/div/div/a[1]")
                 .hrefAttribute.substringAfter('?')
         }
     }
 
-    private fun HtmlPage.extract(selector: String) = querySelector<DomNode>(selector).asNormalizedText()
-    private fun HtmlTableRow.extract(index: Int) = getCell(index).asNormalizedText()
+    private fun DomNode.extract(selector: String) = getFirstByXPath<DomNode>(selector).safeText
+    private fun HtmlTableRow.extract(index: Int) = getCell(index).safeText
     private fun HtmlTableRow.extractDecimal(index: Int) = extract(index).replace(',', '.')
     private fun HtmlTableRow.extractBillDateTime() = run {
         val date = extract(1)

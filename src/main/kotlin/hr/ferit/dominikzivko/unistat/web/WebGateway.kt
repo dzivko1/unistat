@@ -10,6 +10,7 @@ import domyutil.*
 import hr.ferit.dominikzivko.unistat.AppComponent
 import hr.ferit.dominikzivko.unistat.data.Cookies
 import hr.ferit.dominikzivko.unistat.data.Pref
+import hr.ferit.dominikzivko.unistat.urlString
 import org.apache.logging.log4j.LogManager
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.deleteAll
@@ -61,12 +62,13 @@ class WebGateway : AppComponent {
      */
     fun get(url: String): HtmlPage {
         val fullUrl = if (url.startsWith("http")) url else Pref.url_base + url
-        log.debug("Connecting to: $fullUrl")
+        log.debug("Connecting to: $fullUrl ...")
         return webClient.getPage<HtmlPage>(fullUrl).also {
             val stillExecuting = webClient.waitForBackgroundJavaScript(10000)
             if (stillExecuting > 0)
                 log.warn("Background javascript still executing after timeout!")
             lastPage = it
+            log.debug("Connection response: ${it.urlString}")
         }
     }
 

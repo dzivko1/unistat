@@ -1,5 +1,6 @@
 package hr.ferit.dominikzivko.unistat
 
+import com.gargoylesoftware.htmlunit.html.DomNode
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hr.ferit.dominikzivko.unistat.gui.formatted
 import javafx.beans.Observable
@@ -12,6 +13,7 @@ import javafx.scene.chart.XYChart
 import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
 import javafx.util.Duration
+import org.apache.commons.lang3.StringUtils
 import java.time.LocalDate
 
 fun LocalDate.isToday() = this == LocalDate.now()
@@ -20,6 +22,7 @@ fun LocalDate.isPastWeek() = this in LocalDate.now().minusWeeks(1)..LocalDate.no
 fun LocalDate.isPastMonth() = this in LocalDate.now().minusMonths(1)..LocalDate.now()
 
 val HtmlPage.urlString: String get() = url.toExternalForm()
+val DomNode.safeText: String get() = StringUtils.normalizeSpace(textContent)
 
 
 /**
