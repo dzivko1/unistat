@@ -1,8 +1,10 @@
 package hr.ferit.dominikzivko.unistat.web
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
+import com.gargoylesoftware.htmlunit.SilentCssErrorHandler
 import com.gargoylesoftware.htmlunit.WebClient
 import com.gargoylesoftware.htmlunit.html.HtmlPage
+import com.gargoylesoftware.htmlunit.javascript.SilentJavaScriptErrorListener
 import com.gargoylesoftware.htmlunit.util.Cookie
 import domyutil.*
 import hr.ferit.dominikzivko.unistat.AppComponent
@@ -14,6 +16,8 @@ import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.api.ExposedBlob
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.logging.Level
+import java.util.logging.Logger
 
 /**
  * An [AppComponent] handling all communication with the webserver.
@@ -25,13 +29,20 @@ class WebGateway : AppComponent {
     private val log by lazy { LogManager.getLogger(javaClass) }
 
     private val webClient = WebClient(BrowserVersion.INTERNET_EXPLORER).apply {
-        options.isThrowExceptionOnScriptError = false
-        options.isRedirectEnabled = true
-        options.isJavaScriptEnabled = true
+        options.apply {
+            isThrowExceptionOnScriptError = false
+            isThrowExceptionOnFailingStatusCode = false
+            isPrintContentOnFailingStatusCode = false
+            isRedirectEnabled = true
+            isJavaScriptEnabled = true
 
-        // When the app image is exported, an error claiming that the handshake failed pops up. This fixes it.
-        // The idea came from an (outdated) SO answer: https://stackoverflow.com/a/47670855/6640693
-        options.sslClientProtocols = arrayOf("TLSv1.2")
+            // When the app image is exported, an error claiming that the handshake failed pops up. This fixes it.
+            // The idea came from an (outdated) SO answer: https://stackoverflow.com/a/47670855/6640693
+            setSSLClientProtocols("TLSv1.2")
+        }
+        javaScriptErrorListener = SilentJavaScriptErrorListener()
+        cssErrorHandler = SilentCssErrorHandler()
+        Logger.getLogger("com.gargoylesoftware.htmlunit").level = Level.OFF
     }
 
     var lastPage: HtmlPage? = null
