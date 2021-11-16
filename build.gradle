@@ -21,7 +21,7 @@ apply plugin: 'koin'
 
 
 group 'hr.ferit.dominikzivko'
-version '1.2.0'
+version '1.2.1'
 
 mainClassName = 'hr.ferit.dominikzivko.unistat.Launcher'
 
