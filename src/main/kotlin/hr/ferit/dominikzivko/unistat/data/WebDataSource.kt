@@ -123,14 +123,14 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         val detailsLocation = billTableRow.querySelector<HtmlAnchor>("a").hrefAttribute
         val detailsPage = web.fetchAuthorized(detailsLocation)
         val entriesTable = detailsPage.querySelector<HtmlTable>("table")
-        val entryCount = entriesTable.rowCount - 2
+        val entryCount = entriesTable.rowCount - 1
 
         return List(entryCount) { index ->
             entriesTable.getRow(index + 1).run {
                 val name = extract(0)
                 val amount = extract(1).toInt()
                 val price = extractDecimal(2).toBigDecimal().setScale(2)
-                val subsidy = extractDecimal(4).toBigDecimal().setScale(2)
+                val subsidy = extractCurrencyDecimal(4).toBigDecimal().setScale(2)
                 return@List BillEntry(Article(name, price), amount, subsidy)
             }
         }
@@ -161,6 +161,13 @@ class WebDataSource(val web: AuthWebGateway) : DataSource {
         val date = extract(1)
         val time = extract(2)
         LocalDateTime.parse("$date. $time", SERVER_DATE_TIME_FORMATTER)
+    }
+
+    // fix for temporary double currency labeling
+    private fun HtmlTableRow.extractCurrencyDecimal(index: Int): String {
+        return getCell(index).apply {
+            removeChild(firstChild)
+        }.safeText.dropLast(3).replace(',', '.')
     }
 
     private fun HtmlTableRow.extractBillOutline() = Pair(
