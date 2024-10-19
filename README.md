@@ -1,0 +1,5 @@
+![UniStat-1 1 0-pregled](https://github.com/user-attachments/assets/a037c9b8-3e20-45cc-9f37-6290648167cc)
+![UniStat-1 1 0-racuni](https://github.com/user-attachments/assets/404da55a-82aa-44d8-a443-368f10d854e7)
+![UniStat-1 1 0-kalendar](https://github.com/user-attachments/assets/0c9b00db-8828-4756-9ca0-95fcf5f8879a)
+![UniStat-1 1 0-stats1](https://github.com/user-attachments/assets/23205b2a-f775-4a3e-97c4-63b0560550b1)
+![UniStat-1 1 0-stats2](https://github.com/user-attachments/assets/44b0b0f9-cb72-4e71-9435-cf2ec86f736d)
